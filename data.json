@@ -138,12 +138,6 @@
             "plain": true,
             "options": [
               {
-                "name": "V Bridger",
-                "sub": "",
-                "price": "300,000",
-                "noQty": true
-              },
-              {
                 "name": "비대칭 포즈",
                 "sub": "",
                 "price": "350,000",
@@ -153,6 +147,18 @@
                 "name": "삼면도",
                 "sub": "단색",
                 "price": "250,000",
+                "noQty": true
+              }
+            ]
+          },
+          {
+            "title": "리깅 업그레이드",
+            "wide": true,
+            "options": [
+              {
+                "name": "V Bridger",
+                "sub": "",
+                "price": "300,000",
                 "noQty": true
               }
             ]
@@ -173,7 +179,7 @@
             ]
           },
           {
-            "title": "",
+            "title": "파츠",
             "options": [
               {
                 "name": "소품 추가",
@@ -275,7 +281,7 @@
             ]
           },
           {
-            "title": "",
+            "title": "파츠",
             "options": [
               {
                 "name": "소품 추가",
@@ -316,15 +322,21 @@
             "plain": true,
             "options": [
               {
-                "name": "V Bridger",
-                "sub": "",
-                "price": "300,000",
-                "noQty": true
-              },
-              {
                 "name": "비대칭 포즈",
                 "sub": "",
                 "price": "350,000",
+                "noQty": true
+              }
+            ]
+          },
+          {
+            "title": "리깅 업그레이드",
+            "wide": true,
+            "options": [
+              {
+                "name": "V Bridger",
+                "sub": "",
+                "price": "300,000",
                 "noQty": true
               }
             ]
@@ -486,6 +498,8 @@
         "name": "EXPRESSION",
         "type": "gif",
         "cols": 4,
+        "baseCount": 4,
+        "baseTitle": "기본 제공",
         "items": [
           {
             "src": "images/p-mwbuo3opj25t.webp",

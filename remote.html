@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LEUIN · Menu</title>
+<!-- 아트머그 글에서 본문 바깥(화면 오른쪽)에 고정으로 띄우는 리모컨 메뉴.
+     메뉴 항목·현재 위치는 같은 글 안의 본문 iframe(index.html)에서 받아옵니다. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chalk:#E7E7FF;--bell:#9699E1;--bell-deep:#4C50B2;--line:#E3E3F6;--on-bell:#1F2050;
+  --font:'Pretendard Variable',Pretendard,'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --en:'Montserrat','Pretendard Variable',Pretendard,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:transparent}
+body{display:flex;align-items:center;justify-content:flex-end;padding:0 14px 0 0;font-family:var(--font);-webkit-font-smoothing:antialiased}
+ul{list-style:none}
+.remote{width:140px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(76,80,178,.18);overflow:hidden;opacity:0;visibility:hidden;transform:translateX(12px);transition:opacity .35s ease,transform .45s cubic-bezier(.22,1,.36,1),visibility 0s .45s}
+.remote.show{opacity:1;visibility:visible;transform:none;transition:opacity .35s ease,transform .45s cubic-bezier(.22,1,.36,1),visibility 0s}
+.remote-head{padding:9px 0;background:var(--bell);color:var(--on-bell);font:800 11px var(--en);letter-spacing:.1em;text-align:center}
+.remote ul{position:relative;padding:6px}
+.ind{position:absolute;left:0;top:0;z-index:0;width:0;height:0;border-radius:10px;background:var(--chalk);pointer-events:none;will-change:transform}
+.remote li{position:relative;z-index:1}
+.remote li a{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;color:#43446C;font-size:12.5px;font-weight:600;text-decoration:none;white-space:nowrap;transition:color .25s}
+.remote li a span{display:block;line-height:1.25}
+.remote li a i{display:flex;align-items:center;justify-content:center;min-width:16px;height:15.6px;color:var(--bell-deep);font:700 10px/1 var(--en);font-style:normal;opacity:.7}
+.remote li a.on,.remote li a.hov{color:var(--bell-deep)}
+.remote li a.on i{opacity:1}
+.remote-top{display:block;padding:10px 0;border-top:1px solid var(--line);color:var(--bell-deep);font:800 12px var(--en);letter-spacing:.06em;text-align:center;text-decoration:none}
+</style>
+</head>
+<body>
+<nav class="remote" id="remote" aria-label="페이지 메뉴">
+  <div class="remote-head">◆ MENU ◆</div>
+  <ul id="list"><li class="ind" id="ind" aria-hidden="true" style="position:absolute;padding:0"></li></ul>
+  <a class="remote-top" id="topBtn" href="#">↑ TOP</a>
+</nav>
+<script>
+(function () {
+  'use strict';
+  var remote = document.getElementById('remote'), list = document.getElementById('list');
+  var ind = document.getElementById('ind'), topBtn = document.getElementById('topBtn');
+  var main = null, links = [], active = 0, hover = -1, built = '';
+
+  function send(w, msg) { msg.leuin = 'remote'; try { w.postMessage(msg, location.origin); } catch (e) {} }
+  function hello() {
+    var msg = { t: 'hello', w: window.innerWidth };
+    if (main) { send(main, msg); return; }
+    try { for (var i = 0; i < parent.frames.length; i++) if (parent.frames[i] !== window) send(parent.frames[i], msg); } catch (e) {}
+  }
+
+  /* 연보라 표시 : 현재 메뉴 / 커서를 올린 메뉴를 부드럽게 따라감 (본문 리모컨과 같은 움직임) */
+  var cur = null, tgt = null, raf = 0;
+  function box(i) {
+    var ur = list.getBoundingClientRect(), ar = links[i].getBoundingClientRect();
+    return { x: ar.left - ur.left, y: ar.top - ur.top, w: ar.width, h: ar.height };
+  }
+  function paint(p) {
+    ind.style.width = p.w.toFixed(1) + 'px';
+    ind.style.height = p.h.toFixed(1) + 'px';
+    ind.style.transform = 'translate(' + p.x.toFixed(1) + 'px,' + p.y.toFixed(1) + 'px)';
+  }
+  function step() {
+    var done = true;
+    ['x', 'y', 'w', 'h'].forEach(function (k) {
+      var d = tgt[k] - cur[k];
+      if (Math.abs(d) < 0.3) cur[k] = tgt[k]; else { cur[k] += d * 0.15; done = false; }
+    });
+    paint(cur);
+    raf = done ? 0 : requestAnimationFrame(step);
+  }
+  function move(instant) {
+    if (!links.length) return;
+    links.forEach(function (a, k) { a.classList.toggle('on', k === active); a.classList.toggle('hov', k === hover); });
+    tgt = box(hover >= 0 ? hover : Math.min(active, links.length - 1));
+    if (!cur || instant || !remote.classList.contains('show')) { cur = { x: tgt.x, y: tgt.y, w: tgt.w, h: tgt.h }; paint(cur); return; }
+    if (!raf) raf = requestAnimationFrame(step);
+  }
+
+  function build(items) {
+    var key = JSON.stringify(items);
+    if (key === built) return;
+    built = key;
+    links.forEach(function (a) { list.removeChild(a.parentNode); });
+    links = items.map(function (it) {
+      var li = document.createElement('li'), a = document.createElement('a'), i = document.createElement('i'), s = document.createElement('span');
+      a.href = '#' + it.id; a.title = it.label;
+      i.textContent = it.num; s.textContent = it.label;
+      a.appendChild(i); a.appendChild(s); li.appendChild(a); list.appendChild(li);
+      return a;
+    });
+    links.forEach(function (a, k) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        active = k; move();
+        if (main) send(main, { t: 'go', id: items[k].id });
+      });
+      a.addEventListener('mouseenter', function () { hover = k; move(); });
+    });
+    move(true);
+  }
+
+  list.addEventListener('mouseleave', function () { hover = -1; move(); });
+  topBtn.addEventListener('click', function (e) {
+    if (topBtn.target === '_top') return;      /* 아트머그 글 주소가 있으면 글 맨 위로 이동 */
+    e.preventDefault();
+    active = 0; move();
+    if (main) send(main, { t: 'top' });
+  });
+
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (e.origin !== location.origin || !d || d.leuin !== 'remote') return;
+    if (d.t === 'ready') { hello(); return; }
+    main = e.source;
+    if (d.t === 'menu') {
+      build(d.items || []);
+      if (d.post) { topBtn.href = d.post.split('#')[0] + '#'; topBtn.target = '_top'; }
+      else { topBtn.href = '#'; topBtn.removeAttribute('target'); }
+    } else if (d.t === 'state') {
+      active = d.active || 0;
+      remote.classList.toggle('show', !!d.shown && links.length > 0);
+      move();
+    }
+  });
+
+  hello();
+  window.addEventListener('load', hello);
+  window.addEventListener('resize', function () { hello(); move(true); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { move(true); });
+  /* 본문 iframe 이 늦게 열리는 경우를 대비해 연결될 때까지 몇 번 더 인사 */
+  var tries = 0, t = setInterval(function () { if (main || ++tries > 20) { clearInterval(t); return; } hello(); }, 500);
+})();
+</script>
+</body>
+</html>

@@ -74,8 +74,8 @@ textarea.ghost{min-height:0;resize:vertical}
 .tot{display:flex;align-items:center;gap:4px;color:var(--sub);font-size:11.5px}
 .tot b{min-width:18px;color:var(--ink);text-align:center}
 .ss{font-size:13px;font-weight:700;min-width:62px;text-align:right}
-.ss.full{color:#8C8DAE}
-.ss.open{color:var(--bell-deep)}
+.ss.full{color:#D9626C}
+.ss.open{color:#4F7BD9}
 .sc-body .note{margin:8px 4px 0}
 
 /* 공지 (페이지와 동일한 번호 목록 / 접이식) */
@@ -131,6 +131,7 @@ textarea.ghost{min-height:0;resize:vertical}
 .nav.prev{left:14px}.nav.next{right:14px}
 .gmeta{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;border-top:1px solid var(--line)}
 .gmeta select{width:150px}
+.platpick{display:flex;flex-wrap:wrap;gap:4px 12px;max-width:340px}
 .gmeta .nick{max-width:260px;font-size:15px;font-weight:700;text-align:center}
 .gmeta.one{padding-top:0;border-top:0}
 .gthumbs{display:flex;gap:8px;padding:14px 16px;border-top:1px solid var(--line);overflow-x:auto}
@@ -147,6 +148,14 @@ textarea.ghost{min-height:0;resize:vertical}
 .th .im{aspect-ratio:2/1;border-radius:8px;background:#fff;overflow:hidden;display:grid;place-items:center;color:#9B9CB5;font-size:12px}
 .th .im img{width:100%;height:100%;object-fit:contain;padding:8px}
 .th .tl .btn{flex:1;padding:4px 0}
+/* 리깅 영상 목록 (주소만 입력) */
+.rlist{display:grid;gap:8px}
+.rrow{display:grid;grid-template-columns:24px 112px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.rnum{font:800 13px var(--en);color:var(--sub);text-align:center}
+.rthumb{display:grid;place-items:center;aspect-ratio:16/9;border-radius:8px;background:var(--panel);color:#9B9CB5;font-size:11px;overflow:hidden}
+.rthumb img{display:block;width:100%;height:100%;object-fit:cover}
+.rthumb.sq{aspect-ratio:1;width:72px;justify-self:center}
+@media(max-width:720px){.rrow{grid-template-columns:20px 84px minmax(0,1fr)}.rrow .tools{grid-column:2 / -1;justify-content:flex-end}}
 code{padding:1px 6px;border-radius:6px;background:var(--chalk);font-size:12.5px}
 ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:decimal}
 .card{padding:26px;border:1px solid var(--line);border-radius:20px;background:#fff}
@@ -298,11 +307,9 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
         tools(months, i, (mo.label || '이 달'))
       ]));
     });
-    body.appendChild(h('div', { class: 'note' }, [inp(S.slots, 'note', { class: 'ghost', placeholder: '※ 예약 현황 안내 문구' })]));
     var card = h('aside', { class: 'slot-card' }, [
       h('div', { class: 'sc-head' }, [
-        h('span', { class: 'slot-pill', text: '◆ SLOT ◆' }),
-
+        h('span', { class: 'slot-pill', text: 'SLOT' })
       ]),
       body
     ]);
@@ -398,7 +405,12 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
         ]));
       });
       gbox.appendChild(h('div', { class: 'ai optbox' }, [
-        h('div', { class: 'ah' }, [inp(g, 'title', { class: 'ghost', placeholder: '묶음 이름 (비우면 이름 없이 줄만 구분)' }), tools(t.groups, gi, g.title || (gi + 1) + '번째 묶음')]),
+        h('div', { class: 'ah' }, [
+          inp(g, 'title', { class: 'ghost', placeholder: g.plain ? '(묶음 없음 · 이름 표시 안 됨)' : '묶음 이름 (비우면 이름 없는 상자)' }),
+          h('label', { class: 'chk', style: 'flex:none' }, [h('input', { type: 'checkbox', checked: !!g.plain, onchange: function (e) { g.plain = e.target.checked; if (g.plain) g.wide = false; touch(); render(); } }), '묶음 없이']),
+          g.plain ? null : h('label', { class: 'chk', style: 'flex:none' }, [h('input', { type: 'checkbox', checked: !!g.wide, onchange: function (e) { g.wide = e.target.checked; touch(); render(); } }), '가로로 길게']),
+          tools(t.groups, gi, g.title || (gi + 1) + '번째 묶음')
+        ]),
         h('div', { class: 'apin' }, [opts, addBtn('+ 옵션 추가', function () { g.options.push({ name: '', sub: '', price: '' }); touch(); render(); })])
       ]));
     });
@@ -408,12 +420,12 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
       h('div', { class: 'pgl', text: '기본' }), cards,
       addBtn('+ 카드 추가', function () { t.cards.push({ name: '', price: '', features: [] }); touch(); render(); }),
       h('div', { class: 'notes' }, [lines(S.price.notes, 3)]),
-      h('h3', { class: 'sub-title', text: '추가 옵션 · ' + t.key + ' (묶음마다 한 줄로 표시돼요)' }),
+      h('h3', { class: 'sub-title', text: '추가 옵션 · ' + t.key + ' ("묶음 없이"는 전체 폭 한 줄, 나머지 묶음은 회색 상자로 한 줄에 두 개씩)' }),
       gbox,
       addBtn('+ 묶음 추가', function () { t.groups.push({ title: '', options: [{ name: '', sub: '', price: '' }] }); touch(); render(); }),
       h('div', { class: 'notes' }, [lines(S.price.optionNotes, 3)])
     ]);
-    m.appendChild(guide('SET / ILLUSTRATION / RIGGING 탭마다 카드와 옵션이 따로 저장돼요. 금액은 숫자만 입력하면 자동으로 쉼표가 붙고, 숫자가 아닌 글(예: 협의)도 가능해요. 신청 계산기에는 숫자 금액만 합산됩니다. 옵션 묶음 안의 옵션들은 한 줄에 나란히 표시되고(최대 3개), 묶음 이름을 적으면 그 줄 위에 이름이 보여요.'));
+    m.appendChild(guide('SET / ILLUSTRATION / RIGGING 탭마다 카드와 옵션이 따로 저장돼요. 금액은 숫자만 입력하면 자동으로 쉼표가 붙고, 숫자가 아닌 글(예: 협의)도 가능해요. 신청 계산기에는 숫자 금액만 합산됩니다. "묶음 없이"를 켠 묶음은 옵션이 한 줄에 나란히(최대 3개) 표시되고, "가로로 길게"를 켠 묶음은 한 줄 전체 폭의 상자 안에 옵션이 나란히 보이며, 나머지 묶음은 회색 상자 안에 한 줄에 하나씩 표시되며 이름은 상자 테두리 위에 보여요.'));
     m.appendChild(s6);
   }
 
@@ -433,18 +445,51 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
   }
 
   /* ---------- 일러스트 / 리깅 (페이지와 같은 뷰어 모양) ---------- */
-  function newItem(items) {
+  function newItem(rig) {
     var it = { src: '', alt: '', nick: '', platform: '' };
-    if (items === S.gallery.rigging) it.video = '';
+    if (rig) it.video = '';
     return it;
   }
+  /* 리깅 : 예전 형식(작업물 목록만)이면 '쇼케이스' 탭 하나로 감싸고,
+     작업물은 { video } 만 남깁니다. (예전에 올린 이미지가 있으면 src 도 유지) */
+  function rigItem(x, type) {
+    x = x || {};
+    if (type === 'gif') return { src: x.src || '', caption: x.caption || '' };
+    var o = { video: x.video || '' };
+    if (x.src) o.src = x.src;
+    return o;
+  }
+  /* type : video = 영상 캐러셀 / gif = 움짤 + 작은 설명 (지정이 없으면 첫 탭만 영상) */
+  function rigCats(r) {
+    r = (r || []).filter(Boolean);
+    if (!r.some(function (x) { return Array.isArray(x.items); })) r = [{ name: 'SHOWCASE', items: r }];
+    r.forEach(function (c, i) {
+      if (!c.type) c.type = i === 0 ? 'video' : 'gif';
+      if (c.type === 'gif' && !c.cols) c.cols = /표정|EXPRESSION/i.test(c.name || '') ? 4 : 3;
+      c.items = (c.items || []).filter(Boolean).map(function (x) { return rigItem(x, c.type); });
+    });
+    return r;
+  }
+  function ytId(u) { var m = String(u || '').match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/|live\/)([\w-]{11})/); return m ? m[1] : ''; }
   function srcOf(it) { return pending[it.src] ? pending[it.src].url : it.src; }
+  /* 방송 플랫폼 : 여러 개 선택 가능 (platforms 배열). 예전의 platform 한 개 값은 배열로 옮김 */
+  function platsOf(it) {
+    if (!Array.isArray(it.platforms)) { it.platforms = it.platform ? [it.platform] : []; }
+    delete it.platform;
+    return it.platforms;
+  }
   function platSelect(it) {
-    var list = (S.platforms && S.platforms.list) || [];
-    var sel = h('select', { onchange: function (e) { it.platform = e.target.value; touch(); } },
-      [h('option', { value: '', text: '플랫폼 선택 안 함' })].concat(list.map(function (n) { return h('option', { value: n, text: n }); })));
-    sel.value = it.platform || '';
-    return sel;
+    var list = (S.platforms && S.platforms.list) || [], cur = platsOf(it);
+    if (!list.length) return h('span', { class: 'hint', style: 'margin:0', text: '플랫폼 목록이 없습니다' });
+    return h('div', { class: 'platpick', title: '방송 플랫폼 (여러 개 선택 가능)' }, list.map(function (n) {
+      return h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: cur.indexOf(n) >= 0, onchange: function (e) {
+        var a = platsOf(it), i = a.indexOf(n);
+        if (e.target.checked && i < 0) a.push(n);
+        if (!e.target.checked && i >= 0) a.splice(i, 1);
+        a.sort(function (x, y) { return list.indexOf(x) - list.indexOf(y); });
+        touch();
+      } }), n]);
+    }));
   }
 
   function gallery(items, key, rig) {
@@ -470,10 +515,10 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     });
     if (items.length) box.appendChild(th);
 
-    var file = h('input', { type: 'file', accept: 'image/*', multiple: true, style: 'display:none', onchange: function (e) { addFiles(items, e.target.files); e.target.value = ''; } });
+    var file = h('input', { type: 'file', accept: 'image/*', multiple: true, style: 'display:none', onchange: function (e) { addFiles(items, e.target.files, rig); e.target.value = ''; } });
     var tl = h('div', { class: 'gtools' }, [
       h('button', { type: 'button', class: 'btn primary', text: '+ 이미지 올리기', onclick: function () { file.click(); } }),
-      h('button', { type: 'button', class: 'btn', text: '+ 빈 칸', onclick: function () { items.push(newItem(items)); iSel[key] = items.length - 1; touch(); render(); } }),
+      h('button', { type: 'button', class: 'btn', text: '+ 빈 칸', onclick: function () { items.push(newItem(rig)); iSel[key] = items.length - 1; touch(); render(); } }),
       file
     ]);
     if (it) {
@@ -510,12 +555,93 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     viewPlatforms(m);
   }
 
+  var rCat = 0;
   function viewRigging(m) {
-    var items = S.gallery.rigging;
-    var kids = gallery(items, 'rig', true);
-    m.appendChild(guide('페이지에는 가운데 큰 카드와 양옆 카드로 보여요. 영상 주소(YouTube 또는 mp4)를 넣으면 재생 버튼이 생기고, 이미지를 올리지 않으면 YouTube 썸네일이 표시돼요.'));
+    var cats = S.gallery.rigging = rigCats(S.gallery.rigging);
+    if (!cats.length) cats.push({ name: 'SHOWCASE', type: 'video', items: [] });
+    if (rCat >= cats.length) rCat = 0;
+    var cur = cats[rCat];
+    cur.items = cur.items || [];
+    var tabs = h('div', { class: 'gtabs' });
+    cats.forEach(function (c, i) {
+      tabs.appendChild(h('button', { type: 'button', class: 'tab' + (c.soon ? ' dis' : ''), 'aria-selected': String(i === rCat), text: (c.name || '(이름 없음)') + (c.soon ? ' · 준비중' : ''), onclick: function () { rCat = i; render(); } }));
+    });
+    var kids = [tabs];
+    if (cur.type === 'gif') gifEditor(cur, kids);
+    else videoEditor(cur, kids);
+    kids.push(h('div', { class: 'grid2', style: 'margin-top:18px' }, [
+      field('탭 이름', inp(cur, 'name')),
+      field('종류', (function () {
+        var s = h('select', { onchange: function (e) { cur.type = e.target.value; if (cur.type === 'gif' && !cur.cols) cur.cols = 3; cur.items = cur.items.map(function (x) { return rigItem(x, cur.type); }); touch(); render(); } }, [
+          h('option', { value: 'video', text: '영상 캐러셀 (YouTube 주소)' }), h('option', { value: 'gif', text: '움짤 + 작은 설명' })]);
+        s.value = cur.type; return s;
+      })())
+    ]));
+    if (cur.type === 'gif') kids.push(h('div', { class: 'grid2' }, [
+      field('한 줄에 보일 개수', (function () {
+        var s = h('select', { onchange: function (e) { cur.cols = +e.target.value; touch(); } }, [2, 3, 4, 5].map(function (n) { return h('option', { value: String(n), text: n + '장' }); }));
+        s.value = String(cur.cols || 3); return s;
+      })()),
+      field('앞에서부터 묶을 개수 (0 = 묶지 않음)', h('input', { type: 'number', min: '0', max: '50', value: String(cur.baseCount || 0), oninput: function (e) { cur.baseCount = Math.max(0, parseInt(e.target.value, 10) || 0); touch(); } }))
+    ]));
+    if (cur.type === 'gif') kids.push(h('div', { class: 'grid2' }, [
+      field('묶음 이름 (가운데 정렬로 표시)', inp(cur, 'baseTitle', { placeholder: '기본 제공' })),
+      h('div')
+    ]));
+    kids.push(h('div', { class: 'field' }, [h('span', { text: '탭 관리' }), h('div', { class: 'tl', style: 'flex-wrap:wrap;align-items:center' }, [
+      h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: !!cur.soon, onchange: function (e) { cur.soon = e.target.checked; touch(); render(); } }), '준비중 (회색·선택 불가)']),
+      h('button', { type: 'button', class: 'btn sm', text: '+ 탭 추가', onclick: function () { cats.push({ name: 'NEW', type: 'gif', cols: 3, items: [] }); rCat = cats.length - 1; touch(); render(); } }),
+      cats.length > 1 ? h('button', { type: 'button', class: 'btn sm danger', text: '이 탭 삭제', onclick: function () { if (!confirm('"' + cur.name + '" 탭을 통째로 삭제할까요?')) return; cats.splice(rCat, 1); rCat = 0; touch(); render(); } }) : null
+    ])]));
+    m.appendChild(guide('영상 캐러셀 탭은 YouTube 주소만 넣으면 썸네일과 재생 버튼이 자동으로 만들어져요. 움짤 탭은 GIF(또는 이미지)를 올리고 아래에 보일 짧은 설명을 적어요. GIF 는 움직임이 유지되도록 변환 없이 그대로 올라갑니다. ↑ / ↓ 로 순서를 바꾸고, "준비중"을 켠 탭은 페이지에서 회색(선택 불가)으로 보여요.'));
     m.appendChild(sec('5', '리깅', kids));
-    viewPlatforms(m);
+  }
+
+  function videoEditor(cur, kids) {
+    var list = h('div', { class: 'rlist' });
+    cur.items.forEach(function (it, i) {
+      var th = h('div', { class: 'rthumb' });
+      function paintThumb() {
+        th.innerHTML = '';
+        var id = ytId(it.video), src = id ? 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg' : (it.src ? (pending[it.src] ? pending[it.src].url : it.src) : '');
+        if (src) th.appendChild(h('img', { src: src, alt: '' }));
+        else th.textContent = it.video ? '주소 확인' : '영상 없음';
+      }
+      paintThumb();
+      list.appendChild(h('div', { class: 'rrow' }, [
+        h('b', { class: 'rnum', text: String(i + 1) }),
+        th,
+        h('input', { type: 'text', value: it.video || '', placeholder: 'YouTube 주소 (예: https://youtu.be/...)', 'aria-label': (i + 1) + '번 영상 주소',
+          oninput: function (e) { it.video = e.target.value.trim(); touch(); paintThumb(); } }),
+        tools(cur.items, i, (i + 1) + '번 영상')
+      ]));
+    });
+    if (!cur.items.length) list.appendChild(h('p', { class: 'hint', style: 'margin:0', text: '등록된 영상이 없습니다.' }));
+    kids.push(list);
+    kids.push(addBtn('+ 영상 추가', function () { cur.items.push({ video: '' }); touch(); render(); }));
+  }
+  function gifEditor(cur, kids) {
+    var list = h('div', { class: 'rlist' });
+    cur.items.forEach(function (it, i) {
+      var th = h('div', { class: 'rthumb sq' });
+      if (it.src) th.appendChild(h('img', { src: pending[it.src] ? pending[it.src].url : it.src, alt: '' })); else th.textContent = '이미지 없음';
+      list.appendChild(h('div', { class: 'rrow' }, [
+        h('b', { class: 'rnum', text: String(i + 1) }),
+        th,
+        h('input', { type: 'text', value: it.caption || '', placeholder: '작은 설명 (예: 눈 깜빡임)', 'aria-label': (i + 1) + '번 설명',
+          oninput: function (e) { it.caption = e.target.value; touch(); } }),
+        tools(cur.items, i, (i + 1) + '번 움짤')
+      ]));
+    });
+    if (!cur.items.length) list.appendChild(h('p', { class: 'hint', style: 'margin:0', text: '등록된 움짤이 없습니다.' }));
+    var file = h('input', { type: 'file', accept: 'image/gif,.gif,image/*', multiple: true, style: 'display:none', onchange: function (e) {
+      var fs = Array.prototype.slice.call(e.target.files || []); e.target.value = ''; if (!fs.length) return;
+      busy++; setStatus('움짤 처리 중… (' + fs.length + '개)', '');
+      fs.reduce(function (p, f) { return p.then(function () { return processImage(f).then(function (r) { pending[r.path] = { blob: r.blob, url: r.url }; cur.items.push({ src: r.path, caption: '' }); }); }); }, Promise.resolve())
+        .then(function () { busy--; touch(); render(); }, function (er) { busy--; setStatus(er.message, 'err'); render(); });
+    } });
+    kids.push(list);
+    kids.push(h('div', {}, [addBtn('+ 움짤 올리기 (여러 개 가능)', function () { file.click(); }), file]));
   }
 
   function viewPlatforms(m) {
@@ -550,6 +676,12 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
   }
 
   function processImage(file) {
+    /* GIF 는 캔버스로 바꾸면 움직임이 사라지므로 그대로 올립니다 */
+    /* 파일 형식 정보가 비어 있는 경우가 있어 확장자(.gif)로도 확인합니다 */
+    if (file && (file.type === 'image/gif' || /\.gif$/i.test(file.name || ''))) {
+      if (file.size > 25 * 1024 * 1024) return Promise.reject(new Error(file.name + ' 이(가) 25MB 를 넘습니다. 용량을 줄여 다시 올려 주세요.'));
+      return Promise.resolve({ path: 'images/p-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + '.gif', blob: file, url: URL.createObjectURL(file) });
+    }
     return new Promise(function (resolve, reject) {
       var url = URL.createObjectURL(file), img = new Image();
       img.onload = function () {
@@ -569,7 +701,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
       img.src = url;
     });
   }
-  function addFiles(items, files) {
+  function addFiles(items, files, rig) {
     var list = Array.prototype.slice.call(files || []);
     if (!list.length) return;
     setStatus('이미지 처리 중… (' + list.length + '장)', '');
@@ -580,7 +712,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
           pending[r.path] = { blob: r.blob, url: r.url };
           /* 빈 칸이 있으면 먼저 채우고, 없으면 뒤에 추가 */
           var empty = items.filter(function (x) { return !x.src; })[0];
-          if (empty) { empty.src = r.path; } else { var ni = newItem(items); ni.src = r.path; items.push(ni); }
+          if (empty) { empty.src = r.path; } else { var ni = newItem(rig); ni.src = r.path; items.push(ni); }
         });
       });
     }, Promise.resolve()).then(function () { busy--; touch(); render(); }, function (e) { busy--; setStatus(e.message, 'err'); render(); });
@@ -679,7 +811,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
   function usedSrcs() {
     var all = [];
     S.gallery.illustration.forEach(function (c) { c.items.forEach(function (i) { all.push(i.src); }); });
-    S.gallery.rigging.forEach(function (i) { all.push(i.src); });
+    rigCats(S.gallery.rigging).forEach(function (c) { (c.items || []).forEach(function (i) { all.push(i.src); }); });
     var lg = (S.platforms && S.platforms.logos) || {};
     Object.keys(lg).forEach(function (k) { all.push(lg[k]); });
     return all;
@@ -731,6 +863,9 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     o.links = o.links || { post: '', inquiry: '' };
     o.platforms = o.platforms || { list: [], logos: {} };
     o.platforms.logos = o.platforms.logos || {};
+    o.gallery = o.gallery || { illustration: [], rigging: [] };
+    o.gallery.rigging = rigCats(o.gallery.rigging);
+    (o.gallery.illustration || []).forEach(function (c) { (c.items || []).forEach(platsOf); });
     return o;
   }
   function load() {
