@@ -8,13 +8,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-/* 본문 폰트 : Paperlogy */
-@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');font-weight:400;font-display:swap}
-@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');font-weight:500;font-display:swap}
-@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
-@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');font-weight:700;font-display:swap}
-@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap}
-@font-face{font-family:'Paperlogy';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');font-weight:900;font-display:swap}
 :root{
   /* Snow Drift / Blue Chalk / Blue Bell */
   --cream:#FDF8F1;
@@ -27,7 +20,7 @@
   --panel:#F4F4FE;
   --on-bell:#1F2050;
   --card:#fff;
-  --font:'Paperlogy','Pretendard Variable',Pretendard,'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --font:'Pretendard Variable',Pretendard,'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
   --en:'Montserrat','Pretendard Variable',Pretendard,sans-serif;
   --remote-w:140px;
 }
@@ -40,8 +33,9 @@ button{font-family:inherit;color:inherit}
 input,select,textarea{font-family:inherit}
 
 /* ---------- 레이아웃 ---------- */
-.page{max-width:925px;margin:0 auto;padding:28px 20px 56px}
-.sec{margin-top:28px;padding:36px 24px;border:1px solid var(--line);border-radius:20px;background:var(--card);scroll-margin-top:72px}
+.page{max-width:925px;margin:0 auto;padding:42px 20px 56px}
+/* 큰 칸 사이 세로 간격 28px → 42px (1.5배), 칸 안쪽 여백 상하좌우 +3px */
+.sec{margin-top:42px;padding:39px 27px;border:1px solid var(--line);border-radius:20px;background:var(--card);scroll-margin-top:72px}
 .sec-head{margin-bottom:26px;text-align:center}
 .sec h2{display:flex;align-items:center;justify-content:center;gap:12px;font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
 .sub-title{margin:26px 0 10px;font-size:15px;font-weight:700}
@@ -108,7 +102,7 @@ input,select,textarea{font-family:inherit}
 #noticeAcc .ah{padding-top:16.25px;padding-bottom:16.25px;font-size:17px}
 /* 공지사항 1~6 : 외곽선 없이 항목 사이에 점선 (기본 가능 범위 위 점선과 동일) */
 #noticeAcc .ai{border:0;border-radius:0;background:none}
-#noticeAcc .ai+.ai{margin-top:0;border-top:1px dashed #C9CAE6}
+#noticeAcc .ai+.ai{margin-top:0;border-top:1px dashed #E0E0E7}
 #noticeAcc{gap:0}
 /* 펼친 내용은 자주하는 질문 답변과 같은 글씨 */
 #noticeAcc .apin{font-size:16px;line-height:1.7}
@@ -166,7 +160,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .rights .txt{color:#43446C;font-size:14px;font-weight:700}
 #rights .notes{gap:1.5px}
 /* 표 : 한 열(방송용/개인세/기업세)에 커서를 올리면 나머지 열은 회색으로 흐려짐 */
-.rights tr:not(.foot)>:not(:first-child){transition:opacity .25s,filter .25s}
+.rights tr:not(.foot)>*{transition:opacity .25s,filter .25s}
+/* 첫 번째 열(추가금~기업 사용)에 커서 : 맨 윗줄 + 그 줄만 남기고 흐리게 */
+.rights[data-hr] tbody tr:not(.foot):not(.hr)>*{opacity:.35;filter:grayscale(1)}
 .rights[data-hc] tr:not(.foot)>:not(:first-child){opacity:.35;filter:grayscale(1)}
 .rights[data-hc="1"] tr:not(.foot)>:nth-child(2):not(:first-child),.rights[data-hc="2"] tr:not(.foot)>:nth-child(3):not(:first-child),.rights[data-hc="3"] tr:not(.foot)>:nth-child(4):not(:first-child){opacity:1;filter:none}
 
@@ -326,10 +322,11 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .pc.off .poff{display:block;margin-top:34px;color:#8C8DA8;font-size:13.5px;text-align:center}
 .pc.off .pk{display:none}
 .pnotes{gap:3px;margin-top:22px;color:#43446C;font-size:13.5px;line-height:19.5px}
-.pnotes li::before{content:"-";font-weight:700;color:#BDBED0}
-/* 가격표의 작은 설명 : 3px 안쪽으로 */
-.pnotes{padding-left:3px}
-.obar{display:flex;align-items:center;gap:16px;margin-top:44px}
+.pnotes li::before{content:"※";font-weight:400;color:inherit}
+/* 가격표의 작은 설명 : 5px 안쪽으로 */
+.pnotes{padding-left:5px}
+/* OPTIONS 양옆 점선 : 아래 옵션의 네모칸 ~ 가격 너비에 맞춤 (옵션 줄 안쪽 여백 10px) */
+.obar{display:flex;align-items:center;gap:16px;margin:44px 10px 0}
 .obar::before,.obar::after{content:"";flex:1;border-top:1px dotted #BDBFE0}
 .opill{padding:8px 22px;border:0;border-radius:999px;background:#E9E9F1;font:800 11.5px var(--en);letter-spacing:.12em;cursor:pointer;transition:background .2s}
 .opill[aria-expanded="true"]{background:var(--bell);color:var(--on-bell)}
@@ -423,7 +420,13 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 .fcard{padding:26px 26px 28px;border-radius:22px;background:var(--panel)}
 .fcard h3{display:flex;align-items:center;gap:10px;margin-bottom:1.2px;font-size:18px;font-weight:800}
 .fcard h3::before{content:"";width:3px;height:19px;border-radius:2px;background:var(--bell-deep)}
-.fq{display:grid;gap:7px;margin-top:17px}
+.fq{display:grid;gap:6px;margin-top:17px}
+/* 미정 선택 시 타이틀 옆 안내 */
+.tbdn{display:none;margin-left:8px;color:var(--bell-deep);font-size:12px;font-weight:600}
+.fq.tbd .tbdn{display:inline}
+.fline .dd{flex:1;min-width:0}
+.dd.dis .dd-btn{background:#EEEEF6;color:#A9AAC4;cursor:default}
+.dd.dis .chev{opacity:.4}
 .fl{font-size:15px;font-weight:700}
 .fh{color:var(--sub);font-size:12px;line-height:1.55}
 .fq .fh{margin-top:-4px}
@@ -431,7 +434,7 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 .krow{--kw:92px;flex-wrap:nowrap}
 .krow .chip{width:var(--kw);padding:0}
 /* ∨ 표시 : 위아래 줄 사이 정중앙 (보이는 V 모양 기준), 조금 연한 색 */
-.kchev{display:block;width:9px;height:9px;margin:-.5px 0 13.5px calc(var(--kw,92px) * 1.5 + 8px - 4.5px);border-right:1.5px solid #8A8DDA;border-bottom:1.5px solid #8A8DDA;transform:rotate(45deg)}
+.kchev{display:block;width:9px;height:9px;margin:.5px 0 12.5px calc(var(--kw,92px) * 1.5 + 8px - 4.5px);border-right:1.5px solid #8A8DDA;border-bottom:1.5px solid #8A8DDA;transform:rotate(45deg)}
 /* 펼쳐지는 영역 (높이 0 → 내용 높이, 위 간격까지 함께) */
 .reveal{display:grid;grid-template-rows:0fr;align-self:start;margin-top:-7px;opacity:0;visibility:hidden;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .3s ease,visibility 0s .45s}
 .reveal.on{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .35s ease .05s,visibility 0s}
@@ -703,15 +706,18 @@ body.inframe .remote,body.ext-remote .remote{display:none}
         <div class="fcard">
           <h3>방송 정보</h3>
           <div class="fq">
-            <label class="fl" for="f_nick">방송 닉네임</label>
+            <label class="fl" for="f_nick">방송 닉네임<span class="tbdn">※ 추후 정해지는 대로 말씀 부탁드립니다.</span></label>
             <div class="fline"><input type="text" id="f_nick" autocomplete="off" placeholder="예) 르인"><button type="button" class="chip" id="nickTbd" aria-pressed="false">미정</button></div>
             <p class="ferr" id="e_nick"></p>
           </div>
           <div class="fq">
-            <span class="fl" id="l_plat">활동 플랫폼</span>
-            <div class="dd" id="dd_plat">
-              <button type="button" class="dd-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="l_plat dd_plat_v"><span class="dd-v dd-ph" id="dd_plat_v">플랫폼 선택</span><span class="chev" aria-hidden="true"></span></button>
-              <ul class="dd-list" role="listbox" aria-labelledby="l_plat"></ul>
+            <span class="fl" id="l_plat">활동 플랫폼<span class="tbdn">※ 추후 정해지는 대로 말씀 부탁드립니다.</span></span>
+            <div class="fline">
+              <div class="dd" id="dd_plat">
+                <button type="button" class="dd-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="l_plat dd_plat_v"><span class="dd-v dd-ph" id="dd_plat_v">플랫폼 선택</span><span class="chev" aria-hidden="true"></span></button>
+                <ul class="dd-list" role="listbox" aria-labelledby="l_plat"></ul>
+              </div>
+              <button type="button" class="chip" id="platTbd" aria-pressed="false">미정</button>
             </div>
             <div class="reveal" id="platEtcWrap"><div class="reveal-in"><div class="reveal-pad"><input type="text" id="f_platEtc" autocomplete="off" placeholder="플랫폼명을 입력해 주세요" aria-label="기타 플랫폼명"></div></div></div>
             <p class="ferr" id="e_plat"></p>
@@ -983,10 +989,18 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     if (!t) return;
     t.addEventListener('mouseover', function (e) {
       var c = e.target.closest('td,th');
-      if (!c || !t.contains(c) || c.parentNode.classList.contains('foot') || c.cellIndex < 1) { t.removeAttribute('data-hc'); return; }
+      var row = c && c.parentNode;
+      each(t.querySelectorAll('tr.hr'), function (r) { if (r !== row || c.cellIndex !== 0) r.classList.remove('hr'); });
+      if (!c || !t.contains(c) || row.classList.contains('foot')) { t.removeAttribute('data-hc'); t.removeAttribute('data-hr'); return; }
+      if (c.cellIndex === 0) {
+        t.removeAttribute('data-hc');
+        if (row.parentNode.tagName === 'TBODY') { row.classList.add('hr'); t.setAttribute('data-hr', ''); } else t.removeAttribute('data-hr');
+        return;
+      }
+      t.removeAttribute('data-hr');
       t.setAttribute('data-hc', String(c.cellIndex));
     });
-    t.addEventListener('mouseleave', function () { t.removeAttribute('data-hc'); });
+    t.addEventListener('mouseleave', function () { t.removeAttribute('data-hc'); t.removeAttribute('data-hr'); each(t.querySelectorAll('tr.hr'), function (r) { r.classList.remove('hr'); }); });
   })();
 
   /* ---------- 진행 과정 (채운 아이콘 + > 표시) ---------- */
@@ -1611,7 +1625,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       pub: ['공개', '비공개']
     };
     var sel = {};          /* 선택된 값 : { plat:'치지직', kind:'SET', ... } */
-    var privEl = $('f_priv'), nick = $('f_nick'), tbd = $('nickTbd');
+    var privEl = $('f_priv'), nick = $('f_nick'), tbd = $('nickTbd'), ptbd = $('platTbd');
+    function isTbd(b) { return b.getAttribute('aria-pressed') === 'true'; }
     privEl.innerHTML = '<option value="">기간 선택</option>' + [1, 2, 3, 4, 5].map(function (n) { return '<option value="' + n + '">' + n + '개월</option>'; }).join('') + '<option value="6">6개월 이상</option>';
 
     /* 접혀 있다가 부드럽게 펼쳐지는 영역 (기타 플랫폼명 / 전신·반신) */
@@ -1620,7 +1635,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     /* ---- 필수 항목 확인 : 기타 문의사항 · 추가 옵션을 뺀 나머지 ---- */
     var REQ = [
       ['nick', function () { return tbd.getAttribute('aria-pressed') === 'true' || nick.value.trim(); }, '방송 닉네임을 입력하거나 ‘미정’을 선택해 주세요.'],
-      ['plat', function () { return sel.plat && (sel.plat !== '기타' || $('f_platEtc').value.trim()); }, function () { return sel.plat === '기타' ? '플랫폼명을 입력해 주세요.' : '활동 플랫폼을 선택해 주세요.'; }],
+      ['plat', function () { return isTbd(ptbd) || (sel.plat && (sel.plat !== '기타' || $('f_platEtc').value.trim())); }, function () { return sel.plat === '기타' ? '플랫폼명을 입력해 주세요.' : '활동 플랫폼을 선택하거나 ‘미정’을 선택해 주세요.'; }],
       ['debut', function () { return $('f_debut').value.trim(); }, '데뷔 예정시기를 입력해 주세요.'],
       ['act', function () { return sel.act; }, '활동 구분을 선택해 주세요.'],
       ['type', function () { return sel.kind && sel.size; }, function () { return sel.kind ? '전신 / 반신을 선택해 주세요.' : '신청 타입을 선택해 주세요.'; }],
@@ -1665,7 +1680,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       ddVal.textContent = v || '플랫폼 선택';
       ddVal.classList.toggle('dd-ph', !v);
       ddItems.forEach(function (li) { li.setAttribute('aria-selected', li.getAttribute('data-v') === sel.plat ? 'true' : 'false'); });
-      reveal($('platEtcWrap'), sel.plat === '기타');
+      reveal($('platEtcWrap'), sel.plat === '기타' && !isTbd(ptbd));
       if (sel.plat !== '기타') $('f_platEtc').value = '';
       recheck('plat');
     }
@@ -1673,7 +1688,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       setPlat(v); ddOpen(false); ddBtn.focus({ preventScroll: true });
       if (v === '기타') setTimeout(function () { $('f_platEtc').focus({ preventScroll: true }); }, 320);
     }
-    ddBtn.addEventListener('click', function () { ddOpen(!dd.classList.contains('open')); });
+    ddBtn.addEventListener('click', function () { if (isTbd(ptbd)) return; ddOpen(!dd.classList.contains('open')); });
     ddList.addEventListener('click', function (e) { var li = e.target.closest('li'); if (li) pick(li.getAttribute('data-v')); });
     ddList.addEventListener('mousemove', function (e) { var li = e.target.closest('li'); if (li) { ddAct = ddItems.indexOf(li); paintAct(); } });
     ddBtn.addEventListener('keydown', function (e) {
@@ -1724,12 +1739,24 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       });
     });
 
+    /* 미정 : 입력해 둔 내용은 지우지 않고 잠시 비활성화 (다시 누르면 그대로 돌아옴) */
     tbd.addEventListener('click', function () {
-      var on = tbd.getAttribute('aria-pressed') !== 'true';
+      var on = !isTbd(tbd);
       tbd.setAttribute('aria-pressed', on);
       nick.disabled = on;
-      if (on) nick.value = '';
+      boxOf('nick').classList.toggle('tbd', on);
       recheck('nick');
+    });
+    ptbd.addEventListener('click', function () {
+      var on = !isTbd(ptbd);
+      ptbd.setAttribute('aria-pressed', on);
+      ddOpen(false);
+      dd.classList.toggle('dis', on);
+      ddBtn.setAttribute('aria-disabled', on ? 'true' : 'false');
+      $('f_platEtc').disabled = on;
+      reveal($('platEtcWrap'), sel.plat === '기타' && !on);
+      boxOf('plat').classList.toggle('tbd', on);
+      recheck('plat');
     });
     nick.addEventListener('input', function () { recheck('nick'); });
     $('f_debut').addEventListener('input', function () { recheck('debut'); });
@@ -1782,8 +1809,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
         '', '',
         '[커미션 신청서]', '',
         '■ 방송 정보',
-        line('방송 닉네임', tbd.getAttribute('aria-pressed') === 'true' ? '미정' : nick.value),
-        line('활동 플랫폼', plat),
+        line('방송 닉네임', isTbd(tbd) ? '미정' : nick.value),
+        line('활동 플랫폼', isTbd(ptbd) ? '미정' : plat),
         line('데뷔 예정시기', $('f_debut').value),
         line('활동 구분', sel.act), '',
         '■ 신청 내용',
@@ -1869,6 +1896,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       syncSize();
       setPlat(''); ddOpen(false);
       tbd.setAttribute('aria-pressed', 'false'); nick.disabled = false;
+      ptbd.setAttribute('aria-pressed', 'false'); dd.classList.remove('dis'); ddBtn.setAttribute('aria-disabled', 'false'); $('f_platEtc').disabled = false;
+      boxOf('nick').classList.remove('tbd'); boxOf('plat').classList.remove('tbd');
       agree.checked = false; sync();
       clearErr();
       stat.classList.remove('bad');
