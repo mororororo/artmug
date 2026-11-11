@@ -295,17 +295,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .gal .sc-arrow.prev{left:calc(var(--peek,60px) - 56px)}
 .gal .sc-arrow.next{right:calc(var(--peek,60px) - 56px)}
 /* 양옆 이전/다음 카드 : 바깥으로 갈수록 서서히 사라짐 */
-.sc-clip{overflow:hidden;padding:6px 0 10px;margin:-6px 0 -10px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--peek,60px),#000 calc(100% - var(--peek,60px)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--peek,60px),#000 calc(100% - var(--peek,60px)),transparent 100%)}
+.sc-clip{overflow:hidden;padding:6px 0 10px;margin:-6px 0 -10px;-webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.5) 0,#000 var(--peek,60px),#000 calc(100% - var(--peek,60px)),rgba(0,0,0,.5) 100%);mask-image:linear-gradient(90deg,rgba(0,0,0,.5) 0,#000 var(--peek,60px),#000 calc(100% - var(--peek,60px)),rgba(0,0,0,.5) 100%)}
 .sc-thumb.sq{width:72px;aspect-ratio:1}
 .gph5{aspect-ratio:16/9}
-/* 버튜버 : 여자 / 남자 탭 (분류 탭 아래, 조금 작게) */
-.sexs{display:flex;justify-content:center;gap:22px;margin:-8px 0 18px}
-/* FEMALE / MALE : 상자 없이 글자만, 선택된 쪽 아래에 막대 */
-.tab.sx,.tab.sx:disabled,.tab.sx[aria-selected="true"],.tab.sx:not(:disabled):not([aria-selected="true"]):hover{padding:6px 2px 7px;border:0;border-radius:0;background:none;font:800 12px var(--en);letter-spacing:.12em}
-.tab.sx{color:#A9AABF}
-.tab.sx:not(:disabled):not([aria-selected="true"]):hover{color:var(--bell-deep)}
-.tab.sx[aria-selected="true"]{color:var(--bell-deep);background:linear-gradient(var(--bell-deep),var(--bell-deep)) left bottom/100% 2px no-repeat}
-.tab.sx:disabled{color:#CDCEDB}
 .sc-dots{display:flex;justify-content:center;gap:7px;margin-top:6px}
 .sc-dots button{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:#D5D6EE;cursor:pointer;transition:background .2s,transform .2s}
 .sc-dots button[aria-current="true"]{background:var(--bell-deep);transform:scale(1.25)}
@@ -1280,38 +1272,17 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     window.addEventListener('load', function () { layout(false); });
   }
 
-  /* ---------- 일러스트 갤러리 : 분류 탭 (+ 버튜버는 여자/남자 탭) + 무한 순환 캐러셀 ---------- */
-  var SEXES = ['여자', '남자'];
-  function sexOf(it) { return it && it.sex === '남자' ? '남자' : '여자'; }
-  /* 여자/남자 탭 : 분류에 sexTabs 가 켜져 있거나, 이름이 VTUBER/버튜버 인 경우 */
-  function hasSexTabs(c) { return c.sexTabs != null ? !!c.sexTabs : /VTUBER|버튜버/i.test(c.name || ''); }
-
+  /* ---------- 일러스트 갤러리 : 분류 탭 + 무한 순환 캐러셀 ---------- */
   function Gallery(root, cats) {
     cats = (cats || []).filter(Boolean);
     if (!cats.length) cats = [{ name: '', items: [] }];
-    root.innerHTML = '<div class="tabs" role="tablist"></div><div class="sexs" role="tablist" aria-label="성별"></div><div class="gal-body"></div>';
-    var tabsEl = root.querySelector('.tabs'), sexEl = root.querySelector('.sexs'), body = root.querySelector('.gal-body');
-    var ci = 0, sex = '여자';
+    root.innerHTML = '<div class="tabs" role="tablist"></div><div class="gal-body"></div>';
+    var tabsEl = root.querySelector('.tabs'), body = root.querySelector('.gal-body');
+    var ci = 0;
 
     function itemsNow() {
       var c = cats[ci], all = (c.items || []).filter(function (x) { return x && x.src; });
-      return hasSexTabs(c) ? all.filter(function (x) { return sexOf(x) === sex; }) : all;
-    }
-    function buildSex() {
-      var c = cats[ci];
-      sexEl.innerHTML = '';
-      if (!hasSexTabs(c)) { sexEl.style.display = 'none'; return; }
-      sexEl.style.display = '';
-      var all = (c.items || []).filter(function (x) { return x && x.src; });
-      SEXES.forEach(function (s) {
-        var b = document.createElement('button'), has = all.some(function (x) { return sexOf(x) === s; });
-        b.type = 'button'; b.className = 'tab sx'; b.textContent = s === '남자' ? 'MALE' : 'FEMALE';
-        b.setAttribute('role', 'tab');
-        if (!has && s !== '여자') { b.disabled = true; b.setAttribute('aria-disabled', 'true'); b.setAttribute('aria-label', s + ' (준비중)'); }
-        b.setAttribute('aria-selected', s === sex ? 'true' : 'false');
-        b.addEventListener('click', function () { sex = s; buildSex(); build(); });
-        sexEl.appendChild(b);
-      });
+      return all;
     }
     function build() {
       var items = itemsNow(), name = cats[ci].name || '작업물';
@@ -1334,14 +1305,14 @@ body.inframe .remote,body.ext-remote .remote{display:none}
         if (i !== 0 && !(c.items || []).some(function (x) { return x && x.src; })) { b.disabled = true; b.setAttribute('aria-disabled', 'true'); b.setAttribute('aria-label', c.name + ' (준비중)'); }
         b.setAttribute('aria-selected', i === ci ? 'true' : 'false');
         b.addEventListener('click', function () {
-          ci = i; sex = '여자';
+          ci = i;
           each(tabsEl.querySelectorAll('.tab'), function (x, k) { x.setAttribute('aria-selected', k === ci ? 'true' : 'false'); });
-          buildSex(); build();
+          build();
         });
         tabsEl.appendChild(b);
       });
     }
-    buildTabs(); buildSex(); build();
+    buildTabs(); build();
   }
 
   /* ---------- 리깅 : 세부 탭 (쇼케이스 / 얼굴 / 몸 / 표정) + 쇼케이스 ---------- */

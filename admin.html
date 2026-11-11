@@ -532,14 +532,6 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     }));
   }
 
-  /* 버튜버 등 '여자/남자 탭' 을 쓰는 분류 : sexTabs 가 없으면 이름이 VTUBER/버튜버 인 경우 사용 */
-  function hasSexTabs(c) { return c && (c.sexTabs != null ? !!c.sexTabs : /VTUBER|버튜버/i.test(c.name || '')); }
-  function sexPick(it, key) {
-    var cur = it.sex === '남자' ? '남자' : '여자';
-    return h('div', { class: 'platpick', title: '이 작업물을 보여 줄 탭' }, [h('span', { class: 'hint', style: 'margin:0', text: '탭:' })].concat(['여자', '남자'].map(function (s) {
-      return h('label', { class: 'chk' }, [h('input', { type: 'radio', name: 'sex_' + key, checked: cur === s, onchange: function () { it.sex = s; touch(); } }), s]);
-    })));
-  }
   function gallery(items, key, rig, cat) {
     var sel = Math.min(iSel[key] || 0, Math.max(0, items.length - 1)); iSel[key] = sel;
     var it = items[sel];
@@ -552,7 +544,6 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     }
     var box = h('div', { class: 'gcard' }, [viewer]);
     if (it) {
-      if (!rig && hasSexTabs(cat)) box.appendChild(h('div', { class: 'gmeta' }, [sexPick(it, key)]));
       if (rig) box.appendChild(h('div', { class: 'gmeta one' }, [inp(it, 'video', { class: 'ghost', placeholder: '영상 주소 (YouTube 또는 mp4, 선택)', style: 'text-align:center' })]));
     }
     var th = h('div', { class: 'gthumbs' });
@@ -593,7 +584,6 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     gallery(cur.items, 'ill' + iCat, false, cur).forEach(function (k) { kids.push(k); });
     kids.push(h('div', { class: 'grid2', style: 'margin-top:18px' }, [
       field('탭 이름', inp(cur, 'name')),
-      h('div', { class: 'field' }, [h('span', { text: '여자 / 남자 탭' }), h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: hasSexTabs(cur), onchange: function (e) { cur.sexTabs = e.target.checked; touch(); render(); } }), '이 분류를 여자 / 남자 탭으로 나누기'])]),
       h('div', { class: 'field' }, [h('span', { text: '분류 관리' }), h('div', { class: 'tl' }, [
         h('button', { type: 'button', class: 'btn sm', text: '+ 분류 추가', onclick: function () { cats.push({ name: '새 분류', items: [] }); iCat = cats.length - 1; touch(); render(); } }),
         cats.length > 1 ? h('button', { type: 'button', class: 'btn sm danger', text: '이 분류 삭제', onclick: function () { if (!confirm('"' + cur.name + '" 분류를 통째로 삭제할까요?')) return; cats.splice(iCat, 1); iCat = 0; touch(); render(); } }) : null
