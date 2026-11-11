@@ -526,7 +526,7 @@ textarea{min-height:96px;resize:none;overflow:hidden}
 .form input[type="text"],.form select{height:36px;padding:0 16px;border-color:#CBCDF0;border-radius:999px}
 .form textarea{border-color:#CBCDF0;border-radius:18px;padding:12px 16px}
 .form textarea{line-height:21px}
-.fline.est input{max-width:230px;text-align:right;font-weight:700}
+.fline.est input{text-align:right;font-weight:700}
 .won{font-size:15px;font-weight:700}
 .chips+.chips{margin-top:2px}
 /* 동의 체크 : 외곽 상자 없이 작게, 가운데 정렬 */
@@ -1598,6 +1598,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     if ((P.notes || []).length) html += '<ul class="notes pnotes">' + P.notes.map(function (n) { return '<li>' + fmt(n) + '</li>'; }).join('') + '</ul>';
 
     var oi = 0;
+    /* 추가 옵션 위 안내 (예: 일러스트 단독 의뢰) : 탭마다 따로 */
+    if (t.preNotesTitle) html += '<p class="pnt">' + fmt(t.preNotesTitle) + '</p>';
+    if ((t.preNotes || []).length) html += '<ul class="notes pnotes">' + t.preNotes.map(function (n) { return '<li>' + fmt(n) + '</li>'; }).join('') + '</ul>';
     html += '<div class="optgs" style="margin-top:36px">' + groupsOf(t).map(function (g) {
       var rows = (g.options || []).map(function (o) {
         var i = oi++, q = calc.qty[calc.tab][i] || 0, nq = !!o.noQty, unit = o.unit || '개';

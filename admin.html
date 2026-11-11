@@ -452,6 +452,9 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
       h('div', { class: 'pgl', text: '기본' }), cards,
       addBtn('+ 카드 추가', function () { t.cards.push({ name: '', price: '', features: [] }); touch(); render(); }),
       h('div', { class: 'notes' }, [lines(S.price.notes, 3)]),
+      /* 추가 옵션 위 안내 : 탭마다 따로 (예: 일러스트 단독 의뢰) */
+      field('추가 옵션 위 안내 제목 · ' + t.key + ' (선택, 예: 일러스트 단독 의뢰)', inp(t, 'preNotesTitle', { placeholder: '비워 두면 제목 없이 표시' })),
+      h('div', { class: 'notes' }, [lines(t.preNotes = t.preNotes || [], 2)]),
       h('h3', { class: 'sub-title', text: '추가 옵션 · ' + t.key + ' ("묶음 없이"는 전체 폭 한 줄, 나머지 묶음은 회색 상자로 한 줄에 두 개씩)' }),
       gbox,
       addBtn('+ 묶음 추가', function () { t.groups.push({ title: '', options: [{ name: '', sub: '', price: '' }] }); touch(); render(); }),
