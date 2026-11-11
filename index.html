@@ -107,11 +107,14 @@ input,select,textarea{font-family:inherit}
 .ht{display:flex;align-items:center;gap:12px}
 #noticeAcc .ah{padding-top:16.25px;padding-bottom:16.25px;font-size:17px}
 /* 공지사항 1~6 : 외곽선 없이 항목 사이에 점선 (기본 가능 범위 위 점선과 동일) */
-#noticeAcc .ai{border:0;border-radius:0;background:none}
-#noticeAcc .ai+.ai{margin-top:0;border-top:1px dashed #E0E0E7}
-#noticeAcc{gap:0}
+/* 공지사항 1~6 : 위 주요 안내처럼 둥근 연보라 상자 (펼치면 제목만 연보라, 내용은 흰 바탕) */
+#noticeAcc{gap:13.5px}
+#noticeAcc .ai,#noticeAcc .ai.open{margin-top:0;border:1.5px solid var(--panel);border-radius:14px;background:#fff;overflow:hidden;transition:border-color .25s,transform .25s,box-shadow .25s}
+#noticeAcc .ah{background:var(--panel);transition:background .25s}
+#noticeAcc .ai:hover{border-color:var(--chalk);transform:translateY(-2px);box-shadow:0 3px 8px rgba(110,114,205,.2)}
+#noticeAcc .ai:hover .ah{background:var(--chalk)}
 /* 펼친 내용은 자주하는 질문 답변과 같은 글씨 */
-#noticeAcc .apin{font-size:16px;line-height:1.7}
+#noticeAcc .apin{padding-top:16px;font-size:16px;line-height:1.7}
 .ai{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
 .ai,.ai.open{border-color:#D6D6DE}
 /* 자주하는 질문 : 공지사항과 같은 연보라 + 다이아 */
@@ -138,9 +141,10 @@ input,select,textarea{font-family:inherit}
 .bul li{position:relative;padding-left:14px}
 .bul li::before{content:"•";position:absolute;left:0;color:var(--bell-deep)}
 /* 기본 가능 범위 : 위에 점선 구분선, 외곽선 없음, 펼칠 때 항목이 차례로 쫘라락 */
-#baseAcc{margin-top:22px;padding-top:6px;border:0;border-top:1px dashed #C9CAE6;border-radius:0;background:none;overflow:visible}
+/* 접었을 때 아래 간격 2/3 (52px → 34.7px), 펼쳤을 때는 그대로 */
+#baseAcc{margin-top:22px;margin-bottom:-17.33px;padding-top:6px;border:0;border-top:1px dashed #C9CAE6;border-radius:0;background:none;overflow:visible}
 #baseAcc .ah{padding-left:4px;padding-right:4px;padding-bottom:13px;font-size:16.5px}
-#baseAcc .apin{padding-left:4px;padding-right:4px;padding-bottom:13.33px;font-size:14px}
+#baseAcc .apin{padding-left:4px;padding-right:4px;padding-bottom:30.66px;font-size:14px}
 #baseAcc .bul li{opacity:0;transform:translateY(-10px);transition:opacity .25s ease,transform .3s ease}
 #baseAcc .ap.open .bul li{opacity:1;transform:none;transition:opacity .4s ease,transform .5s cubic-bezier(.22,1,.36,1)}
 #baseAcc .ap.open .bul li:nth-child(1){transition-delay:.06s}
@@ -180,7 +184,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 #illust .sec-head,#price .sec-head{margin-bottom:24.5px}
 
 /* 작업과정 : 위 가로 스텝 라인(원형 번호, 카드 왼쪽에 맞춤) + 아래 같은 높이의 카드 7장 */
-.flow2{--gap:10px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap);padding-top:2px}
+.flow2{--gap:16px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap);padding-top:2px}
 .fs{position:relative;display:flex;flex-direction:column;min-width:0}
 .fs-dot{position:relative;z-index:1;display:grid;place-items:center;align-self:center;width:30px;height:30px;margin-bottom:16px;border:1.5px solid #D6D6DE;border-radius:50%;background:#fff;color:#8C8DAE;font:700 11.5px/1 var(--en)}
 .fs-dot svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
@@ -192,7 +196,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .fs-dot{display:block;line-height:27px;padding:1px 0 0;text-align:center}
 /* 원과 원을 잇는 얇은 선 (첫 단계 오른쪽 일부는 Blue Bell) */
 .fs:not(:last-child)::before{content:"";position:absolute;left:calc(50% + 15px);top:14.25px;width:calc(100% + var(--gap) - 30px);height:1.5px;background:#DCDCE6}
-.fs-card{flex:1;display:flex;flex-direction:column;align-items:flex-start;padding:16px 12px 18px;overflow:hidden;border:0;border-radius:12px;background:#fff;box-shadow:0 1px 4px rgba(38,39,79,.08);transition:transform .25s ease}
+.fs-card{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 12px 18px;overflow:hidden;border:0;border-radius:12px;background:#fff;box-shadow:0 1px 4px rgba(38,39,79,.08);transition:transform .25s ease}
 .fs-card:hover{transform:scale(1.05)}
 .fs-ic{flex:none;display:grid;place-items:center;width:30px;height:30px}
 .fs-ic svg{width:26px;height:26px;fill:none;stroke:var(--bell-deep);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -200,15 +204,15 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .fs-card b{margin-top:7px;font-size:18px;font-weight:700;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere}
 /* 컨펌 횟수 : 카드 아래쪽 일부를 나눠 보라색으로 칠하고 그 안에 표시 */
 .fs-card b{margin-bottom:16px}
-.fs-card .bd{align-self:stretch;margin:auto -12px -18px;padding:7px 4px;border-top:1.5px solid var(--bell);border-radius:0;background:var(--chalk);color:var(--bell-deep);font-size:12.5px;font-weight:700;text-align:center}
+.fs-card .bd{align-self:stretch;margin:auto -12px -18px;padding:7px 4px;border-top:1.5px solid #CDCEF6;border-radius:0;background:var(--chalk);color:var(--bell-deep);font-size:12.5px;font-weight:700;text-align:center}
 /* 맨 아래 구간 표시 : 디자인(01) / 일러스트(02~03) / 리깅(04~07) */
-.fphase{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap,10px);margin-top:14px}
+.fphase{--gap:16px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap);margin-top:14px}
 /* ┣──── 디자인 1주 ────┤ : 양 끝은 세로 실선, 가운데 가로선은 점선 (STEP 01 과 같은 색) */
-.fph{display:flex;align-items:center;gap:8px;padding:0 2px;color:#B4B5C8;font-size:13px;font-weight:700;white-space:nowrap}
+.fph{display:flex;align-items:center;gap:8px;padding:0 2px;color:#C8C9D8;font-size:13px;font-weight:700;white-space:nowrap}
 .fph s{position:relative;flex:1;min-width:8px;height:11px;text-decoration:none}
-.fph s::before{content:"";position:absolute;left:0;right:0;top:50%;margin-top:-.75px;border-top:1.5px dashed #C4C5D4}
-.fph s:first-child{border-left:1.5px solid #C4C5D4}
-.fph s:last-child{border-right:1.5px solid #C4C5D4}
+.fph s::before{content:"";position:absolute;left:0;right:0;top:50%;margin-top:-.75px;border-top:1.5px dashed #D9DAE4}
+.fph s:first-child{border-left:1.5px solid #D9DAE4}
+.fph s:last-child{border-right:1.5px solid #D9DAE4}
 .fph i{margin-left:4px;font-style:normal}
 .fph em{font-style:normal}
 .bd{margin-top:8px;padding:2px 10px;border-radius:999px;background:var(--bell);color:var(--on-bell);font-size:12px;font-style:normal;font-weight:700}
@@ -267,7 +271,8 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .play:hover{transform:scale(1.08)}
 .play::before{content:"";margin-left:5px;border-left:19px solid var(--bell-deep);border-top:12px solid transparent;border-bottom:12px solid transparent}
 .sc-arrow{position:absolute;top:50%;z-index:3;display:grid;place-items:center;width:44px;height:44px;margin-top:-24px;padding:0;border:1.5px solid #CFD0EE;border-radius:50%;background:rgba(255,255,255,.96);color:var(--bell-deep);font-size:22px;line-height:1;cursor:pointer;transition:background .2s,border-color .2s}
-.sc-arrow:hover{border-color:var(--bell);background:var(--chalk)}
+.sc-arrow:not(:disabled){color:var(--bell)}
+.sc-arrow:not(:disabled):hover{border-color:var(--bell);background:var(--chalk)}
 .sc-arrow.prev{left:8px}
 .sc-arrow.next{right:8px}
 .sc-arrow[hidden]{display:none}
@@ -280,7 +285,11 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 /* 일러스트 : 조금 더 빠르게, 아래 점 1px 작게 */
 .sc-stage.gal .sc-track{transition-duration:.5s}
 .sc-stage.gal .sc-card{transition-duration:.5s}
-.gal-body .sc-dots button{width:7px;height:7px}
+/* 일러스트 화살표 : 가운데 그림 바로 바깥 */
+.gal .sc-arrow.prev{left:calc(var(--peek,60px) - 56px)}
+.gal .sc-arrow.next{right:calc(var(--peek,60px) - 56px)}
+/* 양옆 이전/다음 카드 : 바깥으로 갈수록 서서히 사라짐 */
+.sc-clip{overflow:hidden;padding:6px 0 10px;margin:-6px 0 -10px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--peek,60px),#000 calc(100% - var(--peek,60px)),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 var(--peek,60px),#000 calc(100% - var(--peek,60px)),transparent 100%)}
 .sc-thumb.sq{width:72px;aspect-ratio:1}
 .gph5{aspect-ratio:16/9}
 /* 버튜버 : 여자 / 남자 탭 (분류 탭 아래, 조금 작게) */
@@ -292,7 +301,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .tab.sx[aria-selected="true"]{color:var(--bell-deep);background:linear-gradient(var(--bell-deep),var(--bell-deep)) left bottom/100% 2px no-repeat}
 .tab.sx:disabled{color:#CDCEDB}
 .sc-dots{display:flex;justify-content:center;gap:7px;margin-top:6px}
-.sc-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:#D5D6EE;cursor:pointer;transition:background .2s,transform .2s}
+.sc-dots button{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:#D5D6EE;cursor:pointer;transition:background .2s,transform .2s}
 .sc-dots button[aria-current="true"]{background:var(--bell-deep);transform:scale(1.25)}
 /* 리깅 움짤 그리드 (얼굴·몸 3장, 표정 4장 / 모바일은 2장) */
 .ggrid{display:grid;grid-template-columns:repeat(var(--gc,3),minmax(0,1fr));gap:18px 14px}
@@ -302,7 +311,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .gcap{margin-top:8px;color:var(--sub);font-size:12.5px;line-height:1.5;text-align:center}
 .gph{aspect-ratio:16/7}
 /* 등록된 영상 썸네일 줄 (현재 영상은 테두리 강조, 많으면 가로 스크롤) */
-.sc-thumbs{display:flex;gap:8px;margin-top:14px;padding:2px 2px 6px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#D5D6EE transparent}
+.sc-thumbs{display:flex;gap:8px;margin-top:16px;padding:2px 2px 6px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#D5D6EE transparent}
 .sc-thumbs>:first-child{margin-left:auto}
 .sc-thumbs>:last-child{margin-right:auto}
 .sc-thumb{flex:none;display:grid;place-items:center;width:104px;aspect-ratio:16/9;padding:0;border:2px solid transparent;border-radius:10px;background:var(--panel);color:#8F90B6;font:700 12px var(--en);overflow:hidden;cursor:pointer;opacity:.6;transition:opacity .2s,border-color .2s}
@@ -339,7 +348,8 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .pc.off .pch{padding-bottom:26px}
 .pc.off .poff{display:block;margin-top:34px;color:#8C8DA8;font-size:13.5px;text-align:center}
 .pc.off .pk{display:none}
-.pnotes{gap:3px;margin-top:20px;color:#43446C;font-size:13.5px;line-height:19.5px}
+/* 줄 간격을 정수(20px + 3px)로 맞춰 줄마다 간격이 같게 */
+.pnotes{gap:3px;margin-top:20px;color:#43446C;font-size:13.5px;line-height:20px}
 .pnotes li::before{content:"※";font-weight:400;color:inherit}
 /* 가격표의 작은 설명 : 5px 안쪽으로 */
 .pnotes{padding-left:6px}
@@ -416,6 +426,8 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .rch{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .rch button{height:36px;padding:0 16px;border:1px solid #CBCDF0;border-radius:999px;background:#fff;font-size:14.5px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s}
 .rch button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff}
+.rch button:disabled{border-color:#E4E4EE;background:#F1F1F6;color:#B6B7CC;cursor:not-allowed}
+.rnote{margin-left:8px;color:var(--bell-deep);font-size:12px;font-weight:600}
 .pwarn{margin-top:10px;color:#B2545D;font-size:11.5px;line-height:1.5}
 .pgo{display:flex;flex:1;justify-content:space-between;align-items:center;height:44px;margin-top:0;padding:0 18px;border:0;border-radius:12px;background:var(--ink);color:#fff;font:700 15.5px var(--font);cursor:pointer;transition:filter .2s}
 .pgo:hover{filter:brightness(1.25)}
@@ -442,7 +454,7 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 .fcard{padding:26px 26px 28px;border-radius:22px;background:var(--panel)}
 .fcard h3{display:flex;align-items:center;gap:10px;margin-bottom:1.2px;font-size:18px;font-weight:800}
 .fcard h3::before{content:"";width:3px;height:19px;border-radius:2px;background:var(--bell-deep)}
-.fq{display:grid;gap:6px;margin-top:15.5px}
+.fq{display:flex;flex-direction:column;gap:6px;margin-top:15.5px}
 /* 미정 선택 시 타이틀 옆 안내 */
 .tbdn{display:none;margin-left:8px;color:var(--bell-deep);font-size:12px;font-weight:600}
 .fq.tbd .tbdn{display:inline}
@@ -451,17 +463,20 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 .dd.dis .chev{opacity:.4}
 .fl{font-size:15px;font-weight:700}
 .fh{color:var(--sub);font-size:12px;line-height:1.55}
-.fq .fh{margin-top:-4px}
+.fq .fh{margin-top:-5px;margin-bottom:1px}
+/* 방송 정보 · 신청 내용 : 항목 위 간격 1.5px 더 줄임 */
+.fgrid .fq{margin-top:14px}
 /* 신청 타입 : 1차(SET/일러스트/리깅) 가로 한 줄 → 고르면 아래에 ∨ 표시와 2차(전신/반신) 가로 한 줄이 펼쳐짐 */
 .krow{--kw:92px;flex-wrap:nowrap}
 .krow .chip{width:var(--kw);padding:0}
 /* ∨ 표시 : 위아래 줄 사이 정중앙 (보이는 V 모양 기준), 조금 연한 색 */
 .kchev{display:block;width:9px;height:9px;margin:.5px 0 12.5px calc(var(--kw,92px) * 1.5 + 8px - 4.5px);border-right:1.5px solid #8A8DDA;border-bottom:1.5px solid #8A8DDA;transform:rotate(45deg)}
 /* 펼쳐지는 영역 (높이 0 → 내용 높이, 위 간격까지 함께) */
-.reveal{display:grid;grid-template-rows:0fr;align-self:start;margin-top:-7px;opacity:0;visibility:hidden;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .3s ease,visibility 0s .45s}
+.reveal{display:grid;grid-template-rows:0fr;align-self:stretch;margin-top:-6px;opacity:0;visibility:hidden;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .3s ease,visibility 0s .45s}
 .reveal.on{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .35s ease .05s,visibility 0s}
 .reveal-in{min-height:0;overflow:hidden}
-.reveal-pad{padding-top:7px}
+/* 펼쳐지는 칸의 테두리·포커스 선이 잘리지 않도록 좌우·아래 여유 */
+.reveal-pad{padding:6px 4px 4px;margin:0 -4px -4px}
 /* 활동 플랫폼 드롭다운 */
 .dd{position:relative}
 .dd-btn{display:flex;align-items:center;justify-content:space-between;width:100%;height:36px;padding:0 16px;border:1px solid #CBCDF0;border-radius:999px;background:#fff;color:var(--ink);font:500 15px var(--font);text-align:left;cursor:pointer;transition:border-color .2s}
@@ -582,6 +597,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .sc-arrow{width:34px;height:34px;margin-top:-19px;font-size:19px}
   .sc-arrow.prev{left:4px}
   .sc-arrow.next{right:4px}
+  .gal .sc-arrow.prev{left:4px}
+  .gal .sc-arrow.next{right:4px}
   .sc-card{border-radius:16px}
   .sc-thumb{width:72px;border-radius:8px}
   .ggrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
@@ -745,8 +762,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
             <p class="ferr" id="e_plat"></p>
           </div>
           <div class="fq">
-            <label class="fl" for="f_debut">데뷔 예정시기</label>
-            <input type="text" id="f_debut" autocomplete="off" placeholder="예) 2027년 3월말">
+            <label class="fl" for="f_debut">데뷔 예정시기<span class="tbdn">※ 추후 정해지는 대로 말씀 부탁드립니다.</span></label>
+            <div class="fline"><input type="text" id="f_debut" autocomplete="off" placeholder="예) 2027년 3월말"><button type="button" class="chip" id="debutTbd" aria-pressed="false">미정</button></div>
             <p class="ferr" id="e_debut"></p>
           </div>
           <div class="fq">
@@ -1127,7 +1144,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   function Peek(root, o) {
     var items = o.items, n = items.length, multi = n > 1;
     var CL = multi ? Math.min(2, n) : 0;
-    root.innerHTML = '<div class="sc-stage ' + (o.cls || '') + '"><div class="sc-track"></div>' +
+    root.innerHTML = '<div class="sc-stage ' + (o.cls || '') + '"><div class="sc-clip"><div class="sc-track"></div></div>' +
       '<button type="button" class="' + (o.arrowCls || 'sc-arrow') + ' prev" aria-label="이전 ' + o.unit + '">' + ARW_L + '</button>' +
       '<button type="button" class="' + (o.arrowCls || 'sc-arrow') + ' next" aria-label="다음 ' + o.unit + '">' + ARW_R + '</button></div>' +
       '<div class="sc-dots"></div><div class="sc-thumbs"></div>';
@@ -1560,6 +1577,9 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     sumUpdate();
   }
 
+  /* 리깅 탭 : 저작권 구매 옵션 없음 */
+  function isRigTab() { var k = (curTab().key || '') + ''; return /RIGGING|리깅/i.test(k); }
+  function rightsNow() { return isRigTab() ? 'broadcast' : calc.rights; }
   function calcResult() {
     var t = curTab(), bi = calc.base[calc.tab], card = bi >= 0 ? (t.cards || [])[bi] : null;
     var base = card ? num(card.price) : 0, unpriced = !!card && !base, optSum = 0, lines = [];
@@ -1573,14 +1593,15 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       var qtxt = o.noQty ? '' : (unit === '개' ? (q > 1 ? ' × ' + q : '') : ' · ' + q + unit);
       lines.push({ name: o.name + (o.sub ? ' (' + o.sub + ')' : ''), q: q, unit: unit, qtxt: qtxt, price: p, raw: o.name });
     });
-    var sub = base + optSum, add = calc.rights === 'personal' ? Math.round(sub * 0.3) : 0, total = sub + add;
+    var sub = base + optSum, add = rightsNow() === 'personal' ? Math.round(sub * 0.3) : 0, total = sub + add;
     return { tab: t, card: card, base: base, optSum: optSum, lines: lines, sub: sub, add: add, total: total, unpriced: unpriced };
   }
 
   function sumUpdate() {
-    var r = calcResult(), el = $('psum');
-    var left = '<div class="psel"><h5>저작권 구매</h5><div class="rch">' + [['broadcast', '미구매'], ['personal', '개인세'], ['company', '기업세']].map(function (x) {
-      return '<button type="button" data-r="' + x[0] + '" aria-pressed="' + (calc.rights === x[0]) + '">' + x[1] + '</button>';
+    var r = calcResult(), el = $('psum'), rig = isRigTab(), rights = rightsNow();
+    /* 리깅만 의뢰 : 저작권 구매 버튼 모두 비활성화 */
+    var left = '<div class="psel"><h5>저작권 구매' + (rig ? '<span class="rnote">※ 리깅만 의뢰하는 경우 저작권 구매 옵션이 없습니다.</span>' : '') + '</h5><div class="rch">' + [['broadcast', '미구매'], ['personal', '개인세'], ['company', '기업세']].map(function (x) {
+      return '<button type="button" data-r="' + x[0] + '" aria-pressed="' + (!rig && rights === x[0]) + '"' + (rig ? ' disabled' : '') + '>' + x[1] + '</button>';
     }).join('') + '</div></div>';
     left += '<div class="psel"><h5>선택 항목</h5><ul>';
     if (r.card) left += '<li><span>' + esc(r.tab.key + ' · ' + r.card.name) + '</span><i>✓</i></li>';
@@ -1592,8 +1613,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     var right = '<h4>예상 금액</h4><div class="ptotal">' + comma(r.total) + '<small>원</small></div><div class="sdiv" style="margin-top:0"></div>';
     right += '<div class="prow"><span>기본 금액</span><b>' + comma(r.base) + '원</b></div>';
     right += '<div class="prow"><span>옵션 금액</span><b>' + comma(r.optSum) + '원</b></div>';
-    if (calc.rights === 'personal') right += '<div class="prow"><span>개인세 (+30%)</span><b>' + comma(r.add) + '원</b></div>';
-    if (calc.rights === 'company') right += '<div class="prow"><span>기업세 저작권료</span><b>협의</b></div>';
+    if (rights === 'personal') right += '<div class="prow"><span>개인세 (+30%)</span><b>' + comma(r.add) + '원</b></div>';
+    if (rights === 'company') right += '<div class="prow"><span>기업세</span><b>협의</b></div>';
     right += '<p class="pmin">※ 최소 예상 금액이며 상담 후 최종 금액이 변경될 수 있습니다.</p>';
     right += '<div class="pact"><button type="button" class="prs" id="pRs" title="선택 초기화" aria-label="가격표 선택 초기화"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v4.5h4.5"/></svg></button>' +
       '<button type="button" class="pgo" id="pgo"><span>신청 양식에 반영</span><span aria-hidden="true">↓</span></button></div>';
@@ -1622,10 +1643,11 @@ body.inframe .remote,body.ext-remote .remote{display:none}
         if (nm.indexOf('반신') >= 0) FORM.setChip('size', '반신');
         else if (nm.indexOf('전신') >= 0) FORM.setChip('size', '전신');
       }
-      if (calc.rights === 'personal' || calc.rights === 'company') {
-        FORM.setChip('act', calc.rights === 'personal' ? '개인세' : '기업세');
+      var rt = rightsNow();
+      if (rt === 'personal' || rt === 'company') {
+        FORM.setChip('act', rt === 'personal' ? '개인세' : '기업세');
         FORM.setChip('copy', '구매');
-      } else FORM.setChip('copy', '미구매');
+      } else if (!isRigTab()) FORM.setChip('copy', '미구매');
       var pv = null;
       r.lines.forEach(function (l) { if (l.raw === '포트폴리오 비공개') pv = l; });
       if (pv) { FORM.setChip('pub', '비공개'); FORM.setPriv(pv.q); }
@@ -1648,7 +1670,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       pub: ['공개', '비공개']
     };
     var sel = {};          /* 선택된 값 : { plat:'치지직', kind:'SET', ... } */
-    var privEl = $('f_priv'), nick = $('f_nick'), tbd = $('nickTbd'), ptbd = $('platTbd');
+    var privEl = $('f_priv'), nick = $('f_nick'), tbd = $('nickTbd'), ptbd = $('platTbd'), debut = $('f_debut'), dtbd = $('debutTbd');
     function isTbd(b) { return b.getAttribute('aria-pressed') === 'true'; }
     privEl.innerHTML = '<option value="">기간 선택</option>' + [1, 2, 3, 4, 5].map(function (n) { return '<option value="' + n + '">' + n + '개월</option>'; }).join('') + '<option value="6">6개월 이상</option>';
 
@@ -1659,7 +1681,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     var REQ = [
       ['nick', function () { return tbd.getAttribute('aria-pressed') === 'true' || nick.value.trim(); }, '방송 닉네임을 입력하거나 ‘미정’을 선택해 주세요.'],
       ['plat', function () { return isTbd(ptbd) || (sel.plat && (sel.plat !== '기타' || $('f_platEtc').value.trim())); }, function () { return sel.plat === '기타' ? '플랫폼명을 입력해 주세요.' : '활동 플랫폼을 선택하거나 ‘미정’을 선택해 주세요.'; }],
-      ['debut', function () { return $('f_debut').value.trim(); }, '데뷔 예정시기를 입력해 주세요.'],
+      ['debut', function () { return isTbd(dtbd) || debut.value.trim(); }, '데뷔 예정시기를 입력하거나 ‘미정’을 선택해 주세요.'],
       ['act', function () { return sel.act; }, '활동 구분을 선택해 주세요.'],
       ['type', function () { return sel.kind && sel.size; }, function () { return sel.kind ? '전신 / 반신을 선택해 주세요.' : '신청 타입을 선택해 주세요.'; }],
       ['copy', function () { return sel.copy; }, '저작권 구매 여부를 선택해 주세요.'],
@@ -1770,6 +1792,13 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       boxOf('nick').classList.toggle('tbd', on);
       recheck('nick');
     });
+    dtbd.addEventListener('click', function () {
+      var on = !isTbd(dtbd);
+      dtbd.setAttribute('aria-pressed', on);
+      debut.disabled = on;
+      boxOf('debut').classList.toggle('tbd', on);
+      recheck('debut');
+    });
     ptbd.addEventListener('click', function () {
       var on = !isTbd(ptbd);
       ptbd.setAttribute('aria-pressed', on);
@@ -1834,7 +1863,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
         '■ 방송 정보',
         line('방송 닉네임', isTbd(tbd) ? '미정' : nick.value),
         line('활동 플랫폼', isTbd(ptbd) ? '미정' : plat),
-        line('데뷔 예정시기', $('f_debut').value),
+        line('데뷔 예정시기', isTbd(dtbd) ? '미정' : debut.value),
         line('활동 구분', sel.act), '',
         '■ 신청 내용',
         line('신청 타입', type),
@@ -1921,6 +1950,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       tbd.setAttribute('aria-pressed', 'false'); nick.disabled = false;
       ptbd.setAttribute('aria-pressed', 'false'); dd.classList.remove('dis'); ddBtn.setAttribute('aria-disabled', 'false'); $('f_platEtc').disabled = false;
       boxOf('nick').classList.remove('tbd'); boxOf('plat').classList.remove('tbd');
+      dtbd.setAttribute('aria-pressed', 'false'); debut.disabled = false; boxOf('debut').classList.remove('tbd');
       agree.checked = false; sync();
       clearErr();
       stat.classList.remove('bad');
