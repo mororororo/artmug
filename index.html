@@ -55,7 +55,8 @@ input,select,textarea{font-family:inherit}
 .eyebrow{font-family:var(--en);font-size:12.5px;font-weight:700;letter-spacing:.3em;color:var(--bell-deep)}
 .intro h1{margin:8px 0 0;font-size:clamp(48px,8vw,72px);font-weight:800;letter-spacing:-.03em;line-height:1.05}
 /* '르인' 아래 구분선 */
-.idiv{display:block;align-self:stretch;height:1px;margin:20px -28px 4px;background:#E3E3EA}
+/* '르인' 아래 소개말 */
+.intro-txt{margin-top:22px;color:#43446C;font-size:13.5px;line-height:1.8;word-break:keep-all}
 .btns{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
 .btn{display:inline-block;padding:12px 26px;border:1.5px solid var(--bell);border-radius:999px;background:#fff;color:var(--bell-deep);font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
 .btn:hover{background:var(--chalk);transform:translateY(-2px);box-shadow:0 3px 8px rgba(110,114,205,.2)}
@@ -70,11 +71,11 @@ input,select,textarea{font-family:inherit}
 
 /* ---------- 슬롯 현황 ---------- */
 .slots{display:grid}
-.srow{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}
+.srow{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid #EFEFF4}
 .srow:last-child{border-bottom:0}
 /* 마감된 달 : 회색 배경으로 비활성화 */
 .srow.off{border-bottom-color:transparent;border-radius:10px;background:#F1F1F5}
-.srow.off+.srow.off{margin-top:3px}
+.srow.off+.srow.off{margin-top:1px}
 .srow.off .sm{color:#A9AABF}
 .srow.off .dot{background:#C6C7D6}
 .srow.off .ss.full{color:#A9AABF}
@@ -114,20 +115,23 @@ input,select,textarea{font-family:inherit}
 #noticeAcc .ai:hover{border-color:var(--chalk);transform:translateY(-2px);box-shadow:0 3px 8px rgba(110,114,205,.2)}
 #noticeAcc .ai:hover .ah{background:var(--chalk)}
 /* 펼친 내용은 자주하는 질문 답변과 같은 글씨 */
-#noticeAcc .apin{padding-top:16px;font-size:16px;line-height:1.7}
+/* 펼친 내용 : 제목 첫 글자(번호 원 26px + 간격 12px 뒤)와 같은 위치에서 시작 */
+#noticeAcc .apin{padding:16px 18px 18px 56px;font-size:16px;line-height:1.7}
 .ai{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
 .ai,.ai.open{border-color:#D6D6DE}
 /* 자주하는 질문 : 공지사항과 같은 연보라 + 다이아 */
-#faqList .ai{border:0;background:var(--panel);transition:background .25s,transform .25s,box-shadow .25s}
-#faqList .ai:hover,#faqList .ai.open{background:var(--chalk)}
-#faqList .ai:hover{transform:translateY(-2px);box-shadow:0 3px 8px rgba(110,114,205,.2)}
+/* 자주하는 질문 : 공지사항과 같은 상자 (펼치면 질문만 연보라, 답변은 흰 바탕) */
+#faqList .ai,#faqList .ai.open{border:1.5px solid var(--panel);border-radius:14px;background:#fff;overflow:hidden;transition:border-color .25s,transform .25s,box-shadow .25s}
+#faqList .ah{background:var(--panel);transition:background .25s}
+#faqList .ai:hover{border-color:var(--chalk);transform:translateY(-2px);box-shadow:0 3px 8px rgba(110,114,205,.2)}
+#faqList .ai:hover .ah{background:var(--chalk)}
 /* 다이아 위아래 여백을 같게, 질문 글자와 화살표는 다이아 중심 높이에 맞춤 */
 #faqList .ah{padding:15px 16px;font-size:16.5px;font-weight:600;line-height:1.5}
 #faqList .fqq{display:flex;gap:7px;align-items:center}
 #faqList .chev{position:relative;top:1.5px}
 #faqList .fqq::before{content:"Q.";flex:none;width:18px;color:var(--bell-deep);font:800 15px/1 var(--en);transform:translateY(-1px)}
 /* 답변 : A. 를 질문 첫 글자(Q. 18px + 간격 7px 뒤)에 맞추고, 위 간격 2.5px 줄임 */
-#faqList .apin{margin-top:-2.5px;padding:0 18px 18px 41px;font-size:16px;line-height:1.7}
+#faqList .apin{padding:13.5px 18px 18px 41px;font-size:16px;line-height:1.7}
 /* 답변 앞 A. , 줄이 바뀌어도 A. 만큼 들여쓰기 */
 .fa{display:flex;gap:7px}
 .fa-a{flex:none;color:var(--bell-deep);font:800 15px/1.8 var(--en)}
@@ -144,7 +148,8 @@ input,select,textarea{font-family:inherit}
 /* 접었을 때 아래 간격 2/3 (52px → 34.7px), 펼쳤을 때는 그대로 */
 #baseAcc{margin-top:22px;margin-bottom:-17.33px;padding-top:6px;border:0;border-top:1px dashed #C9CAE6;border-radius:0;background:none;overflow:visible}
 #baseAcc .ah{padding-left:4px;padding-right:4px;padding-bottom:13px;font-size:16.5px}
-#baseAcc .apin{padding-left:4px;padding-right:4px;padding-bottom:30.66px;font-size:14px}
+/* 펼쳤을 때 마지막 줄 아래 간격 = 접었을 때 아래 간격 */
+#baseAcc .apin{padding-left:4px;padding-right:4px;padding-bottom:13px;font-size:14px}
 #baseAcc .bul li{opacity:0;transform:translateY(-10px);transition:opacity .25s ease,transform .3s ease}
 #baseAcc .ap.open .bul li{opacity:1;transform:none;transition:opacity .4s ease,transform .5s cubic-bezier(.22,1,.36,1)}
 #baseAcc .ap.open .bul li:nth-child(1){transition-delay:.06s}
@@ -196,25 +201,26 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .fs-dot{display:block;line-height:27px;padding:1px 0 0;text-align:center}
 /* 원과 원을 잇는 얇은 선 (첫 단계 오른쪽 일부는 Blue Bell) */
 .fs:not(:last-child)::before{content:"";position:absolute;left:calc(50% + 15px);top:14.25px;width:calc(100% + var(--gap) - 30px);height:1.5px;background:#DCDCE6}
-.fs-card{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 12px 18px;overflow:hidden;border:0;border-radius:12px;background:#fff;box-shadow:0 1px 4px rgba(38,39,79,.08);transition:transform .25s ease}
-.fs-card:hover{transform:scale(1.05)}
+.fs-card{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 8px 18px;overflow:hidden;border:0;border-radius:12px;background:none;box-shadow:none;transition:transform .25s ease}
+
 .fs-ic{flex:none;display:grid;place-items:center;width:30px;height:30px}
 .fs-ic svg{width:26px;height:26px;fill:none;stroke:var(--bell-deep);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .fs-step{margin-top:12px;color:#9B9CB5;font:700 10.5px/1 var(--en);letter-spacing:.08em}
 .fs-card b{margin-top:7px;font-size:18px;font-weight:700;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere}
 /* 컨펌 횟수 : 카드 아래쪽 일부를 나눠 보라색으로 칠하고 그 안에 표시 */
 .fs-card b{margin-bottom:16px}
-.fs-card .bd{align-self:stretch;margin:auto -12px -18px;padding:7px 4px;border-top:1.5px solid #CDCEF6;border-radius:0;background:var(--chalk);color:var(--bell-deep);font-size:12.5px;font-weight:700;text-align:center}
+/* 컨펌 횟수 : 둥근 네모 */
+.fs-card .bd{align-self:center;margin:auto 0 0;padding:5px 14px;border:0;border-radius:8px;background:var(--chalk);color:var(--bell-deep);font-size:12.5px;font-weight:700;text-align:center}
 /* 맨 아래 구간 표시 : 디자인(01) / 일러스트(02~03) / 리깅(04~07) */
-.fphase{--gap:16px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap);margin-top:14px}
+/* 기간 묶음 : 가격표 묶음처럼 단계 카드를 상자로 묶고, 기간은 상자 아래 테두리 정중앙에 */
+.flowbox{position:relative;padding-bottom:12px}
+.flowbox .flow2{position:relative;z-index:1}
+.fphase{--gap:16px;position:absolute;left:0;right:0;top:46px;bottom:0;z-index:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap);margin:0;pointer-events:none}
 /* ┣──── 디자인 1주 ────┤ : 양 끝은 세로 실선, 가운데 가로선은 점선 (STEP 01 과 같은 색) */
-.fph{display:flex;align-items:center;gap:8px;padding:0 2px;color:#C8C9D8;font-size:13px;font-weight:700;white-space:nowrap}
-.fph s{position:relative;flex:1;min-width:8px;height:11px;text-decoration:none}
-.fph s::before{content:"";position:absolute;left:0;right:0;top:50%;margin-top:-.75px;border-top:1.5px dashed #D9DAE4}
-.fph s:first-child{border-left:1.5px solid #D9DAE4}
-.fph s:last-child{border-right:1.5px solid #D9DAE4}
+.fph{position:relative;display:block;border:1px solid #E6E6EC;border-radius:18px;background:#FBFBFC;color:#B4B5C8;font-size:13px;font-weight:600;white-space:nowrap}
+.fph s{display:none}
+.fph em{position:absolute;left:50%;bottom:0;padding:0 8px;background:#fff;font-style:normal;line-height:1.4;transform:translate(-50%,50%)}
 .fph i{margin-left:4px;font-style:normal}
-.fph em{font-style:normal}
 .bd{margin-top:8px;padding:2px 10px;border-radius:999px;background:var(--bell);color:var(--on-bell);font-size:12px;font-style:normal;font-weight:700}
 
 /* ---------- 일러스트 갤러리 ---------- */
@@ -349,7 +355,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .pc.off .poff{display:block;margin-top:34px;color:#8C8DA8;font-size:13.5px;text-align:center}
 .pc.off .pk{display:none}
 /* 줄 간격을 정수(20px + 3px)로 맞춰 줄마다 간격이 같게 */
-.pnotes{gap:3px;margin-top:20px;color:#43446C;font-size:13.5px;line-height:20px}
+.pnotes{gap:3px;margin-top:17px;color:#43446C;font-size:13.5px;line-height:20px}
 .pnotes li::before{content:"※";font-weight:400;color:inherit}
 /* 가격표의 작은 설명 : 5px 안쪽으로 */
 .pnotes{padding-left:6px}
@@ -518,7 +524,7 @@ textarea{min-height:96px;resize:none;overflow:hidden}
 .won{font-size:15px;font-weight:700}
 .chips+.chips{margin-top:2px}
 /* 동의 체크 : 외곽 상자 없이 작게, 가운데 정렬 */
-.agree{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:8px;padding:4px 0;font-size:14px;font-weight:700;cursor:pointer}
+.agree{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:5px;margin-bottom:3px;padding:4px 0;font-size:14px;font-weight:700;cursor:pointer}
 .agree input{flex:none;width:16px;height:16px;margin:0;accent-color:var(--bell-deep)}
 #f_est::placeholder{color:#B9BACB}
 .fbtns{display:grid;grid-template-columns:1fr;gap:10px;margin-top:0}
@@ -634,9 +640,11 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .fs-step{margin-top:0}
   .fs-card b{margin-top:4px;font-size:16px}
   .fs-card .bd{justify-self:start;margin-top:6px}
-  .fphase{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
-  .fph{grid-column:auto!important;justify-content:center;padding:8px 4px;border-radius:999px;background:var(--panel);font-size:12.5px}
-  .fph s{display:none}
+  .fs-card{text-align:left}
+  .flowbox{padding-bottom:0}
+  .fphase{position:static;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+  .fph{grid-column:auto!important;padding:8px 4px;border:0;border-radius:999px;background:var(--panel);font-size:12.5px;text-align:center}
+  .fph em{position:static;padding:0;background:none;transform:none}
 }
 </style>
 </head>
@@ -649,7 +657,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     <div class="intro">
       <div class="eyebrow">ILLUSTRATOR · RIGGER</div>
       <h1>르인</h1>
-      <span class="idiv" aria-hidden="true"></span>
+      <p class="intro-txt">청순하고 귀여운 인상의 미소녀 캐릭터를 주력으로, 미소녀/미소년 모델을 제작하고 있습니다.<br>페이지를 확인하신 후 문의 사항이나 의뢰 의사가 있으시다면 아래 안내에 따라 문의해 주세요!</p>
     </div>
     <aside class="slot-card" aria-label="월별 예약 현황">
       <div class="sc-head">
@@ -712,8 +720,10 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   <!-- ================= 03 PROCESS ================= -->
   <section class="sec" id="process">
     <div class="sec-head"><h2>작업과정</h2></div>
-    <ol class="flow2" id="flowWork"></ol>
-    <div class="fphase" id="flowPhase"></div>
+    <div class="flowbox">
+      <ol class="flow2" id="flowWork"></ol>
+      <div class="fphase" id="flowPhase" aria-hidden="true"></div>
+    </div>
   </section>
 
   <!-- ================= 04 ILLUSTRATION ================= -->
@@ -934,11 +944,13 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   function renderSlots(s) {
     s = s || {};
     var months = s.months || [], first = -1, html = '';
-    months.forEach(function (m, i) { if (first < 0 && !(m.booked >= m.total)) first = i; });
+    /* 마감 여부 : 관리자에서 '마감 / 예약 가능' 을 고르면 그 값, '자동' 이면 예약 수로 판단 */
+    function isFull(m) { return m.status === '마감' ? true : m.status === '예약 가능' ? false : (parseInt(m.booked, 10) || 0) >= (parseInt(m.total, 10) || 0); }
+    months.forEach(function (m, i) { if (first < 0 && !isFull(m)) first = i; });
     months.forEach(function (m, i) {
       var total = Math.max(0, parseInt(m.total, 10) || 0);
       var booked = Math.min(total, Math.max(0, parseInt(m.booked, 10) || 0));
-      var full = booked >= total, dots = '';
+      var full = isFull(m), dots = '';
       for (var k = 0; k < total; k++) dots += '<span class="dot' + (k < booked ? '' : ' empty') + '"></span>';
       html += '<li class="srow' + (i === first ? ' hl' : '') + (full ? ' off' : '') + '">' +
         '<span class="sm">' + esc(m.label) + '</span>' +
