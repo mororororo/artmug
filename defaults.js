@@ -354,8 +354,8 @@ window.LEUIN_DEFAULTS = {
               },
               {
                 "name" : "겉옷 on/off",
-                "price" : "000,000",
-                "sub" : ""
+                "price" : "100,000",
+                "sub" : "포즈 및 추가 파츠에 따라 책정"
               }
             ],
             "title" : "의상"
@@ -518,8 +518,8 @@ window.LEUIN_DEFAULTS = {
               },
               {
                 "name" : "겉옷 on/off",
-                "price" : "000,000",
-                "sub" : ""
+                "price" : "100,000",
+                "sub" : "포즈 및 추가 파츠에 따라 책정"
               }
             ],
             "title" : "의상"
@@ -688,8 +688,8 @@ window.LEUIN_DEFAULTS = {
               },
               {
                 "name" : "겉옷 on/off",
-                "price" : "000,000",
-                "sub" : ""
+                "price" : "100,000",
+                "sub" : "포즈 및 추가 파츠에 따라 책정"
               }
             ],
             "title" : "의상"

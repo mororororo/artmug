@@ -56,7 +56,7 @@ input,select,textarea{font-family:inherit}
 .intro h1{margin:8px 0 0;font-size:clamp(48px,8vw,72px);font-weight:800;letter-spacing:-.03em;line-height:1.05}
 /* '르인' 아래 구분선 */
 /* '르인' 아래 소개말 */
-.intro-txt{margin-top:14.67px;color:#43446C;font-size:15.5px;line-height:1.75;word-break:keep-all}
+.intro-txt{margin-top:16.17px;color:#43446C;font-size:15.5px;line-height:1.75;word-break:keep-all}
 
 .btns{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
 .btn{display:inline-block;padding:12px 26px;border:1.5px solid var(--bell);border-radius:999px;background:#fff;color:var(--bell-deep);font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
@@ -79,10 +79,10 @@ input,select,textarea{font-family:inherit}
 /* 마감된 달 : 회색 배경으로 비활성화 */
 /* 마감된 달 : 회색 글자 + 월~마감 위로 가로줄 */
 .srow.off{position:relative}
-.srow.off::after{content:"";position:absolute;left:8px;right:8px;top:50%;border-top:1.5px solid #C9CAD8;pointer-events:none}
-.srow.off .sm{color:#A9AABF}
-.srow.off .dot{background:#C6C7D6}
-.srow.off .ss.full{color:#A9AABF}
+.srow.off::after{content:"";position:absolute;left:8px;right:8px;top:50%;border-top:1.5px solid #DEDFE8;pointer-events:none}
+.srow.off .sm{color:#C3C4D4}
+.srow.off .dot{background:#DADBE5}
+.srow.off .ss.full{color:#C3C4D4}
 .sm{font-family:var(--en);font-size:16px;font-weight:800}
 .dots{display:flex;flex-wrap:wrap;gap:6px}
 .dot{position:relative;display:block;width:17px;height:22px;background:var(--bell);clip-path:polygon(50.0% 0.0%,51.8% 5.0%,54.8% 10.0%,58.7% 15.0%,63.2% 20.0%,68.3% 25.0%,73.8% 30.0%,79.8% 35.0%,86.2% 40.0%,92.9% 45.0%,100.0% 50.0%,92.9% 55.0%,86.2% 60.0%,79.8% 65.0%,73.8% 70.0%,68.3% 75.0%,63.2% 80.0%,58.7% 85.0%,54.8% 90.0%,51.8% 95.0%,50.0% 100.0%,48.2% 95.0%,45.2% 90.0%,41.3% 85.0%,36.8% 80.0%,31.7% 75.0%,26.2% 70.0%,20.2% 65.0%,13.8% 60.0%,7.1% 55.0%,0.0% 50.0%,7.1% 45.0%,13.8% 40.0%,20.2% 35.0%,26.2% 30.0%,31.7% 25.0%,36.8% 20.0%,41.3% 15.0%,45.2% 10.0%,48.2% 5.0%)}
@@ -188,6 +188,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 
 /* 작업과정 · 리깅 : 타이틀 아래 간격 2px 줄임 */
 #process .sec-head{margin-bottom:24px}
+/* 작업과정 : 칸 아래쪽 여백 3px 줄임, 다음 칸과의 간격 5/6 */
+#process{padding-bottom:36px}
+#process+.sec{margin-top:35px}
 /* 샘플 · 가격 안내 : 타이틀과 탭 사이 1.5px 줄임 */
 #rigging .sec-head{margin-bottom:22.5px}
 #illust .sec-head,#price .sec-head{margin-bottom:24.5px}
@@ -205,11 +208,11 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .fs-dot{display:block;line-height:27px;padding:1px 0 0;text-align:center}
 /* 원과 원을 잇는 얇은 선 (첫 단계 오른쪽 일부는 Blue Bell) */
 .fs:not(:last-child)::before{content:"";position:absolute;left:calc(50% + 15px);top:14.25px;width:calc(100% + var(--gap) - 30px);height:1.5px;background:#DCDCE6}
-.fs-card{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 8px 18px;overflow:hidden;border:0;border-radius:12px;background:none;box-shadow:none;transition:transform .25s ease}
+.fs-card{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:5.33px 8px 18px;overflow:hidden;border:0;border-radius:12px;background:none;box-shadow:none;transition:transform .25s ease}
 
 .fs-ic{flex:none;display:grid;place-items:center;width:30px;height:30px}
 .fs-ic svg{width:26px;height:26px;fill:none;stroke:var(--bell-deep);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.fs-step{margin-top:12px;color:#9B9CB5;font:700 10.5px/1 var(--en);letter-spacing:.08em}
+.fs-step{margin-top:14px;color:#9B9CB5;font:700 10.5px/1 var(--en);letter-spacing:.08em}
 .fs-card b{margin-top:7px;font-size:18px;font-weight:700;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere}
 /* 컨펌 횟수 : 카드 아래쪽 일부를 나눠 보라색으로 칠하고 그 안에 표시 */
 .fs-card b{margin-bottom:16px}
@@ -313,7 +316,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .gcap{margin-top:8px;color:var(--sub);font-size:12.5px;line-height:1.5;text-align:center}
 .gph{aspect-ratio:16/7}
 /* 등록된 영상 썸네일 줄 (현재 영상은 테두리 강조, 많으면 가로 스크롤) */
-.sc-thumbs{display:flex;gap:8px;margin-top:16px;padding:2px 2px 6px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#D5D6EE transparent}
+.sc-thumbs{display:flex;gap:8px;margin-top:18px;padding:2px 2px 6px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#D5D6EE transparent}
 .sc-thumbs>:first-child{margin-left:auto}
 .sc-thumbs>:last-child{margin-right:auto}
 .sc-thumb{flex:none;display:grid;place-items:center;width:104px;aspect-ratio:16/9;padding:0;border:2px solid transparent;border-radius:10px;background:var(--panel);color:#8F90B6;font:700 12px var(--en);overflow:hidden;cursor:pointer;opacity:.6;transition:opacity .2s,border-color .2s}
@@ -390,6 +393,8 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .oc.sel::before{content:"";position:absolute;inset:4px 0;z-index:-1;border-radius:10px;background:var(--chalk)}
 .oc .pb{flex:1;min-width:0;font-size:14.5px}
 .oc .pb small{margin-left:5px;color:var(--sub);font-size:11.5px}
+/* 선택해서 수량 버튼이 생기면 괄호 설명은 아랫줄로 */
+.oc.sel .pb small{display:block;margin:1px 0 0}
 .oc .pp{display:block;margin:0;font-size:14px}
 .oc .pp i{font-size:1em;margin-left:1px}
 .qty{display:none;align-items:center;gap:6px;color:var(--sub);font-size:13px}
@@ -1066,9 +1071,9 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     cube: '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>'
   };
   var WORK_STEPS = [
-    { i: 'doc', t: '시안', b: '컨펌 2회' },
+    { i: 'doc', t: '시안', b: '컨펌x2' },
     { i: 'scribble', t: '선화 · 밑색' },
-    { i: 'brush', t: '채색 · 파츠분리', b: '컨펌 2회' },
+    { i: 'brush', t: '채색 · 파츠분리', b: '컨펌x2' },
     { i: 'scissors', t: '최종 파츠분리' },
     { i: 'smile', t: '페이셜/헤드 리깅', b: '컨펌' },
     { i: 'person', t: '몸/물리 리깅', b: '컨펌' },
@@ -1139,7 +1144,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     if (!inFrame) document.body.style.overflow = '';
   }
   $('lbx').addEventListener('click', closeLB);
-  lb.addEventListener('click', function (e) { if (e.target === lb || e.target === lbp) closeLB(); });
+  /* 확대 화면 어디를 눌러도 바로 닫힘 */
+  lb.addEventListener('click', closeLB);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('open')) closeLB(); });
 
   /* ---------- 양옆 카드가 살짝 작고 흐리게 보이는 무한 순환 캐러셀 (일러스트 · 리깅 공통) ----------
