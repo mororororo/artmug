@@ -113,12 +113,32 @@
         "cols": 4,
         "items": [
           {
-            "caption": "발그레",
-            "src": "images/p-mwbuo3opj25t.webp"
+            "src": "images/p-mwbuo3opj25t.webp",
+            "caption": "발그레"
           },
           {
-            "caption": "정색",
-            "src": "images/p-mwbuo5fhj1g4.webp"
+            "src": "images/p-mwbuo5fhj1g4.webp",
+            "caption": "정색"
+          },
+          {
+            "src": "images/p-mwcdhb3cgfmj.mp4",
+            "caption": "반짝눈"
+          },
+          {
+            "src": "images/p-mwcdhf527dmx.mp4",
+            "caption": "하트눈"
+          },
+          {
+            "src": "images/p-mwcdhjypd253.mp4",
+            "caption": "눈물"
+          },
+          {
+            "src": "images/p-mwcdhly23g59.mp4",
+            "caption": "눈물 (애니메이션)"
+          },
+          {
+            "src": "images/p-mwcdhnlnkjgg.mp4",
+            "caption": "빙글눈"
           }
         ],
         "name": "EXPRESSION",
@@ -200,7 +220,7 @@
               "기본 표정 4종"
             ],
             "name": "반신 타입",
-            "price": "1,400,000"
+            "price": "1,450,000"
           },
           {
             "features": [
@@ -210,14 +230,14 @@
               "기본 표정 4종"
             ],
             "name": "전신 타입",
-            "price": "1,500,000"
+            "price": "1,550,000"
           },
           {
             "disabled": true,
             "disabledText": "(오픈 예정)",
             "features": [],
             "name": "프리미엄 타입",
-            "price": "000,000"
+            "price": "0,000,000"
           }
         ],
         "groups": [
@@ -382,18 +402,20 @@
         "cards": [
           {
             "features": [
-              "디자인 N안 · 일러스트",
-              "전신 일러스트 png"
+              "디자인 2안 · 일러스트",
+              "전신 일러스트 png",
+              "파츠분리 psd",
+              "기본 표정 4종"
             ],
             "name": "전신 타입",
-            "price": "000,000"
+            "price": "1,000,000"
           },
           {
             "disabled": true,
             "disabledText": "(오픈 예정)",
             "features": [],
             "name": "프리미엄 타입",
-            "price": "000,000"
+            "price": "0,000,000"
           }
         ],
         "groups": [
