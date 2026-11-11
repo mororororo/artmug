@@ -221,8 +221,18 @@ window.LEUIN_DEFAULTS = {
                 "unit" : "개월"
               }
             ],
-            "plain" : true,
-            "title" : ""
+            "title" : "비공개"
+          },
+          {
+            "options" : [
+              {
+                "name" : "V Bridger",
+                "noQty" : true,
+                "price" : "300,000",
+                "sub" : ""
+              }
+            ],
+            "title" : "리깅 업그레이드"
           },
           {
             "options" : [
@@ -240,18 +250,6 @@ window.LEUIN_DEFAULTS = {
               }
             ],
             "title" : "일러스트 업그레이드",
-            "wide" : true
-          },
-          {
-            "options" : [
-              {
-                "name" : "V Bridger",
-                "noQty" : true,
-                "price" : "300,000",
-                "sub" : ""
-              }
-            ],
-            "title" : "리깅 업그레이드",
             "wide" : true
           },
           {
@@ -289,7 +287,7 @@ window.LEUIN_DEFAULTS = {
           {
             "options" : [
               {
-                "name" : "귀/꼬리",
+                "name" : "귀 / 꼬리",
                 "price" : "70,000",
                 "sub" : ""
               },
@@ -304,12 +302,12 @@ window.LEUIN_DEFAULTS = {
           {
             "options" : [
               {
-                "name" : "마이크",
+                "name" : "마이크 포즈",
                 "price" : "130,000",
                 "sub" : "소품 포함"
               },
               {
-                "name" : "게임기",
+                "name" : "게임기 포즈",
                 "price" : "160,000",
                 "sub" : "소품 포함"
               },
@@ -393,8 +391,18 @@ window.LEUIN_DEFAULTS = {
                 "unit" : "개월"
               }
             ],
-            "plain" : true,
-            "title" : ""
+            "title" : "비공개"
+          },
+          {
+            "options" : [
+              {
+                "name" : "V Bridger",
+                "noQty" : true,
+                "price" : "300,000",
+                "sub" : ""
+              }
+            ],
+            "title" : "리깅 업그레이드"
           },
           {
             "options" : [
@@ -406,18 +414,6 @@ window.LEUIN_DEFAULTS = {
               }
             ],
             "title" : "일러스트 업그레이드",
-            "wide" : true
-          },
-          {
-            "options" : [
-              {
-                "name" : "V Bridger",
-                "noQty" : true,
-                "price" : "300,000",
-                "sub" : ""
-              }
-            ],
-            "title" : "리깅 업그레이드",
             "wide" : true
           },
           {
@@ -455,7 +451,7 @@ window.LEUIN_DEFAULTS = {
           {
             "options" : [
               {
-                "name" : "귀/꼬리",
+                "name" : "귀 / 꼬리",
                 "price" : "70,000",
                 "sub" : ""
               },
@@ -470,12 +466,12 @@ window.LEUIN_DEFAULTS = {
           {
             "options" : [
               {
-                "name" : "마이크",
+                "name" : "마이크 포즈",
                 "price" : "130,000",
                 "sub" : "소품 포함"
               },
               {
-                "name" : "게임기",
+                "name" : "게임기 포즈",
                 "price" : "160,000",
                 "sub" : "소품 포함"
               },
@@ -559,8 +555,18 @@ window.LEUIN_DEFAULTS = {
                 "unit" : "개월"
               }
             ],
-            "plain" : true,
-            "title" : ""
+            "title" : "비공개"
+          },
+          {
+            "options" : [
+              {
+                "name" : "V Bridger",
+                "noQty" : true,
+                "price" : "300,000",
+                "sub" : ""
+              }
+            ],
+            "title" : "리깅 업그레이드"
           },
           {
             "options" : [
@@ -578,18 +584,6 @@ window.LEUIN_DEFAULTS = {
               }
             ],
             "title" : "일러스트 업그레이드",
-            "wide" : true
-          },
-          {
-            "options" : [
-              {
-                "name" : "V Bridger",
-                "noQty" : true,
-                "price" : "300,000",
-                "sub" : ""
-              }
-            ],
-            "title" : "리깅 업그레이드",
             "wide" : true
           },
           {
@@ -627,7 +621,7 @@ window.LEUIN_DEFAULTS = {
           {
             "options" : [
               {
-                "name" : "귀/꼬리",
+                "name" : "귀 / 꼬리",
                 "price" : "70,000",
                 "sub" : ""
               },
@@ -642,12 +636,12 @@ window.LEUIN_DEFAULTS = {
           {
             "options" : [
               {
-                "name" : "마이크",
+                "name" : "마이크 포즈",
                 "price" : "130,000",
                 "sub" : "소품 포함"
               },
               {
-                "name" : "게임기",
+                "name" : "게임기 포즈",
                 "price" : "160,000",
                 "sub" : "소품 포함"
               },

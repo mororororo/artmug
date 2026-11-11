@@ -56,7 +56,9 @@ input,select,textarea{font-family:inherit}
 .intro h1{margin:8px 0 0;font-size:clamp(48px,8vw,72px);font-weight:800;letter-spacing:-.03em;line-height:1.05}
 /* '르인' 아래 구분선 */
 /* '르인' 아래 소개말 */
-.intro-txt{margin-top:22px;color:#43446C;font-size:13.5px;line-height:1.8;word-break:keep-all}
+.intro-txt{margin-top:14.67px;color:#43446C;font-size:15.5px;line-height:1.75;word-break:keep-all}
+.intro .btns{margin-top:22px}
+.intro .btn{padding:10px 22px;font-size:13.5px}
 .btns{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
 .btn{display:inline-block;padding:12px 26px;border:1.5px solid var(--bell);border-radius:999px;background:#fff;color:var(--bell-deep);font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
 .btn:hover{background:var(--chalk);transform:translateY(-2px);box-shadow:0 3px 8px rgba(110,114,205,.2)}
@@ -74,8 +76,9 @@ input,select,textarea{font-family:inherit}
 .srow{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid #EFEFF4}
 .srow:last-child{border-bottom:0}
 /* 마감된 달 : 회색 배경으로 비활성화 */
-.srow.off{border-bottom-color:transparent;border-radius:10px;background:#F1F1F5}
-.srow.off+.srow.off{margin-top:1px}
+/* 마감된 달 : 회색 글자 + 월~마감 위로 가로줄 */
+.srow.off{position:relative}
+.srow.off::after{content:"";position:absolute;left:8px;right:8px;top:50%;border-top:1.5px solid #C9CAD8;pointer-events:none}
 .srow.off .sm{color:#A9AABF}
 .srow.off .dot{background:#C6C7D6}
 .srow.off .ss.full{color:#A9AABF}
@@ -210,7 +213,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 /* 컨펌 횟수 : 카드 아래쪽 일부를 나눠 보라색으로 칠하고 그 안에 표시 */
 .fs-card b{margin-bottom:16px}
 /* 컨펌 횟수 : 둥근 네모 */
-.fs-card .bd{align-self:center;margin:auto 0 0;padding:5px 14px;border:0;border-radius:8px;background:var(--chalk);color:var(--bell-deep);font-size:12.5px;font-weight:700;text-align:center}
+.fs-card .bd{align-self:center;margin:auto 0 0;padding:5px 14px;border:0;border-radius:999px;background:var(--chalk);color:var(--bell-deep);font-size:12.5px;font-weight:700;text-align:center}
 /* 맨 아래 구간 표시 : 디자인(01) / 일러스트(02~03) / 리깅(04~07) */
 /* 기간 묶음 : 가격표 묶음처럼 단계 카드를 상자로 묶고, 기간은 상자 아래 테두리 정중앙에 */
 .flowbox{position:relative;padding-bottom:12px}
@@ -224,13 +227,13 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .bd{margin-top:8px;padding:2px 10px;border-radius:999px;background:var(--bell);color:var(--on-bell);font-size:12px;font-style:normal;font-weight:700}
 
 /* ---------- 일러스트 갤러리 ---------- */
-.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:22px}
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:19px}
 .tab{padding:8px 20px;border:1px solid #D5D6EE;border-radius:999px;background:#fff;color:var(--sub);font:700 12px var(--en);letter-spacing:.1em;cursor:pointer;transition:background .28s ease,border-color .28s ease,color .28s ease}
 .tab{position:relative}
 .tab:not(:disabled):not([aria-selected="true"]):hover{border-color:var(--bell);background:var(--chalk);color:var(--bell-deep)}
 .tab:disabled{border-color:#E8E8F0;background:#EFEFF5;color:#B6B7CC;cursor:not-allowed}
-.tab:disabled::after{content:"준비중";position:absolute;left:50%;bottom:calc(100% + 8px);padding:5px 10px;border-radius:8px;background:var(--ink);color:#fff;font:600 12px var(--font);white-space:nowrap;opacity:0;pointer-events:none;transform:translate(-50%,4px);transition:opacity .2s,transform .2s}
-.tab:disabled::before{content:"";position:absolute;left:50%;bottom:calc(100% + 3px);border:5px solid transparent;border-top-color:var(--ink);border-bottom:0;opacity:0;transform:translateX(-50%);transition:opacity .2s}
+.tab:disabled::after{content:"준비중";position:absolute;left:50%;bottom:calc(100% + 10px);padding:6px 10px;border-radius:8px;background:var(--ink);color:#fff;font:600 12px var(--font);white-space:nowrap;opacity:0;pointer-events:none;transform:translate(-50%,4px);transition:opacity .2s,transform .2s}
+.tab:disabled::before{content:"";position:absolute;left:50%;bottom:calc(100% + 5px);border:5px solid transparent;border-top-color:var(--ink);border-bottom:0;opacity:0;transform:translateX(-50%);transition:opacity .2s}
 .tab:disabled:hover::after{opacity:1;transform:translate(-50%,0)}
 .tab:disabled:hover::before{opacity:1}
 .tab[aria-selected="true"]{border-color:var(--bell);background:var(--bell);color:var(--on-bell)}
@@ -470,11 +473,12 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 /* ∨ 표시 : 위아래 줄 사이 정중앙 (보이는 V 모양 기준), 조금 연한 색 */
 .kchev{display:block;width:9px;height:9px;margin:.5px 0 12.5px calc(var(--kw,92px) * 1.5 + 8px - 4.5px);border-right:1.5px solid #8A8DDA;border-bottom:1.5px solid #8A8DDA;transform:rotate(45deg)}
 /* 펼쳐지는 영역 (높이 0 → 내용 높이, 위 간격까지 함께) */
-.reveal{display:grid;grid-template-rows:0fr;align-self:stretch;margin-top:-6px;opacity:0;visibility:hidden;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .3s ease,visibility 0s .45s}
-.reveal.on{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .35s ease .05s,visibility 0s}
+/* 좌우로 4px 넓혀서 그 안쪽 여백에 포커스 외곽선이 들어가도록 (잘림 방지) */
+.reveal{display:grid;grid-template-rows:0fr;align-self:stretch;margin:-6px -4px 0;opacity:0;visibility:hidden;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .3s ease,visibility 0s .45s}
+.reveal.on{margin-bottom:-4px;grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .35s ease .05s,visibility 0s}
 .reveal-in{min-height:0;overflow:hidden}
 /* 펼쳐지는 칸의 테두리·포커스 선이 잘리지 않도록 좌우·아래 여유 */
-.reveal-pad{padding:6px 4px 4px;margin:0 -4px -4px}
+.reveal-pad{padding:6px 4px 4px}
 /* 활동 플랫폼 드롭다운 */
 .dd{position:relative}
 .dd-btn{display:flex;align-items:center;justify-content:space-between;width:100%;height:36px;padding:0 16px;border:1px solid #CBCDF0;border-radius:999px;background:#fff;color:var(--ink);font:500 15px var(--font);text-align:left;cursor:pointer;transition:border-color .2s}
@@ -516,7 +520,7 @@ textarea{min-height:96px;resize:none;overflow:hidden}
 .won{font-size:15px;font-weight:700}
 .chips+.chips{margin-top:2px}
 /* 동의 체크 : 외곽 상자 없이 작게, 가운데 정렬 */
-.agree{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:5px;margin-bottom:3px;padding:4px 0;font-size:14px;font-weight:700;cursor:pointer}
+.agree{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:1px;margin-bottom:7px;padding:4px 0;font-size:14px;font-weight:700;cursor:pointer}
 .agree input{flex:none;width:16px;height:16px;margin:0;accent-color:var(--bell-deep)}
 #f_est::placeholder{color:#B9BACB}
 .fbtns{display:grid;grid-template-columns:1fr;gap:10px;margin-top:0}
@@ -649,7 +653,11 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     <div class="intro">
       <div class="eyebrow">ILLUSTRATOR · RIGGER</div>
       <h1>르인</h1>
-      <p class="intro-txt">청순하고 귀여운 인상의 미소녀 캐릭터를 주력으로, 미소녀/미소년 모델을 제작하고 있습니다.<br>페이지를 확인하신 후 문의 사항이나 의뢰 의사가 있으시다면 아래 안내에 따라 문의해 주세요!</p>
+      <p class="intro-txt">청순하고 귀여운 인상의 미소녀 캐릭터를 주력으로,<br>미소녀/미소년 모델을 제작하고 있습니다.<br>문의 남겨 주시면 빠르게 답변 드리겠습니다!</p>
+      <div class="btns">
+        <a class="btn" href="#illust" data-go="illust">일러스트 샘플</a>
+        <a class="btn" href="#rigging" data-go="rigging">리깅 샘플</a>
+      </div>
     </div>
     <aside class="slot-card" aria-label="월별 예약 현황">
       <div class="sc-head">
@@ -712,10 +720,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   <!-- ================= 03 PROCESS ================= -->
   <section class="sec" id="process">
     <div class="sec-head"><h2>작업과정</h2></div>
-    <div class="flowbox">
-      <ol class="flow2" id="flowWork"></ol>
-      <div class="fphase" id="flowPhase" aria-hidden="true"></div>
-    </div>
+    <ol class="flow2" id="flowWork"></ol>
   </section>
 
   <!-- ================= 04 ILLUSTRATION ================= -->
@@ -1083,7 +1088,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     el.innerHTML = steps.map(function (s, i) {
       var n = i + 1;
       return '<li class="fs' + (n === 1 ? ' mark' : '') + (n === last ? ' last' : '') + '">' +
-        '<span class="fs-dot" aria-hidden="true">' + (n < 10 ? '0' : '') + n + '</span>' +
+        '<span class="fs-dot" aria-hidden="true">' + n + '</span>' +
         '<div class="fs-card"><span class="fs-ic"><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[s.i] + '</svg></span>' +
         '<span class="fs-step">STEP ' + n + '</span>' +
         '<b>' + esc(s.t) + '</b>' + (s.b ? '<em class="bd">' + esc(s.b) + '</em>' : '') + '</div></li>';
@@ -1498,7 +1503,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     if ((P.notes || []).length) html += '<ul class="notes pnotes">' + P.notes.map(function (n) { return '<li>' + fmt(n) + '</li>'; }).join('') + '</ul>';
 
     var oi = 0;
-    html += '<div class="obar"><span class="opill">OPTIONS</span></div><div class="optgs" style="margin-top:20px">' + groupsOf(t).map(function (g) {
+    html += '<div class="optgs" style="margin-top:36px">' + groupsOf(t).map(function (g) {
       var rows = (g.options || []).map(function (o) {
         var i = oi++, q = calc.qty[calc.tab][i] || 0, nq = !!o.noQty, unit = o.unit || '개';
         return '<div class="oc' + (q ? ' sel' : '') + '" data-i="' + i + '" role="checkbox" aria-checked="' + (q > 0) + '" tabindex="0"><span class="pk"></span>' +
