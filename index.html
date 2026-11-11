@@ -120,7 +120,9 @@ input,select,textarea{font-family:inherit}
 #noticeAcc .ai:hover .ah{background:var(--chalk)}
 /* 펼친 내용은 자주하는 질문 답변과 같은 글씨 */
 /* 펼친 내용 : 제목 첫 글자(번호 원 26px + 간격 12px 뒤)와 같은 위치에서 시작 */
-#noticeAcc .apin{padding:16px 18px 18px 56px;font-size:16px;line-height:1.7}
+#noticeAcc .apin{padding:18.5px 18px 20px 56px;font-size:16px;line-height:1.7}
+/* 빈 줄은 절반 높이 */
+.hl{display:block;height:.85em}
 .ai{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
 .ai,.ai.open{border-color:#D6D6DE}
 /* 자주하는 질문 : 공지사항과 같은 연보라 + 다이아 */
@@ -679,7 +681,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 #faqList .fqq::before{margin-top:4.9px}
 /* 답변 : ↳ A. (화살표는 Q. 아래, A. 는 질문 첫 글자 위치) */
 #faqList .apin{padding-left:16px}
-.fa-arr{flex:none;width:18px;height:14px;margin-top:6.5px;fill:none;stroke:var(--bell);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.fa-arr{flex:none;width:18px;height:14px;margin-top:6.5px;fill:none;stroke:var(--bell);stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
 /* 작업과정 : 아이콘~STEP +1px, 컨펌 아래 -2px, 점선은 성글게 · 가운데 */
 .fs-dot{margin-bottom:17px}
 .fs-card{padding-bottom:16px}
@@ -698,6 +700,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .nsub{line-height:19.5px}
   /* 아코디언 펼친 내용 : 들여쓰기 없이 */
   #noticeAcc .apin{padding-left:18px}
+  /* 작가 소개글 : 1px 작게, 줄바꿈 없이 */
+  .intro-txt{font-size:14.5px}
+  .intro-txt br{display:none}
   .fa{display:block}
   .fa-arr{display:inline-block;vertical-align:-1px;margin:0 6px 0 0}
   .fa-a{display:inline;margin-right:6px}
@@ -739,7 +744,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     <div class="intro">
       <div class="eyebrow">ILLUSTRATOR · RIGGER</div>
       <h1>르인</h1>
-      <p class="intro-txt">청순하고 귀여운 인상의 미소녀 캐릭터를 주력으로,<br class="pc-br"> 미소녀/미소년 모델을 제작하고 있습니다.<br>문의 남겨 주시면 빠르게 답변 드리겠습니다!</p>
+      <p class="intro-txt">청순하고 귀여운 인상의 미소녀 캐릭터를 주력으로,<br class="pc-br"> 미소녀/미소년 모델을 제작하고 있습니다.<br> 문의 남겨 주시면 빠르게 답변 드리겠습니다!</p>
 
     </div>
     <aside class="slot-card" aria-label="월별 예약 현황">
@@ -975,6 +980,11 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  /* 공지사항 펼친 내용 : 빈 줄(줄바꿈 두 번 이상)은 절반 높이의 빈칸으로 */
+  function fmtHalf(s) {
+    return esc(String(s == null ? '' : s).replace(/\r/g, '')).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+      .replace(/\n[ \t]*(\n[ \t]*)+/g, '<i class="hl"></i>').replace(/\n/g, '<br>');
+  }
   function fmt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
   /* 동그라미 화살표 : 글자(‹ ›) 대신 선으로 그려 원의 정중앙에 오도록 */
   var ARW_L = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6l-6 6 6 6"/></svg>';
@@ -1056,7 +1066,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     acc.innerHTML = (n.details || []).map(function (d, i) {
       return '<div class="ai"><button type="button" class="ah" aria-expanded="false" aria-controls="ap' + i + '">' +
         '<span class="ht"><i class="n">' + (i + 1) + '</i>' + esc(d.title) + '</span><span class="chev" aria-hidden="true"></span></button>' +
-        '<div class="ap" id="ap' + i + '"><div class="apw"><div class="apin">' + fmt(d.body) + '</div></div></div></div>';
+        '<div class="ap" id="ap' + i + '"><div class="apw"><div class="apin">' + fmtHalf(d.body) + '</div></div></div></div>';
     }).join('');
     bindGroup(acc);
   }
