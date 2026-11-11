@@ -121,8 +121,8 @@ input,select,textarea{font-family:inherit}
 /* 펼친 내용은 자주하는 질문 답변과 같은 글씨 */
 /* 펼친 내용 : 제목 첫 글자(번호 원 26px + 간격 12px 뒤)와 같은 위치에서 시작 */
 #noticeAcc .apin{padding:18.5px 18px 20px 56px;font-size:16px;line-height:1.7}
-/* 빈 줄은 절반 높이 */
-.hl{display:block;height:.85em}
+#noticeAcc .nl{display:block}
+
 .ai{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
 .ai,.ai.open{border-color:#D6D6DE}
 /* 자주하는 질문 : 공지사항과 같은 연보라 + 다이아 */
@@ -980,10 +980,15 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-  /* 공지사항 펼친 내용 : 빈 줄(줄바꿈 두 번 이상)은 절반 높이의 빈칸으로 */
-  function fmtHalf(s) {
-    return esc(String(s == null ? '' : s).replace(/\r/g, '')).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
-      .replace(/\n[ \t]*(\n[ \t]*)+/g, '<i class="hl"></i>').replace(/\n/g, '<br>');
+
+  /* 공지사항 펼친 내용 : 줄마다 블록으로, 관리자에서 정한 줄별 위 간격(lineGaps, px) 적용 */
+  function fmtLines(s, gaps) {
+    gaps = gaps || [];
+    return String(s == null ? '' : s).replace(/\r/g, '').split('\n').map(function (l, i) {
+      var g = Number(gaps[i]) || 0;
+      return '<span class="nl"' + (g ? ' style="margin-top:' + g + 'px"' : '') + '>' +
+        (l.trim() ? esc(l).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') : '&nbsp;') + '</span>';
+    }).join('');
   }
   function fmt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
   /* 동그라미 화살표 : 글자(‹ ›) 대신 선으로 그려 원의 정중앙에 오도록 */
@@ -1066,7 +1071,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     acc.innerHTML = (n.details || []).map(function (d, i) {
       return '<div class="ai"><button type="button" class="ah" aria-expanded="false" aria-controls="ap' + i + '">' +
         '<span class="ht"><i class="n">' + (i + 1) + '</i>' + esc(d.title) + '</span><span class="chev" aria-hidden="true"></span></button>' +
-        '<div class="ap" id="ap' + i + '"><div class="apw"><div class="apin">' + fmtHalf(d.body) + '</div></div></div></div>';
+        '<div class="ap" id="ap' + i + '"><div class="apw"><div class="apin">' + fmtLines(d.body, d.lineGaps) + '</div></div></div></div>';
     }).join('');
     bindGroup(acc);
   }

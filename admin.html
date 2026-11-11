@@ -99,6 +99,15 @@ textarea.ghost{min-height:0;resize:none;overflow:hidden}
 .ai .ah{display:flex;gap:8px;align-items:center;padding:9px 12px;background:var(--panel)}
 .ai .ah .ghost{font-size:15px;font-weight:700}
 .ai .apin{padding:12px 12px 12px 46px}
+/* 공지사항 줄별 간격 */
+.gapbox{margin-top:8px;border:1px dashed #D6D7EE;border-radius:10px;background:#FBFBFE}
+.gapbox summary{padding:8px 12px;color:var(--bell-deep);font-size:12.5px;font-weight:700;cursor:pointer}
+.gaps{display:grid;gap:2px;padding:0 12px 10px}
+.gap-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:3px 0;border-bottom:1px dotted #E3E3F6;font-size:12.5px}
+.gap-t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.gap-t.empty{color:#A9AACB}
+.gap-row input{width:64px;padding:3px 6px;font-size:12.5px;text-align:right}
+.gap-row.on .gap-t{color:var(--bell-deep);font-weight:700}
 .qa{flex:none;width:26px;color:var(--bell-deep);font:800 15px/1 var(--en);text-align:center}
 .qa-a{position:absolute;margin:8px 0 0 -30px}
 .faq .apin{position:relative}
@@ -352,6 +361,44 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     })]));
   }
 
+  /* ---------- 공지사항 : 세부 항목 내용 + 줄별 간격 ----------
+     lineGaps[i] = i번째 줄 위에 더할 간격(px). 음수면 좁아짐 (빈 줄을 좁힐 때 등) */
+  function noticeBody(d) {
+    var box = h('div', { class: 'gaps' });
+    var wrap = h('details', { class: 'gapbox' }, [h('summary', { text: '줄 간격 조절 (줄마다 위 간격 px · 음수 가능)' }), box]);
+    function clean() {
+      var n = String(d.body || '').split('\n').length;
+      var g = (d.lineGaps || []).slice(0, n).map(function (v) { return Number(v) || 0; });
+      while (g.length && !g[g.length - 1]) g.pop();
+      if (g.length) d.lineGaps = g; else delete d.lineGaps;
+    }
+    function build() {
+      box.innerHTML = '';
+      var ls = String(d.body || '').split('\n'), g = d.lineGaps || [];
+      ls.forEach(function (l, i) {
+        var v = Number(g[i]) || 0;
+        var row = h('div', { class: 'gap-row' + (v ? ' on' : '') }, [
+          h('span', { class: 'gap-t' + (l.trim() ? '' : ' empty'), text: (i + 1) + '. ' + (l.trim() ? l : '(빈 줄)') }),
+          h('label', { class: 'chk' }, ['위 ', h('input', { type: 'number', step: '1', value: String(v), 'aria-label': (i + 1) + '번 줄 위 간격',
+            oninput: function (e) {
+              d.lineGaps = d.lineGaps || [];
+              while (d.lineGaps.length < i) d.lineGaps.push(0);
+              d.lineGaps[i] = parseFloat(e.target.value) || 0;
+              row.classList.toggle('on', !!d.lineGaps[i]);
+              clean(); touch();
+            } }), 'px'])
+        ]);
+        box.appendChild(row);
+      });
+    }
+    var t = h('textarea', { rows: 4, value: d.body == null ? '' : d.body, oninput: function (e) {
+      d.body = e.target.value; clean(); touch();
+      clearTimeout(t._t); t._t = setTimeout(build, 300);
+    } });
+    build();
+    return [t, wrap];
+  }
+
   /* ---------- 공지사항 ---------- */
   function viewNotice(m) {
     var n = S.notice;
@@ -367,7 +414,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     n.details.forEach(function (d, i) {
       s1.appendChild(h('div', { class: 'ai' }, [
         h('div', { class: 'ah' }, [h('i', { class: 'n', text: String(i + 1) }), inp(d, 'title', { class: 'ghost', placeholder: '항목 제목' }), tools(n.details, i, d.title || '이 항목')]),
-        h('div', { class: 'apin' }, [ta(d, 'body', 4)])
+        h('div', { class: 'apin' }, noticeBody(d))
       ]));
     });
     s1.appendChild(addBtn('+ 세부 항목 추가', function () { n.details.push({ title: '', body: '' }); touch(); render(); }));
