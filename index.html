@@ -198,21 +198,23 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 /* 작업과정 : 위 가로 스텝 라인(원형 번호, 카드 왼쪽에 맞춤) + 아래 같은 높이의 카드 7장 */
 .flow2{--gap:16px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap);padding-top:2px}
 .fs{position:relative;display:flex;flex-direction:column;min-width:0}
-.fs-dot{position:relative;z-index:1;display:grid;place-items:center;align-self:center;width:30px;height:30px;margin-bottom:16px;border:1.5px solid #D6D6DE;border-radius:50%;background:#fff;color:#8C8DAE;font:700 11.5px/1 var(--en)}
-.fs-dot svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+/* 각 단계 아이콘을 동그라미 안에 넣고, 동그라미끼리 가로선으로 이음 */
+.fs-dot{position:relative;z-index:1;display:grid;place-items:center;align-self:center;width:48px;height:48px;margin-bottom:14px;border:1.5px solid #D6D6DE;border-radius:50%;background:#fff}
+.fs-dot svg{width:24px;height:24px;fill:none;stroke:var(--bell-deep);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.fs.last .fs-dot svg{stroke:var(--on-bell)}
 /* 01 · 07 만 연보라 */
 .fs.mark .fs-dot{border-color:var(--bell);background:var(--chalk);color:var(--bell-deep)}
 /* 07 : 보라로 채움 */
 .fs.last .fs-dot{border-color:var(--bell);background:var(--bell);color:var(--on-bell)}
 /* 숫자를 원의 정중앙에 (영문 숫자 글꼴의 아래 여백만큼 보정) */
-.fs-dot{display:block;line-height:27px;padding:1px 0 0;text-align:center}
+
 /* 원과 원을 잇는 얇은 선 (첫 단계 오른쪽 일부는 Blue Bell) */
-.fs:not(:last-child)::before{content:"";position:absolute;left:calc(50% + 15px);top:14.25px;width:calc(100% + var(--gap) - 30px);height:1.5px;background:#DCDCE6}
-.fs-card{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:5.33px 8px 18px;overflow:hidden;border:0;border-radius:12px;background:none;box-shadow:none;transition:transform .25s ease}
+.fs:not(:last-child)::before{content:"";position:absolute;left:calc(50% + 24px);top:23.25px;width:calc(100% + var(--gap) - 48px);height:1.5px;background:#DCDCE6}
+.fs-card{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 8px 18px;overflow:hidden;border:0;border-radius:12px;background:none;box-shadow:none;transition:transform .25s ease}
 
 .fs-ic{flex:none;display:grid;place-items:center;width:30px;height:30px}
 .fs-ic svg{width:26px;height:26px;fill:none;stroke:var(--bell-deep);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.fs-step{margin-top:14px;color:#9B9CB5;font:700 10.5px/1 var(--en);letter-spacing:.08em}
+.fs-step{margin-top:0;color:#9B9CB5;font:700 10.5px/1 var(--en);letter-spacing:.08em}
 .fs-card b{margin-top:7px;font-size:18px;font-weight:700;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere}
 /* 컨펌 횟수 : 카드 아래쪽 일부를 나눠 보라색으로 칠하고 그 안에 표시 */
 .fs-card b{margin-bottom:16px}
@@ -623,22 +625,23 @@ body.inframe .remote,body.ext-remote .remote{display:none}
 }
 @media (max-width:1100px){
   .flow2,.fphase{--gap:8px}
-  .fs-card{padding:14px 9px 16px}
-  .fs-ic{width:26px;height:26px}
-  .fs-ic svg{width:22px;height:22px}
-  .fs-step{margin-top:12px;font-size:9.5px;letter-spacing:.05em}
+  .fs-card{padding:0 6px 16px}
+  .fs-dot{width:42px;height:42px}
+  .fs-dot svg{width:21px;height:21px}
+  .fs:not(:last-child)::before{left:calc(50% + 21px);top:20.25px;width:calc(100% + var(--gap) - 42px)}
+  .fs-step{margin-top:0;font-size:9.5px;letter-spacing:.05em}
   .fs-card b{font-size:15px}
   .fs-card .bd{padding:2px 8px;font-size:11px}
 }
 @media (max-width:760px){
   /* 세로 타임라인 : 왼쪽 번호 원 + 세로선, 오른쪽 카드 */
   .flow2{grid-template-columns:minmax(0,1fr);gap:10px}
-  .fs{display:grid;grid-template-columns:30px minmax(0,1fr);column-gap:12px;align-items:start}
-  .fs-dot{margin:0;align-self:start}
-  .fs:not(:last-child)::before{left:14.25px;top:30px;width:1.5px;height:calc(100% - 30px + 10px)}
-  .fs-card{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:center;padding:12px 14px}
-  .fs-ic{grid-row:1 / span 3}
-  .fs-step,.fs-card b,.fs-card .bd{grid-column:2}
+  .fs{display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:12px;align-items:start}
+  .fs-dot{width:40px;height:40px;margin:0;align-self:start}
+  .fs-dot svg{width:20px;height:20px}
+  .fs:not(:last-child)::before{left:19.25px;top:40px;width:1.5px;height:calc(100% - 40px + 10px)}
+  .fs-card{display:grid;grid-template-columns:minmax(0,1fr);align-items:center;padding:8px 14px}
+  .fs-step,.fs-card b,.fs-card .bd{grid-column:1}
   .fs-step{margin-top:0}
   .fs-card b{margin-top:4px;font-size:16px}
   .fs-card .bd{justify-self:start;margin-top:6px}
@@ -1091,8 +1094,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     el.innerHTML = steps.map(function (s, i) {
       var n = i + 1;
       return '<li class="fs' + (n === 1 ? ' mark' : '') + (n === last ? ' last' : '') + '">' +
-        '<span class="fs-dot" aria-hidden="true">' + n + '</span>' +
-        '<div class="fs-card"><span class="fs-ic"><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[s.i] + '</svg></span>' +
+        '<span class="fs-dot" aria-hidden="true"><svg viewBox="0 0 24 24">' + ICON[s.i] + '</svg></span>' +
+        '<div class="fs-card">' +
         '<span class="fs-step">STEP ' + n + '</span>' +
         '<b>' + esc(s.t) + '</b>' + (s.b ? '<em class="bd">' + esc(s.b) + '</em>' : '') + '</div></li>';
     }).join('');
