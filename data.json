@@ -420,10 +420,28 @@
         "name": "VTUBER",
         "items": [
           {
-            "src": "images/vtuber-1.webp",
-            "alt": "류설히 버츄얼 모델링",
-            "nick": "류설히",
+            "src": "images/p-mwbux4nu9arr.webp",
+            "alt": "",
+            "nick": "류설히님",
+            "platform": "치지직"
+          },
+          {
+            "src": "images/p-mwbuxducxniu.webp",
+            "alt": "",
+            "nick": "유르밍님",
+            "platform": "치지직"
+          },
+          {
+            "src": "images/p-mwbuxfhctlx0.webp",
+            "alt": "",
+            "nick": "오묘(예정)님",
             "platform": ""
+          },
+          {
+            "src": "images/p-mwbuxwkho7dw.webp",
+            "alt": "",
+            "nick": "홍림님",
+            "platform": "치지직"
           }
         ]
       },
