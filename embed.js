@@ -38,17 +38,22 @@
   if (mount) mount.appendChild(frame);
   else (document.currentScript && document.currentScript.parentNode || document.body).appendChild(frame);
 
-  /* 리모컨 iframe : 화면 고정 */
-  var remote = document.createElement('iframe');
-  remote.id = 'leuin-remote';
-  remote.src = BASE + 'remote.html';
-  remote.title = '페이지 메뉴';
-  remote.setAttribute('scrolling', 'no');
-  remote.setAttribute('frameborder', '0');
-  document.body.appendChild(remote);
+  /* 리모컨 iframe : 화면 고정 (휴대폰 · 태블릿에서는 표시하지 않음) */
+  var touch = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (window.matchMedia && matchMedia('(hover:none) and (pointer:coarse)').matches);
+  var remote = null;
+  if (!touch) {
+    remote = document.createElement('iframe');
+    remote.id = 'leuin-remote';
+    remote.src = BASE + 'remote.html';
+    remote.title = '페이지 메뉴';
+    remote.setAttribute('scrolling', 'no');
+    remote.setAttribute('frameborder', '0');
+    document.body.appendChild(remote);
+  }
 
   /* 가로 위치 : 오른쪽 광고 배너의 가운데에 맞춤 (배너가 없으면 본문 칸 오른쪽 + 40px 위치의 160px 칸 기준) */
   function placeRemote() {
+    if (!remote) return;
     var vw = document.documentElement.clientWidth, x;
     var ban = document.querySelector('.ad_banner6');
     var br = ban && ban.offsetWidth ? ban.getBoundingClientRect() : null;

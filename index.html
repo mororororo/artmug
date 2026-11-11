@@ -199,7 +199,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .flow2{--gap:16px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap);padding-top:2px}
 .fs{position:relative;display:flex;flex-direction:column;min-width:0}
 /* 각 단계 아이콘을 동그라미 안에 넣고, 동그라미끼리 가로선으로 이음 */
-.fs-dot{position:relative;z-index:1;display:grid;place-items:center;align-self:center;width:48px;height:48px;margin-bottom:14px;border:1.5px solid #D6D6DE;border-radius:50%;background:#fff}
+.fs-dot{position:relative;z-index:1;display:grid;place-items:center;align-self:center;width:48px;height:48px;margin-bottom:16px;border:1.5px solid #D6D6DE;border-radius:50%;background:#fff}
 .fs-dot svg{width:24px;height:24px;fill:none;stroke:var(--bell-deep);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .fs.last .fs-dot svg{stroke:var(--on-bell)}
 /* 01 · 07 만 연보라 */
@@ -217,9 +217,11 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .fs-step{margin-top:0;color:#9B9CB5;font:700 10.5px/1 var(--en);letter-spacing:.08em}
 .fs-card b{margin-top:7px;font-size:18px;font-weight:700;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere}
 /* 컨펌 횟수 : 카드 아래쪽 일부를 나눠 보라색으로 칠하고 그 안에 표시 */
-.fs-card b{margin-bottom:16px}
+.fs-card b{margin-bottom:0}
+/* 제목과 컨펌 사이 빈 공간 : 연한 회색 세로 점선 (공간이 없으면 보이지 않음) */
+.fs-vl{flex:1 0 0;width:0;min-height:0;margin:8px 0;border-left:1.5px dotted #D3D4DE}
 /* 컨펌 횟수 : 둥근 네모 */
-.fs-card .bd{align-self:center;margin:auto 0 0;padding:5px 14px;border:0;border-radius:999px;background:var(--chalk);color:var(--bell-deep);font-size:12.5px;font-weight:700;text-align:center}
+.fs-card .bd{align-self:center;margin:0;padding:5px 14px;border:0;border-radius:999px;background:var(--chalk);color:var(--bell-deep);font-size:12.5px;font-weight:700;text-align:center}
 /* 맨 아래 구간 표시 : 디자인(01) / 일러스트(02~03) / 리깅(04~07) */
 /* 기간 묶음 : 가격표 묶음처럼 단계 카드를 상자로 묶고, 기간은 상자 아래 테두리 정중앙에 */
 .flowbox{position:relative;padding-bottom:12px}
@@ -367,7 +369,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .opill[aria-expanded="true"]{background:var(--bell);color:var(--on-bell)}
 /* 옵션 묶음 : 묶음 없는 줄은 전체 폭, 묶음은 한 줄에 두 개 (이름은 외곽선 위) */
 .optgs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 21px}
-.og{min-width:0;margin:0;padding:6px 10px 10px;border:1px solid #E6E6EC;border-radius:18px;background:#FBFBFC}
+.og{min-width:0;margin:0;padding:5px 10px 10px;border:1px solid #E6E6EC;border-radius:18px;background:#FBFBFC}
 .og.plain{grid-column:1 / -1;padding:0;border:0;background:none}
 .og.plain+.og.plain{margin-top:-20px}
 /* 리깅 업그레이드 같은 가로 묶음 위 간격 2px 줄임 */
@@ -396,7 +398,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .oc .pb{flex:1;min-width:0;font-size:14.5px}
 .oc .pb small{margin-left:5px;color:var(--sub);font-size:11.5px}
 /* 선택해서 수량 버튼이 생기면 괄호 설명은 아랫줄로 */
-.oc.sel .pb small{display:block;margin:1px 0 0}
+.oc.sel.hq .pb small{display:block;margin:1px 0 0}
 .oc .pp{display:block;margin:0;font-size:14px}
 .oc .pp i{font-size:1em;margin-left:1px}
 .qty{display:none;align-items:center;gap:6px;color:var(--sub);font-size:13px}
@@ -411,7 +413,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .opt-wrap{padding-bottom:2px}
 .follow{position:sticky;top:84px}
 body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bezier(.2,.8,.2,1);will-change:transform}
-.psum{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;margin-top:40px;padding:28px 30px;border-radius:24px;background:var(--chalk)}
+.psum{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;margin-top:20px;padding:28px 30px;border-radius:24px;background:var(--chalk)}
 .pl{display:grid;align-content:start;gap:22px;padding-right:40px}
 .pr{padding-left:40px;border-left:1px solid rgba(76,80,178,.2)}
 .psum h4{font-size:15px;font-weight:700}
@@ -581,7 +583,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
 @media (max-width:900px){
   .pcs{grid-template-columns:1fr 1fr}
   .psum{grid-template-columns:1fr;padding:22px 18px}
-  .pr{order:-1;padding-left:0;border-left:0;margin-bottom:18px}
+  /* 좁은 화면 : 저작권 구매 → 선택 항목 → 예상 금액 순 */
+  .pr{order:0;margin-top:18px;padding:18px 0 0;border-left:0;border-top:1px solid rgba(76,80,178,.2)}
   .pl{padding-right:0}
   .pl{gap:16px}
   .opts{grid-template-columns:1fr}
@@ -590,8 +593,21 @@ body.inframe .remote,body.ext-remote .remote{display:none}
 }
 @media (max-width:760px){
   :root{--remote-w:42px}
-  .page{padding:16px 12px 40px;padding-right:58px}
-  .sec{padding:26px 16px;border-radius:16px}
+  /* 모바일 : 리모컨 없음, 큰 칸 사이 간격 모두 31.5px (공지사항~사용범위 간격의 3/4 기준) */
+  .page{padding:16px 12px 40px}
+  .remote{display:none!important}
+  .sec{margin-top:31.5px;padding:26px 17px;border-radius:16px}
+  #process+.sec{margin-top:31.5px}
+  .top{gap:31.5px}
+  /* 탭 : 작게, 4개면 2개씩 두 줄 */
+  .tab{padding:6px 14px;font-size:11px}
+  .tabs:has(> :nth-child(4)){display:grid;grid-template-columns:repeat(2,auto);justify-content:center}
+  .ptab{padding:7px 15px;font-size:11px}
+  /* 오픈 예정 : 카드 정중앙 */
+  .pc.off .pch{padding-bottom:120px}
+  .pc.off .poff{position:absolute;left:0;right:0;top:50%;margin:0;transform:translateY(-50%)}
+  /* 예상 금액 · 신청서 칸 : 위아래 안쪽 여백 2.5px 줄임 */
+  .psum{padding-top:19.5px;padding-bottom:19.5px}
   .sec h2{font-size:22px;gap:8px}
   .top{grid-template-columns:1fr}
   .intro{padding:34px 22px}
@@ -602,7 +618,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .pc:not(.off):hover,.oc:hover{transform:none}
   .fgrid{grid-template-columns:1fr}
   .opts.c3 .qty{margin-left:30px}
-  .fcard{padding:22px 18px 24px}
+  .fcard{padding:19.5px 18px 21.5px}
   .viewer{aspect-ratio:1/1}
   .sc-arrow{width:34px;height:34px;margin-top:-19px;font-size:19px}
   .sc-arrow.prev{left:4px}
@@ -610,7 +626,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .gal .sc-arrow.prev{left:4px}
   .gal .sc-arrow.next{right:4px}
   .sc-card{border-radius:16px}
-  .sc-thumb{width:72px;border-radius:8px}
+  .sc-thumb{width:112px;border-radius:8px}
+  .sc-thumb.sq{width:72px}
   .ggrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
   .gimg{border-radius:12px}
   .sc-thumbs{gap:6px;margin-top:12px}
@@ -640,11 +657,13 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .fs-dot{width:40px;height:40px;margin:0;align-self:start}
   .fs-dot svg{width:20px;height:20px}
   .fs:not(:last-child)::before{left:19.25px;top:40px;width:1.5px;height:calc(100% - 40px + 10px)}
-  .fs-card{display:grid;grid-template-columns:minmax(0,1fr);align-items:center;padding:8px 14px}
+  /* 아이콘 원 윗줄 = STEP 윗줄 */
+  .fs-card{display:grid;grid-template-columns:minmax(0,1fr);align-items:center;padding:0 14px 8px}
+  .fs-vl{display:none}
   .fs-step,.fs-card b,.fs-card .bd{grid-column:1}
   .fs-step{margin-top:0}
   .fs-card b{margin-top:4px;font-size:16px}
-  .fs-card .bd{justify-self:start;margin-top:6px}
+  .fs-card .bd{justify-self:start;margin-top:7px}
   .fs-card{text-align:left}
   .flowbox{padding-bottom:0}
   .fphase{position:static;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
@@ -1097,7 +1116,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
         '<span class="fs-dot" aria-hidden="true"><svg viewBox="0 0 24 24">' + ICON[s.i] + '</svg></span>' +
         '<div class="fs-card">' +
         '<span class="fs-step">STEP ' + n + '</span>' +
-        '<b>' + esc(s.t) + '</b>' + (s.b ? '<em class="bd">' + esc(s.b) + '</em>' : '') + '</div></li>';
+        '<b>' + esc(s.t) + '</b>' + (s.b ? '<i class="fs-vl" aria-hidden="true"></i><em class="bd">' + esc(s.b) + '</em>' : '') + '</div></li>';
     }).join('');
     var ph = $('flowPhase');
     if (ph) ph.innerHTML = WORK_PHASES.map(function (p) {
@@ -1513,7 +1532,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     html += '<div class="optgs" style="margin-top:36px">' + groupsOf(t).map(function (g) {
       var rows = (g.options || []).map(function (o) {
         var i = oi++, q = calc.qty[calc.tab][i] || 0, nq = !!o.noQty, unit = o.unit || '개';
-        return '<div class="oc' + (q ? ' sel' : '') + '" data-i="' + i + '" role="checkbox" aria-checked="' + (q > 0) + '" tabindex="0"><span class="pk"></span>' +
+        return '<div class="oc' + (q ? ' sel' : '') + (nq ? '' : ' hq') + '" data-i="' + i + '" role="checkbox" aria-checked="' + (q > 0) + '" tabindex="0"><span class="pk"></span>' +
           '<span class="pb">' + esc(o.name) + (o.sub ? '<small>(' + esc(o.sub) + ')</small>' : '') + '</span>' +
           (nq ? '' : '<span class="qty"><button type="button" class="qb" data-d="-1" aria-label="하나 줄이기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8"/></svg></button><input type="number" min="1" max="99" value="' + (q || 1) + '" aria-label="' + esc(unit) + ' 수"><button type="button" class="qb" data-d="1" aria-label="하나 늘리기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5 1v8"/></svg></button><span class="qu">' + esc(unit) + '</span></span>') +
           '<em class="pp">' + esc(won(o.price)) + '</em></div>';
