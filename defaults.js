@@ -371,7 +371,13 @@ window.LEUIN_DEFAULTS = {
             "title": "의상"
           }
         ],
-        "key": "SET"
+        "key": "SET",
+        "optionNotesTitle": "",
+        "optionNotes": [
+          "기재된 금액은 일러스트와 리깅을 합산한 최소 금액입니다.",
+          "추후 의상 추가를 예정하고 계신 경우 몸체 추가를 권장드립니다.",
+          "헤어 및 의상 추가에는 시안 1장이 포함됩니다."
+        ]
       },
       {
         "cards": [
@@ -519,7 +525,12 @@ window.LEUIN_DEFAULTS = {
             "title": "의상"
           }
         ],
-        "key": "ILLUSTRATION"
+        "key": "ILLUSTRATION",
+        "optionNotesTitle": "일러스트 단독 의뢰",
+        "optionNotes": [
+          "PSD 파일은 리거에게 전달하는 용도 외에는 사용하실 수 없습니다. 그 외의 용도로 사용을 원하시는 경우 저작권 구매가 필요합니다.",
+          "파츠 분리는 작가(르인)의 리깅 방식에 맞춰 작업하여 전달해 드립니다. 타 리거의 작업 방식에 맞춘 파츠 분리 수정은 불가능하거나 추가 비용이 발생할 수 있습니다."
+        ]
       },
       {
         "cards": [
@@ -648,7 +659,11 @@ window.LEUIN_DEFAULTS = {
             "title": "의상"
           }
         ],
-        "key": "RIGGING"
+        "key": "RIGGING",
+        "optionNotesTitle": "리깅 단독 의뢰",
+        "optionNotes": [
+          "기본 포함 표정은 해당 표정의 파츠 파일이 있어야 진행 가능합니다. 경우에 따라 다른 표정으로 변경하여 진행 가능하나, 난이도에 따라 변경이 불가할 수 있습니다."
+        ]
       }
     ]
   },

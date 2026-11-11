@@ -503,7 +503,7 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 .dd-list li.act{background:var(--chalk)}
 .dd-list li[aria-selected="true"]{color:var(--bell-deep);font-weight:700}
 /* 필수 항목 미입력 표시 */
-.ferr{display:none;margin-top:-3px;color:#D9626C;font-size:11.5px;font-weight:600;line-height:1.4}
+.ferr{display:none;margin-top:-2px;color:#D9626C;font-size:11.5px;font-weight:600;line-height:1.4}
 .fq.err .ferr{display:block}
 .fq.err input[type="text"],.fq.err textarea,.fq.err .dd-btn{border-color:#E6A3A9}
 .pstat.bad{color:#D9626C}
@@ -670,6 +670,64 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .fph{grid-column:auto!important;padding:8px 4px;border:0;border-radius:999px;background:var(--panel);font-size:12.5px;text-align:center}
   .fph em{position:static;padding:0;background:none;transform:none}
 }
+/* ---------- 추가 수정 (PC 공통) ---------- */
+/* 터치 화면에서 두 번 눌러 확대하는 대기(약 0.3초) 없이 바로 반응 */
+button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
+.chip{transition:background .1s,border-color .1s,color .1s}
+/* 자주하는 질문 : Q. 는 질문 첫 줄에 맞춤 */
+#faqList .fqq{align-items:flex-start}
+#faqList .fqq::before{margin-top:4.9px}
+/* 답변 : ↳ A. (화살표는 Q. 아래, A. 는 질문 첫 글자 위치) */
+#faqList .apin{padding-left:16px}
+.fa-arr{flex:none;width:18px;height:14px;margin-top:6.5px;fill:none;stroke:var(--bell);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+/* 작업과정 : 아이콘~STEP +1px, 컨펌 아래 -2px, 점선은 성글게 · 가운데 */
+.fs-dot{margin-bottom:17px}
+.fs-card{padding-bottom:16px}
+.fs-vl{width:1.5px;border:0;margin:6px 0 10px;background:repeating-linear-gradient(to bottom,#D3D4DE 0 2px,transparent 2px 6px)}
+/* 가격 : 탭별 안내 제목 */
+.pnt{margin-top:17px;padding-left:6px;color:#43446C;font-size:13.5px;font-weight:700}
+.pnt+.pnotes{margin-top:6px}
+/* 표정 mp4 */
+.gimg video{display:block;width:100%;height:100%;object-fit:cover}
+.lbp video{display:block;max-width:100%;max-height:100%;border-radius:8px}
+
+/* ---------- 추가 수정 (모바일) ---------- */
+@media (max-width:760px){
+  .pc-br{display:none}
+  .notice li{line-height:25.7px}
+  .nsub{line-height:19.5px}
+  /* 아코디언 펼친 내용 : 들여쓰기 없이 */
+  #noticeAcc .apin{padding-left:18px}
+  .fa{display:block}
+  .fa-arr{display:inline-block;vertical-align:-1px;margin:0 6px 0 0}
+  .fa-a{display:inline;margin-right:6px}
+  .fa-t{display:inline}
+  /* 사용범위 표 : 가로 스크롤 없이 */
+  .rights{min-width:0}
+  .rights th,.rights td{padding:10px 4px;font-size:12px}
+  .rights tbody th{padding-left:8px}
+  .rights thead th{font-size:12.5px}
+  .rights .txt,.rights .foot td{font-size:11.5px}
+  /* 작업과정 : 원 1px 위로, 단계 사이 +2px */
+  .flow2{gap:12px}
+  .fs-dot{margin-top:-1px}
+  .fs:not(:last-child)::before{top:39px;height:calc(100% - 39px + 12px)}
+  /* 리깅 썸네일 조금 작게 */
+  .sc-thumb{width:100px}
+  .sc-thumb.sq{width:72px}
+  /* 예상 금액 칸 : 위 간격 +1.5px, 안쪽 위 여백 -1.5px */
+  .psum{margin-top:21.5px;padding-top:18px}
+  /* SET / ILLUSTRATION / RIGGING 한 줄 */
+  .ptabs{flex-wrap:nowrap;gap:6px}
+  .ptab{padding:7px 11px;letter-spacing:.05em}
+  /* 캐릭터 특징 : 예시 4줄이 들어가는 기본 높이 */
+  #f_desc{min-height:110px}
+  /* 수량 선택 작게 (상자 밖으로 나가지 않게) */
+  .oc{gap:8px;padding-left:6px;padding-right:6px}
+  .qty{gap:4px;font-size:12px}
+  .qb{width:22px;height:22px}
+  .qty input{width:32px;padding:3px 1px;font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -681,7 +739,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     <div class="intro">
       <div class="eyebrow">ILLUSTRATOR · RIGGER</div>
       <h1>르인</h1>
-      <p class="intro-txt">청순하고 귀여운 인상의 미소녀 캐릭터를 주력으로,<br>미소녀/미소년 모델을 제작하고 있습니다.<br>문의 남겨 주시면 빠르게 답변 드리겠습니다!</p>
+      <p class="intro-txt">청순하고 귀여운 인상의 미소녀 캐릭터를 주력으로,<br class="pc-br"> 미소녀/미소년 모델을 제작하고 있습니다.<br>문의 남겨 주시면 빠르게 답변 드리겠습니다!</p>
 
     </div>
     <aside class="slot-card" aria-label="월별 예약 현황">
@@ -777,12 +835,12 @@ body.inframe .remote,body.ext-remote .remote{display:none}
         <div class="fcard">
           <h3>방송 정보</h3>
           <div class="fq">
-            <label class="fl" for="f_nick">방송 닉네임<span class="tbdn">※ 추후 정해지는 대로 말씀 부탁드립니다.</span></label>
+            <label class="fl" for="f_nick">방송 닉네임</label>
             <div class="fline"><input type="text" id="f_nick" autocomplete="off" placeholder="예) 르인"><button type="button" class="chip" id="nickTbd" aria-pressed="false">미정</button></div>
             <p class="ferr" id="e_nick"></p>
           </div>
           <div class="fq">
-            <span class="fl" id="l_plat">활동 플랫폼<span class="tbdn">※ 추후 정해지는 대로 말씀 부탁드립니다.</span></span>
+            <span class="fl" id="l_plat">활동 플랫폼</span>
             <div class="fline">
               <div class="dd" id="dd_plat">
                 <button type="button" class="dd-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="l_plat dd_plat_v"><span class="dd-v dd-ph" id="dd_plat_v">플랫폼 선택</span><span class="chev" aria-hidden="true"></span></button>
@@ -794,7 +852,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
             <p class="ferr" id="e_plat"></p>
           </div>
           <div class="fq">
-            <label class="fl" for="f_debut">데뷔 예정시기<span class="tbdn">※ 추후 정해지는 대로 말씀 부탁드립니다.</span></label>
+            <label class="fl" for="f_debut">데뷔 예정시기</label>
             <div class="fline"><input type="text" id="f_debut" autocomplete="off" placeholder="예) 2027년 3월말"><button type="button" class="chip" id="debutTbd" aria-pressed="false">미정</button></div>
             <p class="ferr" id="e_debut"></p>
           </div>
@@ -1028,7 +1086,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     acc.innerHTML = list.map(function (d, i) {
       return '<div class="ai"><button type="button" class="ah" aria-expanded="false" aria-controls="fq' + i + '">' +
         '<span class="fqq">' + esc(d.q) + '</span><span class="chev" aria-hidden="true"></span></button>' +
-        '<div class="ap" id="fq' + i + '"><div class="apw"><div class="apin"><div class="fa"><span class="fa-a" aria-hidden="true">A.</span><div class="fa-t">' + fmt(d.a) + '</div></div></div></div></div></div>';
+        '<div class="ap" id="fq' + i + '"><div class="apw"><div class="apin"><div class="fa"><svg class="fa-arr" viewBox="0 0 18 14" aria-hidden="true"><path d="M2.5 1.5v6h12M11 4l3.5 3.5L11 11"/></svg><span class="fa-a" aria-hidden="true">A.</span><div class="fa-t">' + fmt(d.a) + '</div></div></div></div></div></div>';
     }).join('');
     bindGroup(acc);
   }
@@ -1153,8 +1211,17 @@ body.inframe .remote,body.ext-remote .remote{display:none}
     lbp.style.top = top + 'px';
     lbp.style.height = h + 'px';
   }
+  var lbv = null;
   function openLB(src, alt) {
-    lbi.src = src; lbi.alt = alt || '';
+    /* mp4 등 영상은 영상으로 크게 보기 */
+    if (isFile(src)) {
+      if (!lbv) { lbv = document.createElement('video'); lbv.muted = true; lbv.loop = true; lbv.autoplay = true; lbv.setAttribute('playsinline', ''); lbp.appendChild(lbv); }
+      lbi.style.display = 'none'; lbv.style.display = ''; lbv.src = src;
+      var pr = lbv.play && lbv.play(); if (pr && pr.catch) pr.catch(function () {});
+    } else {
+      if (lbv) { lbv.style.display = 'none'; lbv.removeAttribute('src'); }
+      lbi.style.display = ''; lbi.src = src; lbi.alt = alt || '';
+    }
     lb.classList.add('open');
     layoutLB();
     if (!inFrame) document.body.style.overflow = 'hidden';
@@ -1163,6 +1230,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   function closeLB() {
     lb.classList.remove('open');
     lbi.removeAttribute('src');
+    if (lbv) { lbv.pause(); lbv.removeAttribute('src'); lbv.load(); }
     if (!inFrame) document.body.style.overflow = '';
   }
   $('lbx').addEventListener('click', closeLB);
@@ -1371,7 +1439,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       return '<ul class="ggrid" style="--gc:' + (cols || 3) + '">' + items.slice(from, to).map(function (it, k) {
         var i = from + k;
         return '<li><button type="button" class="gimg" data-i="' + i + '" aria-label="' + esc(it.caption || ((i + 1) + '번 움짤')) + ' 크게 보기">' +
-          '<img src="' + esc(it.src) + '" alt="' + esc(it.caption || '') + '" loading="lazy" decoding="async"></button>' +
+          (isFile(it.src) ? '<video src="' + esc(it.src) + '" muted autoplay loop playsinline preload="metadata"></video>'
+                          : '<img src="' + esc(it.src) + '" alt="' + esc(it.caption || '') + '" loading="lazy" decoding="async">') + '</button>' +
           (it.caption ? '<p class="gcap">' + fmt(it.caption) + '</p>' : '') + '</li>';
       }).join('') + '</ul>';
     }
@@ -1545,7 +1614,10 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       if (g.wide) return '<fieldset class="og wide' + (g.title ? '' : ' notitle') + '">' + legend + rowOpts + '</fieldset>';
       return '<fieldset class="og' + (g.title ? '' : ' notitle') + '">' + legend + '<div class="opts one">' + rows + '</div></fieldset>';
     }).join('') + '</div>';
-    if ((P.optionNotes || []).length) html += '<ul class="notes pnotes">' + P.optionNotes.map(function (n) { return '<li>' + fmt(n) + '</li>'; }).join('') + '</ul>';
+    /* 추가 옵션 아래 안내 : 탭(SET/ILLUSTRATION/RIGGING)마다 따로 (없으면 공통 안내) */
+    var oNotes = (t.optionNotes && t.optionNotes.length) ? t.optionNotes : (P.optionNotes || []);
+    if (t.optionNotesTitle) html += '<p class="pnt">' + fmt(t.optionNotesTitle) + '</p>';
+    if (oNotes.length) html += '<ul class="notes pnotes">' + oNotes.map(function (n) { return '<li>' + fmt(n) + '</li>'; }).join('') + '</ul>';
 
     html += '<aside class="psum" id="psum" aria-live="polite"></aside>';
     root.innerHTML = html;
@@ -1700,7 +1772,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
       ['type', function () { return sel.kind && sel.size; }, function () { return sel.kind ? '전신 / 반신을 선택해 주세요.' : '신청 타입을 선택해 주세요.'; }],
       ['copy', function () { return sel.copy; }, '저작권 구매 여부를 선택해 주세요.'],
       ['pub', function () { return sel.pub && (sel.pub !== '비공개' || privEl.value); }, function () { return sel.pub === '비공개' ? '비공개 기간을 선택해 주세요.' : '포트폴리오 공개 여부를 선택해 주세요.'; }],
-      ['est', function () { return $('f_est').value.trim(); }, '가격표에서 상품을 고른 뒤 ‘신청 양식에 반영’을 눌러 주세요.'],
+
       ['desc', function () { return $('f_desc').value.trim(); }, '캐릭터 특징을 입력해 주세요.']
     ];
     function boxOf(k) { return $('e_' + k).parentNode; }

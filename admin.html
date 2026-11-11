@@ -313,15 +313,15 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
 
   /* ---------- 슬롯 현황 (페이지 오른쪽 카드와 같은 모양 · 점을 눌러 예약 수정) ---------- */
   function viewSlots(m) {
-    m.appendChild(guide('페이지에 보이는 모습 그대로 고칠 수 있어요. 동그라미를 누르면 예약 완료 수가 바뀌고, 총 슬롯은 − / + 로 바꿉니다. 오른쪽 칸에서 마감 / 예약 가능을 직접 고를 수 있어요. (자동 = 예약이 다 차면 마감)'));
+    m.appendChild(guide('페이지에 보이는 모습 그대로 고칠 수 있어요. 동그라미를 누르면 예약 완료 수가 바뀌고, 총 슬롯은 − / + 로 바꿉니다. 예약이 다 차면 자동으로 마감으로 표시돼요.'));
     var hero = S.hero, months = S.slots.months;
     var body = h('div', { class: 'sc-body' });
     months.forEach(function (mo, i) {
       var total = Math.max(0, parseInt(mo.total, 10) || 0);
       var booked = Math.min(total, Math.max(0, parseInt(mo.booked, 10) || 0));
       mo.total = total; mo.booked = booked;
-      var st = mo.status === '마감' || mo.status === '예약 가능' ? mo.status : '';
-      var full = st ? st === '마감' : booked >= total, dots = h('div', { class: 'dots' });
+      delete mo.status;
+      var full = booked >= total, dots = h('div', { class: 'dots' });
       for (var k = 0; k < total; k++) (function (k) {
         dots.appendChild(h('button', { type: 'button', class: 'dot' + (k < booked ? '' : ' empty'), title: (k + 1) + '번째 슬롯',
           onclick: function () { mo.booked = (booked === k + 1) ? k : k + 1; touch(); render(); } }));
@@ -335,15 +335,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
           h('b', { text: String(total) }),
           h('button', { type: 'button', class: 'btn sm', text: '+', onclick: function () { mo.total = Math.min(20, total + 1); touch(); render(); } })
         ]),
-        /* 마감 / 예약 가능 직접 선택 (자동 = 예약 수가 다 차면 마감) */
-        h('select', { class: 'ssel ' + (full ? 'full' : 'open'), title: '마감 / 예약 가능', onchange: function (e) {
-          if (e.target.value) mo.status = e.target.value; else delete mo.status;
-          touch(); render();
-        } }, [
-          h('option', { value: '', selected: !st, text: '자동 (' + (booked >= total ? '마감' : '예약 가능') + ')' }),
-          h('option', { value: '마감', selected: st === '마감', text: '마감' }),
-          h('option', { value: '예약 가능', selected: st === '예약 가능', text: '예약 가능' })
-        ]),
+        h('span', { class: 'ss ' + (full ? 'full' : 'open'), text: full ? '마감' : '예약 가능' }),
         tools(months, i, (mo.label || '이 달'))
       ]));
     });
@@ -463,7 +455,9 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
       h('h3', { class: 'sub-title', text: '추가 옵션 · ' + t.key + ' ("묶음 없이"는 전체 폭 한 줄, 나머지 묶음은 회색 상자로 한 줄에 두 개씩)' }),
       gbox,
       addBtn('+ 묶음 추가', function () { t.groups.push({ title: '', options: [{ name: '', sub: '', price: '' }] }); touch(); render(); }),
-      h('div', { class: 'notes' }, [lines(S.price.optionNotes, 3)])
+      /* 추가 옵션 아래 안내 : 탭마다 따로 */
+      field('추가 옵션 아래 안내 제목 · ' + t.key + ' (선택, 예: 일러스트 단독 의뢰)', inp(t, 'optionNotesTitle', { placeholder: '비워 두면 제목 없이 표시' })),
+      h('div', { class: 'notes' }, [lines(t.optionNotes = t.optionNotes || (S.price.optionNotes || []).slice(), 3)])
     ]);
     m.appendChild(guide('SET / ILLUSTRATION / RIGGING 탭마다 카드와 옵션이 따로 저장돼요. 금액은 숫자만 입력하면 자동으로 쉼표가 붙고, 숫자가 아닌 글(예: 협의)도 가능해요. 신청 계산기에는 숫자 금액만 합산됩니다. "묶음 없이"를 켠 묶음은 옵션이 한 줄에 나란히(최대 3개) 표시되고, "가로로 길게"를 켠 묶음은 한 줄 전체 폭의 상자 안에 옵션이 나란히 보이며, 나머지 묶음은 회색 상자 안에 한 줄에 하나씩 표시되며 이름은 상자 테두리 위에 보여요.'));
     m.appendChild(s6);
@@ -663,7 +657,9 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     var list = h('div', { class: 'rlist' });
     cur.items.forEach(function (it, i) {
       var th = h('div', { class: 'rthumb sq' });
-      if (it.src) th.appendChild(h('img', { src: pending[it.src] ? pending[it.src].url : it.src, alt: '' })); else th.textContent = '이미지 없음';
+      var tsrc = it.src ? (pending[it.src] ? pending[it.src].url : it.src) : '';
+      if (tsrc && /\.(mp4|webm|mov)$/i.test(it.src)) th.appendChild(h('video', { src: tsrc, muted: true, autoplay: true, loop: true, playsinline: true }));
+      else if (tsrc) th.appendChild(h('img', { src: tsrc, alt: '' })); else th.textContent = '이미지 없음';
       list.appendChild(h('div', { class: 'rrow' }, [
         h('b', { class: 'rnum', text: String(i + 1) }),
         th,
@@ -673,14 +669,14 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
       ]));
     });
     if (!cur.items.length) list.appendChild(h('p', { class: 'hint', style: 'margin:0', text: '등록된 움짤이 없습니다.' }));
-    var file = h('input', { type: 'file', accept: 'image/gif,.gif,image/*', multiple: true, style: 'display:none', onchange: function (e) {
+    var file = h('input', { type: 'file', accept: 'image/gif,.gif,image/*,video/mp4,.mp4,video/webm,.webm', multiple: true, style: 'display:none', onchange: function (e) {
       var fs = Array.prototype.slice.call(e.target.files || []); e.target.value = ''; if (!fs.length) return;
       busy++; setStatus('움짤 처리 중… (' + fs.length + '개)', '');
       fs.reduce(function (p, f) { return p.then(function () { return processImage(f).then(function (r) { pending[r.path] = { blob: r.blob, url: r.url }; cur.items.push({ src: r.path, caption: '' }); }); }); }, Promise.resolve())
         .then(function () { busy--; touch(); render(); }, function (er) { busy--; setStatus(er.message, 'err'); render(); });
     } });
     kids.push(list);
-    kids.push(h('div', {}, [addBtn('+ 움짤 올리기 (여러 개 가능)', function () { file.click(); }), file]));
+    kids.push(h('div', {}, [addBtn('+ 움짤 올리기 (GIF · 이미지 · mp4, 여러 개 가능)', function () { file.click(); }), file]));
   }
 
   function viewPlatforms(m) {
@@ -715,6 +711,12 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
   }
 
   function processImage(file) {
+    /* mp4 · webm 영상은 그대로 올립니다 (페이지에서 자동 반복 재생) */
+    var vm = file && ((file.type || '').indexOf('video/') === 0 || /\.(mp4|webm|mov)$/i.test(file.name || '')) ? (/\.webm$/i.test(file.name || '') || file.type === 'video/webm' ? 'webm' : 'mp4') : '';
+    if (vm) {
+      if (file.size > 25 * 1024 * 1024) return Promise.reject(new Error(file.name + ' 이(가) 25MB 를 넘습니다. 용량을 줄여 다시 올려 주세요.'));
+      return Promise.resolve({ path: 'images/p-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + '.' + vm, blob: file, url: URL.createObjectURL(file) });
+    }
     /* GIF 는 캔버스로 바꾸면 움직임이 사라지므로 그대로 올립니다 */
     /* 파일 형식 정보가 비어 있는 경우가 있어 확장자(.gif)로도 확인합니다 */
     if (file && (file.type === 'image/gif' || /\.gif$/i.test(file.name || ''))) {
@@ -863,7 +865,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
   }
   function clean() {
     /* 월 라벨 공백 정리 등 가벼운 정리 */
-    S.slots.months.forEach(function (m) { m.label = String(m.label || '').trim(); m.total = Math.max(0, parseInt(m.total, 10) || 0); m.booked = Math.min(m.total, Math.max(0, parseInt(m.booked, 10) || 0)); });
+    S.slots.months.forEach(function (m) { delete m.status; m.label = String(m.label || '').trim(); m.total = Math.max(0, parseInt(m.total, 10) || 0); m.booked = Math.min(m.total, Math.max(0, parseInt(m.booked, 10) || 0)); });
   }
   function save() {
     if (busy) { setStatus('이미지 처리가 끝난 뒤 다시 눌러 주세요.', 'err'); return; }

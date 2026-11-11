@@ -34,7 +34,9 @@
   frame.title = '르인 커미션 안내';
   frame.setAttribute('scrolling', 'no');
   frame.setAttribute('frameborder', '0');
-  frame.setAttribute('allow', 'clipboard-write');
+  /* autoplay : 리깅 영상(YouTube)이 한 번 누르면 바로 재생되도록 iframe 안쪽까지 자동 재생 허용 */
+  frame.setAttribute('allow', 'clipboard-write; autoplay; fullscreen; encrypted-media; picture-in-picture');
+  frame.setAttribute('allowfullscreen', '');
   if (mount) mount.appendChild(frame);
   else (document.currentScript && document.currentScript.parentNode || document.body).appendChild(frame);
 
