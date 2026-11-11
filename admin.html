@@ -589,7 +589,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
   /* ---------- GitHub 연결 ---------- */
   function guessCfg() {
     var host = location.hostname, parts = location.pathname.split('/').filter(Boolean);
-    var o = { owner: '', repo: '', branch: 'main', token: '' };
+    var o = { owner: 'mororororo', repo: 'artmug', branch: 'main', token: '' };
     if (/\.github\.io$/.test(host)) { o.owner = host.split('.')[0]; o.repo = parts.length > 1 ? parts[0] : host; }
     return o;
   }
