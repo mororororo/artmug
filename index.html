@@ -329,6 +329,8 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .sc-thumb:hover{opacity:1}
 .sc-thumb[aria-current="true"]{border-color:var(--bell-deep);opacity:1}
 .sc-thumb img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none}
+/* 일러스트 정사각 썸네일 : 세로로 긴 그림의 윗부분(얼굴)이 잘리지 않도록 위 기준으로 자르기 */
+.sc-thumb.sq img{object-position:50% 0}
 
 /* ---------- 가격 계산기 ---------- */
 .ptabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
