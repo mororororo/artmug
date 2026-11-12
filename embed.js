@@ -112,7 +112,7 @@
       zbox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:64px 16px;background:rgba(0,0,0,.75);cursor:zoom-out';
       var x = document.createElement('button');
       x.type = 'button'; x.textContent = '✕'; x.setAttribute('aria-label', '닫기');
-      x.style.cssText = 'position:absolute;top:12px;right:12px;width:44px;height:44px;padding:0;border:0;background:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;opacity:.85';
+      x.style.cssText = 'position:absolute;top:12px;right:12px;width:44px;height:44px;padding:0;border:0;background:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;opacity:.85;outline:none;box-shadow:none;-webkit-tap-highlight-color:transparent';
       zbox.appendChild(x);
       zbox.addEventListener('click', zoomClose);
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') zoomClose(); });
