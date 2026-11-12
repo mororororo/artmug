@@ -801,7 +801,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .sc-thumb{width:90px}
   /* 신청 타입 버튼 3개 한 줄 (좁은 화면에서는 세 버튼이 같이 줄어듦), ∨ 는 가운데 버튼 정중앙 */
   .krow{flex-wrap:nowrap}
-  .krow .chip{flex:0 1 var(--kw);min-width:0}
+  .krow .chip{flex:0 0 min(var(--kw), (100% - 16px) / 3);width:auto;min-width:0}
   .kchev{margin-left:calc(min(92px, (100% - 16px) / 3) * 1.5 + 8px - 4.5px)}
 }
 </style>
