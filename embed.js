@@ -7,7 +7,7 @@
    하는 일
    · 본문 iframe(index.html) : 내부 스크롤 없이, 페이지 높이에 맞춰 iframe 높이를 자동 조절
    · 리모컨 iframe(remote.html) : 본문 바깥, 오른쪽 광고 배너와 같은 가로 위치에 화면 고정
-   · 아트머그 글 화면 전체 배경색을 페이지 배경색으로
+   · 아트머그 글 화면 전체(상단 · 하단 포함) 배경색을 페이지 배경색으로
    · 아트머그의 '내용 더 보기'(3000px 에서 잘림) 를 풀어 처음부터 전체 표시 */
 (function () {
   'use strict';
@@ -25,6 +25,26 @@
     '#leuin-frame{display:block;width:100%;height:9100px;border:0;background:transparent}' +
     '#leuin-remote{position:fixed;top:50%;left:50%;width:' + RW + 'px;height:' + RH + 'px;margin:-' + (RH / 2) + 'px 0 0 570px;border:0;background:transparent;z-index:9999}';
   document.head.appendChild(css);
+
+  /* 페이지 전체 배경 : 상단 · 하단 · 좌우 등 화면 폭의 넓은 흰색(밝은색) 영역을 모두 같은 연노란색으로
+     (작은 버튼 · 상자 · 이미지는 그대로) */
+  function paintPage() {
+    var vw = document.documentElement.clientWidth || window.innerWidth;
+    var all = document.body ? document.body.getElementsByTagName('*') : [];
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      if (el.tagName === 'IFRAME' || el.tagName === 'IMG' || el.tagName === 'SCRIPT' || el.tagName === 'STYLE') continue;
+      if (el.offsetWidth < vw * 0.6 && el.offsetWidth < 900) continue;
+      var m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/.exec(getComputedStyle(el).backgroundColor);
+      if (!m || (m[4] !== undefined && +m[4] < 0.5)) continue;
+      if (Math.min(+m[1], +m[2], +m[3]) < 235) continue;
+      el.style.setProperty('background-color', CREAM, 'important');
+    }
+  }
+  paintPage();
+  window.addEventListener('load', paintPage);
+  setTimeout(paintPage, 1500);
+  setTimeout(paintPage, 4000);
 
   /* 본문 iframe */
   var mount = document.getElementById('leuin-embed');

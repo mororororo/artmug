@@ -401,6 +401,8 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .oc .pb small{margin-left:5px;color:var(--sub);font-size:11.5px}
 /* 선택해서 수량 버튼이 생기면 괄호 설명은 아랫줄로 */
 .oc.sel.hq .pb small{display:block;margin:1px 0 0}
+/* 신청서 저작권 구매 : PC 에서 미구매 버튼 1px 앞으로 */
+@media (min-width:761px){#c_copy .chip+.chip{margin-left:-1px}}
 .oc .pp{display:block;margin:0;font-size:14px}
 .oc .pp i{font-size:1em;margin-left:1px}
 .qty{display:none;align-items:center;gap:6px;color:var(--sub);font-size:13px}
@@ -408,6 +410,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 /* − / + 는 선으로 그려 원의 정중앙에 */
 .qb svg{display:block;width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;pointer-events:none}
 .qu{margin-left:2px}
+/* 수량 버튼 위치를 모든 옵션에서 같게 : 가격 칸 폭 고정(오른쪽 정렬) + 단위 칸 폭 고정(개월 기준) */
+.oc .pp{flex:none;min-width:80px;text-align:right}
+.qu{min-width:1.75em}
 .qty input{-moz-appearance:textfield;appearance:textfield}
 .qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .sel .qty{display:inline-flex}
@@ -415,9 +420,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .opt-wrap{padding-bottom:2px}
 .follow{position:sticky;top:84px}
 body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bezier(.2,.8,.2,1);will-change:transform}
-.psum{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;margin-top:24px;padding:28px 30px;border-radius:24px;background:var(--chalk)}
+.psum{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;margin-top:24px;padding:28px 32px;border-radius:24px;background:var(--chalk)}
 .pl{display:grid;align-content:start;gap:22px;padding-right:40px}
-.pr{padding-left:40px;border-left:1px solid rgba(76,80,178,.2)}
+.pr{margin-left:-1.5px;padding-left:27.9px;border-left:1px solid rgba(76,80,178,.2)}
 .psum h4{font-size:15px;font-weight:700}
 .pact{display:flex;align-items:center;gap:10px;margin-top:18px}
 .prs{flex:none;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid #CBCDF0;border-radius:12px;background:#fff;color:var(--sub);cursor:pointer}
@@ -519,6 +524,9 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 input[type="text"],select,textarea{width:100%;padding:11px 13px;border:1px solid #D6D7EE;border-radius:12px;background:#fff;color:var(--ink);font:500 15px var(--font)}
 input[type="text"]:focus,select:focus,textarea:focus{border-color:var(--bell);outline:2px solid var(--bell);outline-offset:1px}
 input[type="text"]:disabled{background:#EEEEF6;color:#A9AAC4}
+/* 모바일(iOS 등) 비활성 입력칸 자동 흐림 방지 : 활동 플랫폼 선택칸과 같은 색으로 */
+input[type="text"]:disabled{opacity:1;-webkit-text-fill-color:#A9AAC4}
+input[type="text"]:disabled::placeholder{color:#9B9CB5;-webkit-text-fill-color:#9B9CB5;opacity:1}
 input[readonly],textarea[readonly]{background:#fff}
 /* 상세 내용 입력칸 : 기본 높이는 모두 '추가 옵션' 칸과 같게, 내용이 넘치면 칸이 저절로 늘어남 */
 textarea{min-height:96px;resize:none;overflow:hidden}
@@ -532,9 +540,11 @@ textarea{min-height:96px;resize:none;overflow:hidden}
 .won{font-size:15px;font-weight:700}
 .chips+.chips{margin-top:2px}
 /* 동의 체크 : 외곽 상자 없이 작게, 가운데 정렬 */
-.agree{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:1px;margin-bottom:7px;padding:4px 0;font-size:14px;font-weight:700;cursor:pointer}
+.agree{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:1px;margin-bottom:1px;padding:4px 0;font-size:14px;font-weight:700;cursor:pointer}
 .agree input{flex:none;width:16px;height:16px;margin:0;accent-color:var(--bell-deep)}
 #f_est::placeholder{color:#B9BACB}
+/* PC : 예) 안내 · 플랫폼명 입력 안내 글자 = 플랫폼 선택 글자 색 */
+@media (min-width:761px){.form input:not(#f_est)::placeholder,.form textarea::placeholder{color:#9B9CB5;opacity:1}}
 .fbtns{display:grid;grid-template-columns:1fr;gap:10px;margin-top:0}
 .pbtn{display:flex;justify-content:center;align-items:center;padding:14px 16px;border:1px solid #D2D3EE;border-radius:14px;background:#fff;color:var(--ink);font:700 15.5px var(--font);text-align:center;text-decoration:none;cursor:pointer;transition:filter .2s,background .2s,border-color .2s}
 /* 복사 버튼 = 가격표의 "신청 양식에 반영" 버튼과 같은 색 · 글자 */
@@ -543,6 +553,16 @@ textarea{min-height:96px;resize:none;overflow:hidden}
 .pbtn.main:not([disabled]):hover{filter:brightness(1.25)}
 .pbtn.main[disabled],.pbtn[disabled],.pbtn[aria-disabled="true"]{border-color:transparent;background:#E4E4EE;color:#9B9CB5;cursor:not-allowed}
 .pstat{min-height:20px;margin-top:-3.33px;color:var(--bell-deep);font-size:12.5px;font-weight:600;line-height:1.5;text-align:center}
+/* 동의 전 안내 문구 : 비활성 버튼 글자(#9B9CB5)보다 연한 회색 */
+.pstat.hint{color:#C2C3D2}
+/* PC 신청서 : 입력칸은 왼쪽으로 1px 늘리고, 버튼만 있는 줄은 1px 왼쪽으로 (설명 글자와 맞춤) */
+@media (min-width:761px){
+  .fgrid .fline>input,.fgrid .fline>.dd{margin-left:-1px}
+  #f_platEtc{margin-left:-1px;width:calc(100% + 1px)}
+  .fgrid .chips{margin-left:-1px}
+  #sizeWrap .kchev{translate:-1px 0}
+  .fcard.wide textarea{width:calc(100% + 2px);margin:0 -1px}
+}
 
 .foot{margin-top:32px;color:#8F90B6;font-size:12px;text-align:center;line-height:1.8}
 
@@ -598,7 +618,10 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   /* 모바일 : 리모컨 없음, 큰 칸 사이 간격 모두 31.5px (공지사항~사용범위 간격의 3/4 기준) */
   .page{padding:16px 12px 40px}
   .remote{display:none!important}
-  .sec{margin-top:31.5px;padding:26px 17px;border-radius:16px}
+  .sec{margin-top:31.5px;padding:27.5px 17px;border-radius:16px}
+  /* 큰 타이틀 아래 여백 1.5px 줄임 */
+  .sec-head h2{margin-bottom:-1.5px}
+  .apply-head .rsb{margin-top:.75px}
   #process+.sec{margin-top:31.5px}
   .top{gap:31.5px}
   /* 탭 : 작게, 4개면 2개씩 두 줄 */
@@ -732,6 +755,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .qty{gap:4px;font-size:12px}
   .qb{width:22px;height:22px}
   .qty input{width:32px;padding:3px 1px;font-size:12px}
+  /* 긴 괄호 설명(오마카세 · 겉옷 on/off) 은 아랫줄로 */
+  .oc .pb small.lsub{display:block;margin:1px 0 0}
 }
 </style>
 </head>
@@ -922,7 +947,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       <div class="fbtns">
         <button type="button" class="pbtn main" id="goBtn" disabled><span>신청 내용 복사 후 문의글 작성</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></svg></button>
       </div>
-      <p class="pstat" id="pstat" aria-live="polite">동의에 체크하면 복사와 문의글 작성을 할 수 있어요.</p>
+      <p class="pstat hint" id="pstat" aria-live="polite">동의에 체크하면 복사와 문의글 작성을 할 수 있어요.</p>
     </form>
   </section>
 
@@ -1101,7 +1126,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     acc.innerHTML = list.map(function (d, i) {
       return '<div class="ai"><button type="button" class="ah" aria-expanded="false" aria-controls="fq' + i + '">' +
         '<span class="fqq">' + esc(d.q) + '</span><span class="chev" aria-hidden="true"></span></button>' +
-        '<div class="ap" id="fq' + i + '"><div class="apw"><div class="apin"><div class="fa"><svg class="fa-arr" viewBox="0 0 18 14" aria-hidden="true"><path d="M2.5 1.5v6h12M11 4l3.5 3.5L11 11"/></svg><span class="fa-a" aria-hidden="true">A.</span><div class="fa-t">' + fmt(d.a) + '</div></div></div></div></div></div>';
+        '<div class="ap" id="fq' + i + '"><div class="apw"><div class="apin"><div class="fa"><svg class="fa-arr" viewBox="0 0 18 14" aria-hidden="true"><path d="M2.5 1.5v6h11M10 4l3.5 3.5L10 11"/></svg><span class="fa-a" aria-hidden="true">A.</span><div class="fa-t">' + fmt(d.a) + '</div></div></div></div></div></div>';
     }).join('');
     bindGroup(acc);
   }
@@ -1620,7 +1645,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       var rows = (g.options || []).map(function (o) {
         var i = oi++, q = calc.qty[calc.tab][i] || 0, nq = !!o.noQty, unit = o.unit || '개';
         return '<div class="oc' + (q ? ' sel' : '') + (nq ? '' : ' hq') + '" data-i="' + i + '" role="checkbox" aria-checked="' + (q > 0) + '" tabindex="0"><span class="pk"></span>' +
-          '<span class="pb">' + esc(o.name) + (o.sub ? '<small>(' + esc(o.sub) + ')</small>' : '') + '</span>' +
+          '<span class="pb">' + esc(o.name) + (o.sub ? '<small' + (o.sub.length > 8 ? ' class="lsub"' : '') + '>(' + esc(o.sub) + ')</small>' : '') + '</span>' +
           (nq ? '' : '<span class="qty"><button type="button" class="qb" data-d="-1" aria-label="하나 줄이기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8"/></svg></button><input type="number" min="1" max="99" value="' + (q || 1) + '" aria-label="' + esc(unit) + ' 수"><button type="button" class="qb" data-d="1" aria-label="하나 늘리기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5 1v8"/></svg></button><span class="qu">' + esc(unit) + '</span></span>') +
           '<em class="pp">' + esc(won(o.price)) + '</em></div>';
       }).join('');
@@ -1984,7 +2009,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 
     function sync() { goBtn.disabled = !agree.checked; }
     sync();
-    agree.addEventListener('change', function () { sync(); stat.classList.remove('bad'); stat.textContent = agree.checked ? '' : HINT; });
+    agree.addEventListener('change', function () { sync(); stat.classList.remove('bad'); stat.classList.toggle('hint', !agree.checked); stat.textContent = agree.checked ? '' : HINT; });
 
     function copyText(t) {
       function fallback() {
@@ -2015,12 +2040,12 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     goBtn.addEventListener('click', function () {
       var bad = validate();
       if (bad) {
-        stat.classList.add('bad');
+        stat.classList.add('bad'); stat.classList.remove('hint');
         stat.textContent = '빨간색으로 표시된 필수 항목을 입력해 주세요.';
         showField(bad);
         return;
       }
-      stat.classList.remove('bad');
+      stat.classList.remove('bad', 'hint');
       if (!agree.checked) { stat.textContent = '먼저 페이지 내용 확인 동의에 체크해 주세요.'; return; }
       var w = null;
       if (inq) {
@@ -2057,7 +2082,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       dtbd.setAttribute('aria-pressed', 'false'); debut.disabled = false; boxOf('debut').classList.remove('tbd');
       agree.checked = false; sync();
       clearErr();
-      stat.classList.remove('bad');
+      stat.classList.remove('bad'); stat.classList.add('hint');
       stat.textContent = HINT;
     });
   }
