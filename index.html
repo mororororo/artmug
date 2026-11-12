@@ -204,9 +204,12 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .fs{position:relative;display:flex;flex-direction:column;min-width:0}
 /* 작업과정 : 한 단계에 커서를 올리면 그 단계만 살짝 크게, 나머지는 회색으로 (PC) */
 @media (hover:hover) and (min-width:761px){
-  .flow2 .fs{transition:transform .25s ease,opacity .25s,filter .25s}
-  .flow2:has(.fs:hover) .fs:not(:hover){opacity:.4;filter:grayscale(1)}
-  .flow2 .fs:hover{z-index:2;transform:scale(1.08)}
+  /* 구분선(::before)은 그대로 두고 동그라미 · 카드만 확대 / 흐림 */
+  .flow2 .fs>.fs-dot,.flow2 .fs>.fs-card{transition:transform .25s ease,opacity .25s,filter .25s}
+  .flow2:has(.fs:hover) .fs:not(:hover)>.fs-dot,.flow2:has(.fs:hover) .fs:not(:hover)>.fs-card{opacity:.4;filter:grayscale(1)}
+  .flow2 .fs:hover{z-index:2}
+  .flow2 .fs:hover>.fs-dot{transform:scale(1.08)}
+  .flow2 .fs:hover>.fs-card{transform:scale(1.08);transform-origin:50% 0}
 }
 /* 각 단계 아이콘을 동그라미 안에 넣고, 동그라미끼리 가로선으로 이음 */
 .fs-dot{position:relative;z-index:1;display:grid;place-items:center;align-self:center;width:48px;height:48px;margin-bottom:16px;border:1.5px solid #D6D6DE;border-radius:50%;background:#fff}
@@ -468,7 +471,7 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .pgo{border:1px solid var(--ink)}
 
 /* ---------- 확대 보기 ---------- */
-.lb{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88)}
+.lb{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4)}
 .lb.open{display:block}
 .lbp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 16px 24px}
 .lbp img{display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
@@ -1291,6 +1294,10 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   lbi.addEventListener('load', function () { fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight); });
   function openLB(src, alt, gif) {
     lbSmall = !!gif && !!(window.matchMedia && matchMedia('(hover:hover) and (min-width:761px)').matches);
+    /* 아트머그 안 : 바깥 페이지(embed.js)가 화면 전체를 어둡게 하고 그 위에 직접 크게 띄움 */
+    if (inFrame && lbHost) {
+      try { parent.postMessage({ leuinZoom: { src: new URL(src, location.href).href, video: isFile(src), gif: !!gif } }, '*'); return; } catch (e) {}
+    }
     clearSmall(lbi); clearSmall(lbv);
     /* mp4 등 영상은 영상으로 크게 보기 */
     if (isFile(src)) {
@@ -1307,15 +1314,12 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     lb.classList.add('open');
     layoutLB();
     if (lbSmall && lbi.style.display !== 'none' && lbi.complete) fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight);
-    /* 아트머그 안 : 바깥 화면(상단 · 양옆 등)도 함께 어둡게 */
-    if (inFrame) { try { parent.postMessage({ leuinLB: 1 }, '*'); } catch (e) {} }
     if (!inFrame) document.body.style.overflow = 'hidden';
     $('lbx').focus({ preventScroll: true });
   }
   function closeLB() {
     if (!lb.classList.contains('open')) return;
     lb.classList.remove('open');
-    if (inFrame) { try { parent.postMessage({ leuinLB: 0 }, '*'); } catch (e) {} }
     lbi.removeAttribute('src');
     if (lbv) { lbv.pause(); lbv.removeAttribute('src'); lbv.load(); }
     if (!inFrame) document.body.style.overflow = '';
@@ -1324,8 +1328,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   /* 확대 화면 어디를 눌러도 바로 닫힘 */
   lb.addEventListener('click', closeLB);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('open')) closeLB(); });
-  /* 바깥(아트머그 화면)의 어두운 부분을 눌러도 닫힘 */
-  window.addEventListener('message', function (e) { if (e.source === window.parent && e.data && e.data.leuinCloseLB) closeLB(); });
+  /* embed.js 가 보내는 'leuinHost' 신호 : 바깥 페이지가 확대 보기를 대신 띄울 수 있음 */
+  var lbHost = false;
+  window.addEventListener('message', function (e) { if (e.source === window.parent && e.data && e.data.leuinHost) lbHost = true; });
 
   /* ---------- 양옆 카드가 살짝 작고 흐리게 보이는 무한 순환 캐러셀 (일러스트 · 리깅 공통) ----------
      처음에서 ‹ 를 누르면 바로 왼쪽에 마지막 작품이 있는 것처럼 이어집니다.

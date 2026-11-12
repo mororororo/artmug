@@ -95,25 +95,51 @@
   window.addEventListener('load', placeRemote);
   setTimeout(placeRemote, 1500);
 
-  /* 확대 보기용 전체 화면 어둡게 : 화면 전체를 덮는 검은 막 + 본문 iframe(과 그 바깥 상자들)을 막 위로 */
-  var TOP = 2147483000, shade = null, lifted = [];
-  function dim(on) {
-    lifted.forEach(function (x) { x[0].style.zIndex = x[1]; });
-    lifted = [];
-    if (!on) { if (shade) shade.style.display = 'none'; return; }
-    if (!shade) {
-      shade = document.createElement('div');
-      shade.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:' + TOP + ';background:rgba(0,0,0,.88)';
-      shade.addEventListener('click', function () { try { frame.contentWindow.postMessage({ leuinCloseLB: 1 }, ORIGIN); } catch (er) {} dim(false); });
-      document.body.appendChild(shade);
+  /* 확대 보기 : 아트머그 화면 전체를 40% 검정으로 덮고, 그 위에 사진 · 움짤을 띄움 (어디를 눌러도 / Esc 로 닫힘)
+     PC 의 움짤은 화면에 꽉 차는 크기의 1/4 (가로 · 세로 각각 절반) */
+  var zbox = null, zmedia = null, zOverflow = '';
+  function zoomClose() {
+    if (!zbox || zbox.style.display === 'none') return;
+    zbox.style.display = 'none';
+    if (zmedia) { if (zmedia.pause) zmedia.pause(); zmedia.removeAttribute('src'); if (zmedia.load) zmedia.load(); zmedia.parentNode.removeChild(zmedia); zmedia = null; }
+    document.documentElement.style.overflow = zOverflow;
+  }
+  function zoom(d) {
+    var src = String(d.src || '');
+    if (!/^https:\/\//.test(src)) return;
+    if (!zbox) {
+      zbox = document.createElement('div');
+      zbox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:64px 16px 24px;background:rgba(0,0,0,.4);cursor:zoom-out';
+      var x = document.createElement('button');
+      x.type = 'button'; x.textContent = '✕'; x.setAttribute('aria-label', '닫기');
+      x.style.cssText = 'position:absolute;top:12px;right:12px;width:44px;height:44px;padding:0;border:0;background:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;opacity:.85';
+      zbox.appendChild(x);
+      zbox.addEventListener('click', zoomClose);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') zoomClose(); });
+      document.documentElement.appendChild(zbox);
     }
-    shade.style.display = 'block';
-    if (getComputedStyle(frame).position === 'static') frame.style.position = 'relative';
-    for (var el = frame; el && el !== document.body; el = el.parentElement) {
-      if (el !== frame && getComputedStyle(el).position === 'static') continue;
-      lifted.push([el, el.style.zIndex]);
-      el.style.zIndex = TOP + 1;
+    zoomClose();
+    var m = document.createElement(d.video ? 'video' : 'img');
+    m.style.cssText = 'display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px';
+    var small = d.gif && !touch && window.matchMedia && matchMedia('(min-width:761px)').matches;
+    function fit(w, h) {
+      if (!small || !w || !h) return;
+      var k = Math.min(1, (zbox.clientWidth - 32) / w, (zbox.clientHeight - 88) / h) / 2;
+      m.style.width = Math.round(w * k) + 'px';
+      m.style.height = Math.round(h * k) + 'px';
     }
+    if (d.video) {
+      m.muted = true; m.loop = true; m.autoplay = true; m.setAttribute('playsinline', '');
+      m.addEventListener('loadedmetadata', function () { fit(m.videoWidth, m.videoHeight); });
+    } else m.addEventListener('load', function () { fit(m.naturalWidth, m.naturalHeight); });
+    m.src = src;
+    zbox.appendChild(m);
+    zmedia = m;
+    zOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    zbox.style.display = 'flex';
+    if (d.video) { var p = m.play && m.play(); if (p && p.catch) p.catch(function () {}); }
+    else if (m.complete) fit(m.naturalWidth, m.naturalHeight);
   }
 
   /* 본문 높이 자동 조절 · 문의 창 열기 */
@@ -136,8 +162,8 @@
       if (qb) qb.click();
       return;
     }
-    /* 사진 · 움짤 확대 보기 : 아트머그 화면 전체를 어둡게 (본문 iframe 만 그 위로 올림) */
-    if ('leuinLB' in e.data) { dim(!!e.data.leuinLB); return; }
+    /* 사진 · 움짤 확대 보기 : 아트머그 화면 전체를 어둡게 하고 그 위에 크게 */
+    if (e.data.leuinZoom) { zoom(e.data.leuinZoom); return; }
     var h = +e.data.leuinHeight;
     if (h > 100) frame.style.height = Math.ceil(h) + 'px';
   });
