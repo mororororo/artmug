@@ -93,9 +93,20 @@
   window.addEventListener('load', placeRemote);
   setTimeout(placeRemote, 1500);
 
-  /* 본문 높이 자동 조절 */
+  /* 본문 높이 자동 조절 · 문의 창 열기 */
+  function hello() { try { frame.contentWindow.postMessage({ leuinHost: 1 }, ORIGIN); } catch (er) {} }
+  frame.addEventListener('load', hello);
   window.addEventListener('message', function (e) {
     if (e.origin !== ORIGIN || !e.data || e.source !== frame.contentWindow) return;
+    if (e.data.leuinHello) { hello(); return; }
+    /* '신청 내용 복사 후 문의글 작성' : 아트머그의 '작가에게 문의' 버튼을 눌러 화면 아래 문의 창(로그인 전이면 로그인 창)을 띄움 */
+    if (e.data.leuinInquiry) {
+      var btns = document.querySelectorAll('p.btn_qna, .btn_qna'), qb = null;
+      for (var i = 0; i < btns.length && !qb; i++) if (btns[i].offsetWidth) qb = btns[i];
+      qb = qb || btns[0];
+      if (qb) qb.click();
+      return;
+    }
     var h = +e.data.leuinHeight;
     if (h > 100) frame.style.height = Math.ceil(h) + 'px';
   });
