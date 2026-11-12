@@ -109,7 +109,7 @@
     if (!/^https:\/\//.test(src)) return;
     if (!zbox) {
       zbox = document.createElement('div');
-      zbox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:64px 16px 24px;background:rgba(0,0,0,.75);cursor:zoom-out';
+      zbox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:64px 16px;background:rgba(0,0,0,.75);cursor:zoom-out';
       var x = document.createElement('button');
       x.type = 'button'; x.textContent = '✕'; x.setAttribute('aria-label', '닫기');
       x.style.cssText = 'position:absolute;top:12px;right:12px;width:44px;height:44px;padding:0;border:0;background:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;opacity:.85';
@@ -124,7 +124,7 @@
     var small = d.gif && !touch && window.matchMedia && matchMedia('(min-width:761px)').matches;
     function fit(w, h) {
       if (!small || !w || !h) return;
-      var k = Math.min(1, (zbox.clientWidth - 32) / w, (zbox.clientHeight - 88) / h) / 2;
+      var k = Math.min(1, (zbox.clientWidth - 32) / w, (zbox.clientHeight - 128) / h) / 2;
       m.style.width = Math.round(w * k) + 'px';
       m.style.height = Math.round(h * k) + 'px';
     }
