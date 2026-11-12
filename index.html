@@ -329,8 +329,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .sc-thumb:hover{opacity:1}
 .sc-thumb[aria-current="true"]{border-color:var(--bell-deep);opacity:1}
 .sc-thumb img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none}
-/* 일러스트 정사각 썸네일 : 세로로 긴 그림의 윗부분(얼굴)이 잘리지 않도록 위 기준으로 자르기 */
-.sc-thumb.sq img{object-position:50% 0}
+/* 썸네일 그림을 칸에 딱 맞게 고정 : 모바일 브라우저(사파리 등)에서 세로로 긴 그림이 칸보다 커져 위쪽이 잘리던 문제 */
+.sc-thumb{position:relative}
+.sc-thumb img{position:absolute;inset:0}
 
 /* ---------- 가격 계산기 ---------- */
 .ptabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
@@ -621,9 +622,9 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .page{padding:16px 12px 40px}
   .remote{display:none!important}
   .sec{margin-top:31.5px;padding:27.5px 17px;border-radius:16px}
-  /* 큰 타이틀 아래 여백 1.5px 줄임 */
-  .sec-head h2{margin-bottom:-1.5px}
-  .apply-head .rsb{margin-top:.75px}
+  /* 큰 타이틀 아래 여백 3.5px 줄임 */
+  .sec-head h2{margin-bottom:-3.5px}
+  .apply-head .rsb{margin-top:1.75px}
   #process+.sec{margin-top:31.5px}
   .top{gap:31.5px}
   /* 탭 : 작게, 4개면 2개씩 두 줄 */
