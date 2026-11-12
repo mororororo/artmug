@@ -331,7 +331,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .sc-thumb img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none}
 /* 썸네일 그림을 칸에 딱 맞게 고정 : 모바일 브라우저(사파리 등)에서 세로로 긴 그림이 칸보다 커져 위쪽이 잘리던 문제 */
 .sc-thumb{position:relative}
-.sc-thumb img{position:absolute;inset:0}
+.sc-thumb img{position:absolute;top:0;left:0;right:0;bottom:0}
+/* 일러스트 정사각 썸네일 : 칸 높이를 숫자로 고정하고 가운데 정렬(grid) 대신 일반 배치 → 위쪽 빈 공간 없음 */
+.sc-thumb.sq{display:block;height:72px}
 
 /* ---------- 가격 계산기 ---------- */
 .ptabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
@@ -452,6 +454,10 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .pwarn{margin-top:10px;color:#B2545D;font-size:11.5px;line-height:1.5}
 .pgo{display:flex;flex:1;justify-content:space-between;align-items:center;height:44px;margin-top:0;padding:0 18px;border:0;border-radius:12px;background:var(--ink);color:#fff;font:700 15.5px var(--font);cursor:pointer;transition:filter .2s}
 .pgo:hover{filter:brightness(1.25)}
+/* 신청 양식에 반영 · 초기화 버튼 : 어느 브라우저에서도 같은 높이(44px)로 */
+.pact{align-items:stretch}
+.pgo,.prs{box-sizing:border-box;height:44px;min-height:44px;margin:0;-webkit-appearance:none;appearance:none;line-height:1}
+.pgo{border:1px solid var(--ink)}
 
 /* ---------- 확대 보기 ---------- */
 .lb{display:none;position:fixed;inset:0;z-index:100;background:rgba(28,29,66,.9)}
@@ -469,6 +475,8 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 .rsb{position:absolute;right:0;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:31px;height:31px;padding:0;border:1px solid #CBCDF0;border-radius:9px;background:#fff;color:var(--sub);cursor:pointer;transition:border-color .2s,color .2s}
 .rsb:hover,.rsb.armed{border-color:var(--bell);color:var(--bell-deep)}
 .rsb svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* PC : 신청서 작성 옆 초기화 버튼을 제목 글자 높이에 맞춰 크게 (정사각형 유지) */
+@media (min-width:761px){.rsb{width:34px;height:34px;border-radius:10px}.rsb svg{width:15.5px;height:15.5px}}
 .rsl{position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);color:var(--bell-deep);font:600 12.5px var(--font);white-space:nowrap;pointer-events:none}
 .form{display:grid;gap:14px}
 .fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
