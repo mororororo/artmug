@@ -95,7 +95,7 @@
   window.addEventListener('load', placeRemote);
   setTimeout(placeRemote, 1500);
 
-  /* 확대 보기 : 아트머그 화면 전체를 40% 검정으로 덮고, 그 위에 사진 · 움짤을 띄움 (어디를 눌러도 / Esc 로 닫힘)
+  /* 확대 보기 : 아트머그 화면 전체를 75% 검정으로 덮고, 그 위에 사진 · 움짤을 띄움 (어디를 눌러도 / Esc 로 닫힘)
      PC 의 움짤은 화면에 꽉 차는 크기의 1/4 (가로 · 세로 각각 절반) */
   var zbox = null, zmedia = null, zOverflow = '';
   function zoomClose() {
@@ -109,7 +109,7 @@
     if (!/^https:\/\//.test(src)) return;
     if (!zbox) {
       zbox = document.createElement('div');
-      zbox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:64px 16px 24px;background:rgba(0,0,0,.4);cursor:zoom-out';
+      zbox.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:64px 16px 24px;background:rgba(0,0,0,.75);cursor:zoom-out';
       var x = document.createElement('button');
       x.type = 'button'; x.textContent = '✕'; x.setAttribute('aria-label', '닫기');
       x.style.cssText = 'position:absolute;top:12px;right:12px;width:44px;height:44px;padding:0;border:0;background:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;opacity:.85';

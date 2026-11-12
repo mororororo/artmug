@@ -411,6 +411,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .opts.c3 .qty{order:3;flex-basis:100%;margin:-2px 0 2px 30px}
 .oc{display:flex;align-items:center;gap:12px;padding:12px 10px;border-radius:12px;transition:background .2s,transform .2s}
 .oc{position:relative;isolation:isolate}
+/* 추가 옵션 : 커서를 올리면 클릭 커서 (수량 입력칸만 글자 커서) */
+.oc,.oc *{cursor:pointer}
+.oc .qty input{cursor:text}
 /* 선택된 옵션 : 연보라 칸을 위아래로 4px씩 작게 */
 .oc.sel::before{content:"";position:absolute;inset:4px 0;z-index:-1;border-radius:10px;background:var(--chalk)}
 .oc .pb{flex:1;min-width:0;font-size:14.5px}
@@ -471,7 +474,7 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .pgo{border:1px solid var(--ink)}
 
 /* ---------- 확대 보기 ---------- */
-.lb{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4)}
+.lb{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.75)}
 .lb.open{display:block}
 .lbp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 16px 24px}
 .lbp img{display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
