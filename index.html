@@ -318,9 +318,9 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 /* 일러스트 : 조금 더 빠르게, 아래 점 1px 작게 */
 .sc-stage.gal .sc-track{transition-duration:.5s}
 .sc-stage.gal .sc-card{transition-duration:.5s}
-/* 일러스트 화살표 : 가운데 그림 바로 바깥 */
-.gal .sc-arrow.prev{left:calc(var(--peek,60px) - 56px)}
-.gal .sc-arrow.next{right:calc(var(--peek,60px) - 56px)}
+/* 일러스트 화살표 : 이전 / 다음 그림의 안쪽 세로 모서리 정중앙 (--edge 는 캐러셀이 계산) */
+.gal .sc-arrow.prev{left:calc(var(--edge,40px) - 22px)}
+.gal .sc-arrow.next{right:calc(var(--edge,40px) - 22px)}
 /* 양옆 이전/다음 카드 : 바깥으로 갈수록 서서히 사라짐 */
 .sc-clip{overflow:hidden;padding:6px 0 10px;margin:-6px 0 -10px;-webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.5) 0,#000 var(--peek,60px),#000 calc(100% - var(--peek,60px)),rgba(0,0,0,.5) 100%);mask-image:linear-gradient(90deg,rgba(0,0,0,.5) 0,#000 var(--peek,60px),#000 calc(100% - var(--peek,60px)),rgba(0,0,0,.5) 100%)}
 .sc-thumb.sq{width:72px;aspect-ratio:1}
@@ -676,8 +676,8 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .sc-arrow{width:34px;height:34px;margin-top:-19px;font-size:19px}
   .sc-arrow.prev{left:4px}
   .sc-arrow.next{right:4px}
-  .gal .sc-arrow.prev{left:4px}
-  .gal .sc-arrow.next{right:4px}
+  .gal .sc-arrow.prev{left:calc(var(--edge,21px) - 17px)}
+  .gal .sc-arrow.next{right:calc(var(--edge,21px) - 17px)}
   .sc-card{border-radius:16px}
   .sc-thumb{width:112px;border-radius:8px}
   .sc-thumb.sq{width:72px}
@@ -1397,6 +1397,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       cw = Math.round(w * (mob ? (o.mob || 0.86) : (o.desk || 0.78)));
       base = Math.round((w - cw) / 2 - pos * (cw + gap));
       stage.style.setProperty('--peek', Math.round((w - cw) / 2) + 'px');
+      /* 이전 카드의 안쪽(오른쪽) 세로 모서리 위치 : 양옆 카드는 92% 로 줄어 있으므로 한쪽 4% 만큼 안쪽 */
+      stage.style.setProperty('--edge', Math.round((w - cw) / 2 - gap - cw * 0.04) + 'px');
       track.style.gap = gap + 'px';
       cards.forEach(function (c) { c.style.width = cw + 'px'; });
       if (!animate) track.classList.add('snap');
