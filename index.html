@@ -497,7 +497,7 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 /* PC : 신청서 작성 옆 초기화 버튼을 제목 글자 높이에 맞춰 크게 (정사각형 유지) */
 @media (min-width:761px){.rsb{width:34px;height:34px;border-radius:10px}.rsb svg{width:15.5px;height:15.5px}}
 .rsl{position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);color:var(--bell-deep);font:600 12.5px var(--font);white-space:nowrap;pointer-events:none}
-.form{display:grid;gap:14px}
+.form{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
 .fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .fcard{padding:26px 26px 28px;border-radius:22px;background:var(--panel)}
 .fcard h3{display:flex;align-items:center;gap:10px;margin-bottom:1.2px;font-size:18px;font-weight:800}
@@ -671,7 +671,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .pch{padding:22px 22px 14px}
   .pf{padding:16px 22px 20px}
   .pc:not(.off):hover,.oc:hover{transform:none}
-  .fgrid{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:minmax(0,1fr)}
   .opts.c3 .qty{margin-left:30px}
   .fcard{padding:19.5px 18px 21.5px}
   .viewer{aspect-ratio:1/1}
