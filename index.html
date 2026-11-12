@@ -188,10 +188,11 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .rights[data-hc] tr:not(.foot)>:not(:first-child){opacity:.35;filter:grayscale(1)}
 .rights[data-hc="1"] tr:not(.foot)>:nth-child(2):not(:first-child),.rights[data-hc="2"] tr:not(.foot)>:nth-child(3):not(:first-child),.rights[data-hc="3"] tr:not(.foot)>:nth-child(4):not(:first-child){opacity:1;filter:none}
 /* 사용범위 표 : 회색이 되지 않은 칸(커서를 올린 열 · 행)의 글자만 살짝 크게 (칸 배경은 그대로)
-   1열(추가금~기업 사용)은 왼쪽 끝을 기준으로 커져서 왼쪽 여백 유지 */
-.rights .ct{display:inline-block;transition:transform .25s ease}
-.rights tbody th .ct{transform-origin:0 50%}
-.rights[data-hc="1"] tr:not(.foot)>:nth-child(2):not(:first-child) .ct,.rights[data-hc="2"] tr:not(.foot)>:nth-child(3):not(:first-child) .ct,.rights[data-hc="3"] tr:not(.foot)>:nth-child(4):not(:first-child) .ct,.rights[data-hr] tbody tr.hr>* .ct{transform:scale(1.1)}
+   1열(추가금~기업 사용)은 왼쪽 정렬이라 왼쪽 여백 유지
+   transform 확대는 글자가 반 픽셀쯤 위로 뜨게 그려져서, 줄 높이를 칸 글자 크기 기준 px 로 고정해 두고 글자 크기만 키움 → 항상 칸 세로 중앙 */
+.rights tr:not(.foot)>th,.rights tr:not(.foot)>td{line-height:1.65em}
+.rights .ct{display:block;font-size:1em;transition:font-size .25s ease}
+.rights[data-hc="1"] tr:not(.foot)>:nth-child(2):not(:first-child) .ct,.rights[data-hc="2"] tr:not(.foot)>:nth-child(3):not(:first-child) .ct,.rights[data-hc="3"] tr:not(.foot)>:nth-child(4):not(:first-child) .ct,.rights[data-hr] tbody tr.hr>* .ct{font-size:1.1em}
 
 /* 작업과정 · 리깅 : 타이틀 아래 간격 2px 줄임 */
 #process .sec-head{margin-bottom:24px}
