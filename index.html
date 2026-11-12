@@ -369,10 +369,10 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .pf li{position:relative;padding-left:16px;line-height:1.55}
 .pf li::before{content:"-";position:absolute;left:0;font-weight:700;color:#BDBED0}
 .pk{flex:none;display:grid;place-items:center;width:18px;height:18px;border:1.5px solid #B9BBD8;border-radius:4px;background:#fff;transition:background .2s,border-color .2s}
-.pk::after{content:"";width:9px;height:5px;margin-top:-2px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:translate(0,-1.5px) rotate(-45deg) scale(0);transition:transform .2s}
+/* 체크 표시 : 테두리를 돌려 그리던 방식은 칸 위치(소수점 픽셀)에 따라 조금씩 어긋나서, 박스 안쪽을 꽉 채우는 그림으로 → 모든 칸에서 같은 위치 */
+.pk::after{content:"";width:15px;height:15px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15'%3E%3Cpath d='M3.7 7.5l2.6 2.6 5-5' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") center/100% 100% no-repeat;transform:scale(0);transition:transform .2s}
 .sel>.pk{border-color:var(--ink);background:var(--ink)}
-/* 체크 표시 : 박스 정중앙 (꺾인 선을 돌린 모양의 좌우 폭이 가운데 오도록 가로 이동 없음) */
-.sel>.pk::after{transform:translate(0,-1.5px) rotate(-45deg) scale(1)}
+.sel>.pk::after{transform:scale(1)}
 .pc>.pk{position:absolute;top:20px;right:20px}
 .pc.off{border-color:transparent;background:#E9E9F1;color:#B6B7CC;cursor:not-allowed}
 .pc.off .pn,.pc.off .pp,.pc.off .pp i{color:#B6B7CC}
