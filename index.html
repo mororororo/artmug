@@ -196,7 +196,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 /* 작업과정 · 리깅 : 타이틀 아래 간격 2px 줄임 */
 #process .sec-head{margin-bottom:24px}
 /* 작업과정 : 칸 아래쪽 여백 3px 줄임, 다음 칸과의 간격 5/6 */
-#process{padding-bottom:36px}
+#process{padding-bottom:34px}
 #process+.sec{margin-top:35px}
 /* 샘플 · 가격 안내 : 타이틀과 탭 사이 1.5px 줄임 */
 #rigging .sec-head{margin-bottom:22.5px}
@@ -369,9 +369,10 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .pf li{position:relative;padding-left:16px;line-height:1.55}
 .pf li::before{content:"-";position:absolute;left:0;font-weight:700;color:#BDBED0}
 .pk{flex:none;display:grid;place-items:center;width:18px;height:18px;border:1.5px solid #B9BBD8;border-radius:4px;background:#fff;transition:background .2s,border-color .2s}
-.pk::after{content:"";width:9px;height:5px;margin-top:-2px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:translate(-.5px,-1.5px) rotate(-45deg) scale(0);transition:transform .2s}
+.pk::after{content:"";width:9px;height:5px;margin-top:-2px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:translate(0,-1.5px) rotate(-45deg) scale(0);transition:transform .2s}
 .sel>.pk{border-color:var(--ink);background:var(--ink)}
-.sel>.pk::after{transform:translate(-.5px,-1.5px) rotate(-45deg) scale(1)}
+/* 체크 표시 : 박스 정중앙 (꺾인 선을 돌린 모양의 좌우 폭이 가운데 오도록 가로 이동 없음) */
+.sel>.pk::after{transform:translate(0,-1.5px) rotate(-45deg) scale(1)}
 .pc>.pk{position:absolute;top:20px;right:20px}
 .pc.off{border-color:transparent;background:#E9E9F1;color:#B6B7CC;cursor:not-allowed}
 .pc.off .pn,.pc.off .pp,.pc.off .pp i{color:#B6B7CC}
