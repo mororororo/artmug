@@ -1991,13 +1991,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       var type = [sel.kind, sel.size].filter(Boolean).join(' · ');
       var est = $('f_est').value.trim();
       return [
-        '◈ 문의글 등록 전에 확인해 주세요',
-        '- 캐릭터 특징과 관련된 사진 자료를 꼭 첨부해 주세요.',
-        '원하시는 느낌을 정확히 파악하기 위해 사진과 텍스트가 모두 필요합니다.',
-        '- 구글, 핀터레스트 등에서 찾은 AI 생성 이미지는 참고 자료로 첨부하실 수 있습니다.',
-        '단, 의뢰자께서 직접 자료를 입력하여 생성한 AI 이미지는 지양 부탁드립니다.',
-        '직접 생성한 이미지는 오히려 다양한 디자인을 제안하고 작업하는 데 제약을 줍니다.',
-        'AI 이미지 생성을 시도하기보다는, 생성에 사용하시려던 이미지나 참고 자료를 그대로 첨부 부탁드립니다.',
+        '♦ 모델 디자인 참고용 사진 자료 첨부 부탁드립니다 ♦',
         '', '',
         '[커미션 신청서]', '',
         '■ 방송 정보',
@@ -2013,8 +2007,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         '■ 상세 내용',
         line('캐릭터 특징', $('f_desc').value),
         line('추가 옵션', $('f_opts').value),
-        line('기타 문의사항 및 질문', $('f_etc').value), '',
-        '※ 페이지 내용을 모두 확인하였으며 이에 동의합니다.'
+        line('기타 문의사항 및 질문', $('f_etc').value)
       ].join('\n');
     }
 
