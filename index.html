@@ -182,11 +182,13 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .rights .txt{color:#43446C;font-size:14px;font-weight:700}
 #rights .notes{gap:1.5px}
 /* 표 : 한 열(방송용/개인세/기업세)에 커서를 올리면 나머지 열은 회색으로 흐려짐 */
-.rights tr:not(.foot)>*{transition:opacity .25s,filter .25s}
+.rights tr:not(.foot)>*{position:relative;transition:opacity .25s,filter .25s,transform .25s ease}
 /* 첫 번째 열(추가금~기업 사용)에 커서 : 맨 윗줄 + 그 줄만 남기고 흐리게 */
 .rights[data-hr] tbody tr:not(.foot):not(.hr)>*{opacity:.35;filter:grayscale(1)}
 .rights[data-hc] tr:not(.foot)>:not(:first-child){opacity:.35;filter:grayscale(1)}
 .rights[data-hc="1"] tr:not(.foot)>:nth-child(2):not(:first-child),.rights[data-hc="2"] tr:not(.foot)>:nth-child(3):not(:first-child),.rights[data-hc="3"] tr:not(.foot)>:nth-child(4):not(:first-child){opacity:1;filter:none}
+/* 사용범위 표 : 회색이 되지 않은 칸(커서를 올린 열 · 행)만 살짝 크게 */
+.rights[data-hc="1"] tr:not(.foot)>:nth-child(2):not(:first-child),.rights[data-hc="2"] tr:not(.foot)>:nth-child(3):not(:first-child),.rights[data-hc="3"] tr:not(.foot)>:nth-child(4):not(:first-child),.rights[data-hr] tbody tr.hr>*{z-index:1;transform:scale(1.1)}
 
 /* 작업과정 · 리깅 : 타이틀 아래 간격 2px 줄임 */
 #process .sec-head{margin-bottom:24px}
@@ -200,6 +202,12 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 /* 작업과정 : 위 가로 스텝 라인(원형 번호, 카드 왼쪽에 맞춤) + 아래 같은 높이의 카드 7장 */
 .flow2{--gap:16px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0 var(--gap);padding-top:2px}
 .fs{position:relative;display:flex;flex-direction:column;min-width:0}
+/* 작업과정 : 한 단계에 커서를 올리면 그 단계만 살짝 크게, 나머지는 회색으로 (PC) */
+@media (hover:hover) and (min-width:761px){
+  .flow2 .fs{transition:transform .25s ease,opacity .25s,filter .25s}
+  .flow2:has(.fs:hover) .fs:not(:hover){opacity:.4;filter:grayscale(1)}
+  .flow2 .fs:hover{z-index:2;transform:scale(1.08)}
+}
 /* 각 단계 아이콘을 동그라미 안에 넣고, 동그라미끼리 가로선으로 이음 */
 .fs-dot{position:relative;z-index:1;display:grid;place-items:center;align-self:center;width:48px;height:48px;margin-bottom:16px;border:1.5px solid #D6D6DE;border-radius:50%;background:#fff}
 .fs-dot svg{width:24px;height:24px;fill:none;stroke:var(--bell-deep);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -460,7 +468,7 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .pgo{border:1px solid var(--ink)}
 
 /* ---------- 확대 보기 ---------- */
-.lb{display:none;position:fixed;inset:0;z-index:100;background:rgba(28,29,66,.9)}
+.lb{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88)}
 .lb.open{display:block}
 .lbp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 16px 24px}
 .lbp img{display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
@@ -1268,10 +1276,28 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     lbp.style.height = h + 'px';
   }
   var lbv = null;
-  function openLB(src, alt) {
+  /* PC 에서 움짤은 화면에 꽉 차게 보이던 크기의 1/4 (가로 · 세로 각각 절반) */
+  var lbSmall = false;
+  function fitSmall(el, w, h) {
+    if (!lbSmall || !w || !h) return;
+    var cs = getComputedStyle(lbp);
+    var bw = lbp.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    var bh = lbp.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    var k = Math.min(1, bw / w, bh / h) / 2;
+    el.style.width = Math.round(w * k) + 'px';
+    el.style.height = Math.round(h * k) + 'px';
+  }
+  function clearSmall(el) { if (el) { el.style.width = ''; el.style.height = ''; } }
+  lbi.addEventListener('load', function () { fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight); });
+  function openLB(src, alt, gif) {
+    lbSmall = !!gif && !!(window.matchMedia && matchMedia('(hover:hover) and (min-width:761px)').matches);
+    clearSmall(lbi); clearSmall(lbv);
     /* mp4 등 영상은 영상으로 크게 보기 */
     if (isFile(src)) {
-      if (!lbv) { lbv = document.createElement('video'); lbv.muted = true; lbv.loop = true; lbv.autoplay = true; lbv.setAttribute('playsinline', ''); lbp.appendChild(lbv); }
+      if (!lbv) {
+        lbv = document.createElement('video'); lbv.muted = true; lbv.loop = true; lbv.autoplay = true; lbv.setAttribute('playsinline', ''); lbp.appendChild(lbv);
+        lbv.addEventListener('loadedmetadata', function () { fitSmall(lbv, lbv.videoWidth, lbv.videoHeight); });
+      }
       lbi.style.display = 'none'; lbv.style.display = ''; lbv.src = src;
       var pr = lbv.play && lbv.play(); if (pr && pr.catch) pr.catch(function () {});
     } else {
@@ -1280,11 +1306,16 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     }
     lb.classList.add('open');
     layoutLB();
+    if (lbSmall && lbi.style.display !== 'none' && lbi.complete) fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight);
+    /* 아트머그 안 : 바깥 화면(상단 · 양옆 등)도 함께 어둡게 */
+    if (inFrame) { try { parent.postMessage({ leuinLB: 1 }, '*'); } catch (e) {} }
     if (!inFrame) document.body.style.overflow = 'hidden';
     $('lbx').focus({ preventScroll: true });
   }
   function closeLB() {
+    if (!lb.classList.contains('open')) return;
     lb.classList.remove('open');
+    if (inFrame) { try { parent.postMessage({ leuinLB: 0 }, '*'); } catch (e) {} }
     lbi.removeAttribute('src');
     if (lbv) { lbv.pause(); lbv.removeAttribute('src'); lbv.load(); }
     if (!inFrame) document.body.style.overflow = '';
@@ -1293,6 +1324,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   /* 확대 화면 어디를 눌러도 바로 닫힘 */
   lb.addEventListener('click', closeLB);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('open')) closeLB(); });
+  /* 바깥(아트머그 화면)의 어두운 부분을 눌러도 닫힘 */
+  window.addEventListener('message', function (e) { if (e.source === window.parent && e.data && e.data.leuinCloseLB) closeLB(); });
 
   /* ---------- 양옆 카드가 살짝 작고 흐리게 보이는 무한 순환 캐러셀 (일러스트 · 리깅 공통) ----------
      처음에서 ‹ 를 누르면 바로 왼쪽에 마지막 작품이 있는 것처럼 이어집니다.
@@ -1505,7 +1538,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     if (items.length > nb) html += '<div class="grest">' + cells(nb, items.length) + '</div>';
     root.innerHTML = html;
     each(root.querySelectorAll('.gimg'), function (b) {
-      b.addEventListener('click', function () { var it = items[+b.getAttribute('data-i')]; openLB(it.src, it.caption || ''); });
+      b.addEventListener('click', function () { var it = items[+b.getAttribute('data-i')]; openLB(it.src, it.caption || '', true); });
     });
   }
   function RigTabs(root, cats) {

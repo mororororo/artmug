@@ -95,6 +95,27 @@
   window.addEventListener('load', placeRemote);
   setTimeout(placeRemote, 1500);
 
+  /* 확대 보기용 전체 화면 어둡게 : 화면 전체를 덮는 검은 막 + 본문 iframe(과 그 바깥 상자들)을 막 위로 */
+  var TOP = 2147483000, shade = null, lifted = [];
+  function dim(on) {
+    lifted.forEach(function (x) { x[0].style.zIndex = x[1]; });
+    lifted = [];
+    if (!on) { if (shade) shade.style.display = 'none'; return; }
+    if (!shade) {
+      shade = document.createElement('div');
+      shade.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:' + TOP + ';background:rgba(0,0,0,.88)';
+      shade.addEventListener('click', function () { try { frame.contentWindow.postMessage({ leuinCloseLB: 1 }, ORIGIN); } catch (er) {} dim(false); });
+      document.body.appendChild(shade);
+    }
+    shade.style.display = 'block';
+    if (getComputedStyle(frame).position === 'static') frame.style.position = 'relative';
+    for (var el = frame; el && el !== document.body; el = el.parentElement) {
+      if (el !== frame && getComputedStyle(el).position === 'static') continue;
+      lifted.push([el, el.style.zIndex]);
+      el.style.zIndex = TOP + 1;
+    }
+  }
+
   /* 본문 높이 자동 조절 · 문의 창 열기 */
   function hello() { try { frame.contentWindow.postMessage({ leuinHost: 1 }, ORIGIN); } catch (er) {} }
   frame.addEventListener('load', hello);
@@ -115,6 +136,8 @@
       if (qb) qb.click();
       return;
     }
+    /* 사진 · 움짤 확대 보기 : 아트머그 화면 전체를 어둡게 (본문 iframe 만 그 위로 올림) */
+    if ('leuinLB' in e.data) { dim(!!e.data.leuinLB); return; }
     var h = +e.data.leuinHeight;
     if (h > 100) frame.style.height = Math.ceil(h) + 'px';
   });
