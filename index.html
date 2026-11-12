@@ -371,7 +371,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .pf li::before{content:"-";position:absolute;left:0;font-weight:700;color:#BDBED0}
 .pk{flex:none;display:grid;place-items:center;width:18px;height:18px;border:1.5px solid #B9BBD8;border-radius:4px;background:#fff;transition:background .2s,border-color .2s}
 /* 체크 표시 : 테두리를 돌려 그리던 방식은 칸 위치(소수점 픽셀)에 따라 조금씩 어긋나서, 박스 안쪽을 꽉 채우는 그림으로 → 모든 칸에서 같은 위치 */
-.pk::after{content:"";width:15px;height:15px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15'%3E%3Cpath d='M3.7 7.5l2.6 2.6 5-5' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") center/100% 100% no-repeat;transform:scale(0);transition:transform .2s}
+.pk::after{content:"";width:15px;height:15px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15'%3E%3Cpath d='M1.84 6.44 6.09 10.68 13.16 3.61' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='miter'/%3E%3C/svg%3E") center/100% 100% no-repeat;transform:scale(0);transition:transform .2s}
 .sel>.pk{border-color:var(--ink);background:var(--ink)}
 .sel>.pk::after{transform:scale(1)}
 .pc>.pk{position:absolute;top:20px;right:20px}
