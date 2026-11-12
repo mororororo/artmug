@@ -50,7 +50,9 @@
   var mount = document.getElementById('leuin-embed');
   var frame = document.createElement('iframe');
   frame.id = 'leuin-frame';
-  frame.src = BASE;
+  /* 매번 새 버전을 불러오도록 주소 뒤에 시간 값 (브라우저가 예전 페이지를 최대 10분 보관하는 문제 방지) */
+  var VER = '?v=' + Date.now();
+  frame.src = BASE + VER;
   frame.title = '르인 커미션 안내';
   frame.setAttribute('scrolling', 'no');
   frame.setAttribute('frameborder', '0');
@@ -66,7 +68,7 @@
   if (!touch) {
     remote = document.createElement('iframe');
     remote.id = 'leuin-remote';
-    remote.src = BASE + 'remote.html';
+    remote.src = BASE + 'remote.html' + VER;
     remote.title = '페이지 메뉴';
     remote.setAttribute('scrolling', 'no');
     remote.setAttribute('frameborder', '0');
