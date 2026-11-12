@@ -2054,7 +2054,29 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     /* 복사 + 문의글 작성 : 필수 항목이 비어 있으면 복사하지 않고 빨갛게 표시.
        아트머그 안 : 먼저 복사한 뒤, 아트머그의 '작가에게 문의'(p.btn_qna)를 눌러 화면 아래 문의 창을 띄움
        (새 창을 먼저 열면 포커스가 넘어가 복사가 실패하므로 새 창은 쓰지 않음) */
+    /* 모바일 : 아트머그 모바일 문의 페이지로 이동 (매물 번호는 관리자 '문의 주소'의 number= 값을 그대로 사용) */
+    var isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (window.matchMedia && matchMedia('(hover:none) and (pointer:coarse)').matches);
+    var qnaNum = (/[?&]number=(\d+)/.exec(inq) || [])[1] || '';
+    var mInq = qnaNum ? 'https://artmug.kr/m/index.php?channel=qna_write&number=' + qnaNum : inq;
     goBtn.addEventListener('click', function () {
+      if (isMobile && mInq) {
+        var badM = validate();
+        if (badM) {
+          stat.classList.add('bad'); stat.classList.remove('hint');
+          stat.textContent = '빨간색으로 표시된 필수 항목을 입력해 주세요.';
+          showField(badM);
+          return;
+        }
+        stat.classList.remove('bad', 'hint');
+        if (!agree.checked) { stat.textContent = '먼저 페이지 내용 확인 동의에 체크해 주세요.'; return; }
+        copyText(text()).then(function (ok) {
+          stat.textContent = ok ? '신청 내용이 복사되었어요. 문의 페이지로 이동합니다.' : '자동 복사에 실패했어요. 신청 내용을 직접 복사해 붙여넣어 주세요.';
+          /* 아트머그 안이면 바깥 페이지(embed.js)가 이동, 아니면 직접 이동 */
+          if (host) { try { parent.postMessage({ leuinGo: mInq }, '*'); } catch (e) {} return; }
+          try { window.top.location.href = mInq; } catch (e) { window.location.href = mInq; }
+        });
+        return;
+      }
       if (host) {
         var bad0 = validate();
         if (bad0) {

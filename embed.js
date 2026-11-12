@@ -100,6 +100,12 @@
     if (e.origin !== ORIGIN || !e.data || e.source !== frame.contentWindow) return;
     if (e.data.leuinHello) { hello(); return; }
     /* '신청 내용 복사 후 문의글 작성' : 아트머그의 '작가에게 문의' 버튼을 눌러 화면 아래 문의 창(로그인 전이면 로그인 창)을 띄움 */
+    /* 모바일 : 아트머그 모바일 문의 페이지로 이동 (아트머그 주소만 허용) */
+    if (e.data.leuinGo) {
+      var u = String(e.data.leuinGo);
+      if (/^https:\/\/(www\.)?artmug\.kr\//.test(u)) location.href = u;
+      return;
+    }
     if (e.data.leuinInquiry) {
       var btns = document.querySelectorAll('p.btn_qna, .btn_qna'), qb = null;
       for (var i = 0; i < btns.length && !qb; i++) if (btns[i].offsetWidth) qb = btns[i];
