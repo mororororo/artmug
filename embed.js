@@ -107,12 +107,24 @@
       x = col ? col.getBoundingClientRect().right + 40 + 80 : vw / 2 + 660;
     }
     var left = Math.round(Math.min(x - RW / 2, vw - RW + 4));
+    /* 리모컨 iframe(투명 여백 포함)이 본문 글 위에 겹치면 그 부분의 마우스 · 터치를 가로챔
+       (작업과정 STEP 6·7 호버, 가격 옵션 + 버튼이 안 눌리던 원인)
+       → 본문 글 오른쪽 끝(1180 칸 안 가운데 925px) 바깥으로만 두고, 들어갈 자리가 없으면 숨김 */
+    var fr = frame.getBoundingClientRect();
+    if (fr.width) {
+      var contentRight = fr.left + (fr.width + Math.min(fr.width, 925)) / 2;
+      left = Math.max(left, Math.ceil(contentRight + 4));
+    }
     remote.style.left = left + 'px';
     remote.style.marginLeft = '0';
+    remote.style.visibility = left + RW - (RW - 140) / 2 > vw + 2 ? 'hidden' : '';
   }
   placeRemote();
   window.addEventListener('resize', placeRemote);
   window.addEventListener('load', placeRemote);
+  window.addEventListener('scroll', placeRemote, { passive: true });
+  /* 아트머그가 배너 위치를 나중에 옮기는 경우가 있어 주기적으로 다시 맞춤 */
+  setInterval(placeRemote, 1000);
   setTimeout(placeRemote, 1500);
 
   /* 확대 보기 : 아트머그 화면 전체를 75% 검정으로 덮고, 그 위에 사진 · 움짤을 띄움 (어디를 눌러도 / Esc 로 닫힘)

@@ -128,6 +128,10 @@ input,select,textarea{font-family:inherit}
 /* ▪️ 줄은 글씨 1px 크게 (줄 높이는 그대로), - 줄은 줄 높이 1px 좁게 */
 #noticeAcc .nl.m-sq{font-size:17px;line-height:27.2px}
 #noticeAcc .nl.m-dash{line-height:26.2px}
+/* [[작은 글자]] 가 들어간 줄은 줄 높이 3px 좁게 */
+#noticeAcc .nl:has(.t-sm){line-height:24.2px}
+#noticeAcc .nl.m-sq:has(.t-sm){line-height:24.2px}
+#noticeAcc .nl.m-dash:has(.t-sm){line-height:23.2px}
 /* 글자 꾸밈 : ==연보라 배경== · {{빨간 글자}} · [[작은 글자]] (예시 등) */
 .t-sm{font-size:.84em;color:#6C6D92}
 .t-hl{padding:0 2px;border-radius:3px;background:#E2E3FD;color:inherit;-webkit-box-decoration-break:clone;box-decoration-break:clone}
@@ -267,7 +271,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .tab{position:relative}
 .tab:not(:disabled):not([aria-selected="true"]):hover{border-color:var(--bell);background:var(--chalk);color:var(--bell-deep)}
 .tab:disabled{border-color:#E8E8F0;background:#EFEFF5;color:#B6B7CC;cursor:not-allowed}
-.tab:disabled::after{content:"준비중";position:absolute;left:50%;bottom:calc(100% + 10px);padding:6px 10px;border-radius:8px;background:var(--ink);color:#fff;font:600 12px var(--font);white-space:nowrap;opacity:0;pointer-events:none;transform:translate(-50%,4px);transition:opacity .2s,transform .2s}
+.tab:disabled::after{content:"준비중";position:absolute;left:50%;bottom:calc(100% + 10px);padding:6px 10px;border-radius:8px;background:var(--ink);color:#fff;font:600 12px var(--font);white-space:nowrap;letter-spacing:-.05em;opacity:0;pointer-events:none;transform:translate(-50%,4px);transition:opacity .2s,transform .2s}
 .tab:disabled::before{content:"";position:absolute;left:50%;bottom:calc(100% + 5px);border:5px solid transparent;border-top-color:var(--ink);border-bottom:0;opacity:0;transform:translateX(-50%);transition:opacity .2s}
 .tab:disabled:hover::after{opacity:1;transform:translate(-50%,0)}
 .tab:disabled:hover::before{opacity:1}
@@ -872,6 +876,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   #noticeAcc .apin{line-height:25.2px}
   #noticeAcc .nl.m-sq{line-height:25.2px}
   #noticeAcc .nl.m-dash{line-height:24.2px}
+  #noticeAcc .nl:has(.t-sm),#noticeAcc .nl.m-sq:has(.t-sm){line-height:22.2px}
+  #noticeAcc .nl.m-dash:has(.t-sm){line-height:21.2px}
   /* 작업과정 : 컨펌 횟수는 단계 오른쪽 끝, 아이콘 원의 세로 중앙(16.5px)에 맞추고 단계 이름과 가로 점선으로 이음 */
   .fs-card{grid-template-columns:minmax(0,max-content) minmax(12px,1fr) auto}
   .fs-step,.fs-card b{grid-column:1}
