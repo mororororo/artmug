@@ -631,8 +631,6 @@ textarea{min-height:96px;resize:none;overflow:hidden}
 .estn{margin-left:6px;color:var(--bell-deep);font-size:13px;font-weight:700}
 .estn.co{color:var(--sub);font-size:12px;font-weight:500}
 .estn:empty{display:none}
-/* 가격표 : 개인세일 때 포트폴리오 비공개 금액 옆 +30% */
-.oc .pp .p30{margin-left:3px;color:var(--bell-deep);font-size:10.5px;font-weight:700}
 /* PC : 예) 안내 · 플랫폼명 입력 안내 글자 = 플랫폼 선택 글자 색 */
 @media (min-width:761px){.form input:not(#f_est)::placeholder,.form textarea::placeholder{color:#9B9CB5;opacity:1}}
 .fbtns{display:grid;grid-template-columns:1fr;gap:10px;margin-top:0}
@@ -2077,14 +2075,6 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 
   function sumUpdate() {
     var r = calcResult(), el = $('psum'), rig = isRigTab(), rights = rightsNow();
-    /* 개인세(저작권 구매) : 포트폴리오 비공개 금액도 30% 더해서 표시 (합계는 원래대로 전체 +30%) */
-    each(document.querySelectorAll('#priceRoot .oc'), function (oc) {
-      var pb = oc.querySelector('.pb'), pp = oc.querySelector('.pp');
-      if (!pb || !pp || !/^포트폴리오\s*비공개/.test(pb.textContent)) return;
-      if (pp.getAttribute('data-p0') == null) pp.setAttribute('data-p0', pp.textContent);
-      var p0 = pp.getAttribute('data-p0'), n = num(p0.replace(/[^\d,]/g, ''));
-      pp.innerHTML = rights === 'personal' && n ? esc('₩' + comma(Math.round(n * 1.3))) + '<small class="p30">+30%</small>' : esc(p0);
-    });
     /* 리깅만 의뢰 : 저작권 구매 버튼 모두 비활성화 */
     var left = '<div class="psel"><h5>저작권 구매' + (rig ? '<span class="rnote">※ 리깅만 의뢰하는 경우 저작권 구매 옵션이 없습니다.</span>' : '') + '</h5><div class="rch">' + [['broadcast', '미구매'], ['personal', '개인세'], ['company', '기업세']].map(function (x) {
       return '<button type="button" data-r="' + x[0] + '" aria-pressed="' + (!rig && rights === x[0]) + '"' + (rig ? ' disabled' : '') + '>' + x[1] + '</button>';
