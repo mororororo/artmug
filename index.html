@@ -823,9 +823,6 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .rights .txt,.rights .foot td{font-size:11.5px}
   /* 작업과정 : 원 1px 위로, 단계 사이 +2px */
   .flow2{gap:12px}
-  /* 작업과정 : 타임라인 전체를 내용 폭만큼만 잡아 화면 가운데로 (단계끼리 왼쪽 줄은 맞춘 채) */
-  .flow2{width:fit-content;max-width:100%;margin-left:auto;margin-right:auto}
-  .fs-card{padding-right:0}
   /* 아이콘 원 세로 중앙 = STEP 과 단계 이름 두 줄의 정중앙 */
   .fs-dot{margin-top:-3.5px}
   .fs:not(:last-child)::before{top:36.5px;height:calc(100% - 36.5px + 12px)}
@@ -2709,6 +2706,25 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 
   /* ---------- 시작 ---------- */
   renderFlow($('flowWork'), WORK_STEPS);
+  /* 모바일 작업과정 : 폭 · 간격은 그대로 두고, 가장 긴 단계 기준으로 묶음 전체를 가운데로 (왼쪽 여백만 줌) */
+  function centerFlow() {
+    var el = $('flowWork');
+    if (!el) return;
+    el.style.paddingLeft = '';
+    if (!(window.matchMedia && matchMedia('(max-width:760px)').matches)) return;
+    var L = el.getBoundingClientRect().left, W = el.clientWidth, R = 0, rg = document.createRange();
+    each(el.querySelectorAll('.fs-step,.fs-card b,.fs-card .bd'), function (x) {
+      var r;
+      if (x.classList.contains('bd')) r = x.getBoundingClientRect();
+      else { rg.selectNodeContents(x); r = rg.getBoundingClientRect(); }
+      if (r.width) R = Math.max(R, r.right - L);
+    });
+    if (R) el.style.paddingLeft = Math.max(0, Math.floor((W - R) / 2)) + 'px';
+  }
+  centerFlow();
+  window.addEventListener('resize', centerFlow);
+  window.addEventListener('load', centerFlow);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(centerFlow);
 
   loadData().then(function (data) {
     PLAT = { list: (data.platforms && data.platforms.list) || [], logos: (data.platforms && data.platforms.logos) || {} };
