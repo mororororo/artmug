@@ -141,10 +141,10 @@
       '.lzm *{box-sizing:border-box}' +
       '.lzm-x{position:absolute;top:12px;right:12px;width:44px;height:44px;padding:0;border:0;background:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;opacity:.85;outline:none;box-shadow:none;-webkit-tap-highlight-color:transparent}' +
       '.lzm-w{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}' +
-      '.lzm.multi .lzm-w{padding:0 64px}' +
+      '.lzm.multi .lzm-w{padding:0 74px}' +
       '.lzm-w img,.lzm-w video{display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}' +
       '.lzm-a{position:absolute;top:50%;z-index:2;display:none;place-items:center;width:46px;height:46px;margin-top:-23px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;opacity:.85;outline:none;transition:opacity .2s,background .2s;-webkit-tap-highlight-color:transparent}' +
-      '.lzm-a:hover{opacity:1;background:rgba(255,255,255,.24)}' +
+      '@media (hover:hover){.lzm-a:hover{opacity:1;background:rgba(255,255,255,.24)}}' +
       '.lzm-a svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}' +
       '.lzm-a.p{left:0}.lzm-a.n{right:0}' +
       '.lzm.multi .lzm-a{display:grid}' +
@@ -160,7 +160,7 @@
       '.lzm-t button:hover{opacity:.85}' +
       '.lzm-t button[aria-current="true"]{border-color:#fff;opacity:1}' +
       '.lzm-t img,.lzm-t video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;border-radius:0}' +
-      '@media (max-width:760px){.lzm.multi .lzm-w{padding:0}.lzm-a{width:38px;height:38px;margin-top:-19px;background:rgba(0,0,0,.35)}.lzm-a svg{width:22px;height:22px}' +
+      '@media (max-width:760px){.lzm.multi .lzm-w{padding:0}.lzm.multi{padding-bottom:24px}.lzm-a,.lzm-a:hover,.lzm-a:active,.lzm-a:focus{width:38px;height:38px;margin-top:-19px;background:rgba(0,0,0,.35);opacity:.85;transition:none}.lzm-a svg{width:22px;height:22px}' +
       '.lzm-d button{width:6px;height:6px}.lzm-t{gap:6px}.lzm-t button{width:48px;height:48px;border-radius:8px}}';
     document.head.appendChild(st);
     zbox = document.createElement('div');
@@ -191,13 +191,13 @@
     document.documentElement.appendChild(zbox);
   }
   function zStep(d) { if (zList.length > 1) zShow(zIdx + d); }
-  /* 화살표 : 화면 끝이 아니라 보이는 이미지 좌우 15px 바깥 (자리가 모자라면 화면 안쪽 끝에 붙음) */
+  /* 화살표 : 화면 끝이 아니라 보이는 이미지 좌우 25px 바깥 (자리가 모자라면 화면 안쪽 끝에 붙음) */
   function zArrows() {
     if (!zOpen() || zList.length < 2 || !zmedia || !zmedia.offsetWidth) return;
     var P = zbox.querySelector('.lzm-a.p'), N = zbox.querySelector('.lzm-a.n');
     var W = zwrap.clientWidth, aw = P.offsetWidth || 46;
-    P.style.left = Math.max(0, zmedia.offsetLeft - 15 - aw) + 'px';
-    N.style.right = Math.max(0, W - zmedia.offsetLeft - zmedia.offsetWidth - 15 - aw) + 'px';
+    P.style.left = Math.max(0, zmedia.offsetLeft - 25 - aw) + 'px';
+    N.style.right = Math.max(0, W - zmedia.offsetLeft - zmedia.offsetWidth - 25 - aw) + 'px';
   }
   window.addEventListener('resize', zArrows);
   function zShow(i, first) {

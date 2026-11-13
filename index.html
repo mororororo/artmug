@@ -499,9 +499,9 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .lbm{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
 .lbm img{display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
 /* 여러 장일 때 : 좌우 화살표 + 아래 동그라미 · 작은 썸네일 (확대 상태 그대로 넘김) */
-.lb.multi .lbm{padding:0 64px}
+.lb.multi .lbm{padding:0 74px}
 .lba{position:absolute;top:50%;z-index:2;display:none;place-items:center;width:46px;height:46px;margin-top:-23px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;opacity:.85;transition:opacity .2s,background .2s;-webkit-tap-highlight-color:transparent}
-.lba:hover{opacity:1;background:rgba(255,255,255,.24)}
+@media (hover:hover){.lba:hover{opacity:1;background:rgba(255,255,255,.24)}}
 .lba:focus{outline:none}
 .lba svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .lba.prev{left:0}
@@ -522,7 +522,10 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .lbt img,.lbt video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
 @media (max-width:760px){
   .lb.multi .lbm{padding:0}
-  .lba{width:38px;height:38px;margin-top:-19px;background:rgba(0,0,0,.35)}
+  /* 눌러도 색 · 투명도 그대로 */
+  .lba,.lba:hover,.lba:active,.lba:focus{width:38px;height:38px;margin-top:-19px;background:rgba(0,0,0,.35);opacity:.85;transition:none}
+  /* 동그라미 · 썸네일 줄 10px 위로 (아이폰 아래쪽 제스처 영역과 겹치지 않게) */
+  .lb.multi .lbp{padding-bottom:24px}
   .lba svg{width:22px;height:22px}
   .lbd button{width:6px;height:6px}
   .lbt{gap:6px}
@@ -724,8 +727,9 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .sc-arrow{width:34px;height:34px;margin-top:-19px;font-size:19px}
   .sc-arrow.prev{left:4px}
   .sc-arrow.next{right:4px}
-  .gal .sc-arrow.prev{left:calc(var(--edge,21px) - 17px)}
-  .gal .sc-arrow.next{right:calc(var(--edge,21px) - 17px)}
+  /* 일러스트 샘플 화살표 : 화면 끝에서 잘리지 않게 8px 안쪽으로 (최소 화면 끝에서 8px) */
+  .gal .sc-arrow.prev{left:max(8px,calc(var(--edge,21px) - 9px))}
+  .gal .sc-arrow.next{right:max(8px,calc(var(--edge,21px) - 9px))}
   .sc-card{border-radius:16px}
   .sc-thumb{width:112px;border-radius:8px}
   .sc-thumb.sq{width:72px}
@@ -1425,15 +1429,15 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   }
   function clearSmall(el) { if (el) { el.style.width = ''; el.style.height = ''; } }
   lbi.addEventListener('load', function () { fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight); lbArrows(); });
-  /* 화살표 : 화면 끝이 아니라 보이는 이미지 좌우 15px 바깥 (자리가 모자라면 화면 안쪽 끝에 붙음) */
+  /* 화살표 : 화면 끝이 아니라 보이는 이미지 좌우 25px 바깥 (자리가 모자라면 화면 안쪽 끝에 붙음) */
   function lbArrows() {
     if (!lb.classList.contains('open') || lbList.length < 2) return;
     var m = lbi.style.display === 'none' ? lbv : lbi, P = $('lbPrev'), N = $('lbNext');
     if (!m || !m.offsetWidth) return;
     var W = lbm.clientWidth, aw = P.offsetWidth || 46;
     var l = m.offsetLeft, r = W - (m.offsetLeft + m.offsetWidth);
-    P.style.left = Math.max(0, l - 15 - aw) + 'px';
-    N.style.right = Math.max(0, r - 15 - aw) + 'px';
+    P.style.left = Math.max(0, l - 25 - aw) + 'px';
+    N.style.right = Math.max(0, r - 25 - aw) + 'px';
   }
   window.addEventListener('resize', lbArrows);
   /* list : [{ src, alt }] · i : 처음 보여줄 번호 · o.gif : 움짤 · o.onIndex(i) : 넘길 때마다 호출 (뒤의 캐러셀도 같이 이동)
