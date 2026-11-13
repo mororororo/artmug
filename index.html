@@ -488,6 +488,8 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .rch button{height:36px;padding:0 16px;border:1px solid #CBCDF0;border-radius:999px;background:#fff;font-size:14.5px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s}
 .rch button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:#fff}
 .rch button:disabled{border-color:#E4E4EE;background:#F1F1F6;color:#B6B7CC;cursor:not-allowed}
+.rcost{align-self:center;margin-left:4px;color:var(--sub);font-size:13px;font-weight:600}
+.rcost b{color:var(--bell-deep);font-weight:700}
 .rnote{margin-left:8px;color:var(--bell-deep);font-size:12px;font-weight:600}
 .pwarn{margin-top:10px;color:#B2545D;font-size:11.5px;line-height:1.5}
 .pgo{display:flex;flex:1;justify-content:space-between;align-items:center;height:44px;margin-top:0;padding:0 18px;border:0;border-radius:12px;background:var(--ink);color:#fff;font:700 15.5px var(--font);cursor:pointer;transition:filter .2s}
@@ -2073,8 +2075,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       var qtxt = o.noQty ? '' : (unit === '개' ? (q > 1 ? ' × ' + q : '') : ' · ' + q + unit);
       lines.push({ name: o.name + (o.sub ? ' (' + o.sub + ')' : ''), q: q, unit: unit, qtxt: qtxt, price: p, raw: o.name, nx: nx });
     });
-    var sub = base + optSum, add = rightsNow() === 'personal' ? Math.round((sub - exempt) * 0.3) : 0, total = sub + add;
-    return { tab: t, card: card, base: base, optSum: optSum, exempt: exempt, lines: lines, sub: sub, add: add, total: total, unpriced: unpriced };
+    var sub = base + optSum, cr = Math.round((sub - exempt) * 0.3), add = rightsNow() === 'personal' ? cr : 0, total = sub + add;
+    return { tab: t, card: card, base: base, optSum: optSum, exempt: exempt, cr: cr, lines: lines, sub: sub, add: add, total: total, unpriced: unpriced };
   }
 
   function sumUpdate() {
@@ -2082,7 +2084,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     /* 리깅만 의뢰 : 저작권 구매 버튼 모두 비활성화 */
     var left = '<div class="psel"><h5>저작권 구매' + (rig ? '<span class="rnote">※ 리깅만 의뢰하는 경우 저작권 구매 옵션이 없습니다.</span>' : '') + '</h5><div class="rch">' + [['broadcast', '미구매'], ['personal', '개인세'], ['company', '기업세']].map(function (x) {
       return '<button type="button" data-r="' + x[0] + '" aria-pressed="' + (!rig && rights === x[0]) + '"' + (rig ? ' disabled' : '') + '>' + x[1] + '</button>';
-    }).join('') + '</div></div>';
+    }).join('') + (!rig && r.cr > 0 ? '<span class="rcost">저작권 비용(개인세) <b>' + comma(r.cr) + '원</b></span>' : '') + '</div></div>';
     left += '<div class="psel"><h5>선택 항목</h5><ul>';
     if (r.card) left += '<li><span>' + esc(r.tab.key + ' · ' + r.card.name) + '</span><i>✓</i></li>';
     r.lines.forEach(function (l) { left += '<li><span>' + esc(l.name + l.qtxt) + (rights === 'personal' && l.nx ? '<small class="nx">(저작권 비용 제외 항목)</small>' : '') + '</span><i>✓</i></li>'; });
@@ -2090,7 +2092,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     left += '</ul></div>';
     if (r.unpriced) left += '<p class="pwarn">금액이 아직 정해지지 않은 항목이 포함되어 있어요.</p>';
 
-    var right = '<h4>예상 금액</h4><div class="ptotal">' + comma(r.total) + '<small>원</small></div><div class="sdiv" style="margin-top:0"></div>';
+    var right = '<h4>총 예상 금액</h4><div class="ptotal">' + comma(r.total) + '<small>원</small></div><div class="sdiv" style="margin-top:0"></div>';
     right += '<div class="prow"><span>기본 금액</span><b>' + comma(r.base) + '원</b></div>';
     right += '<div class="prow"><span>옵션 금액</span><b>' + comma(r.optSum) + '원</b></div>';
     if (rights === 'personal') right += '<div class="prow"><span>개인세 (+30%)</span><b>' + comma(r.add) + '원</b></div>';
