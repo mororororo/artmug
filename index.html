@@ -2103,7 +2103,18 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     });
   }
 
-  var FORM = null;
+  var FORM = null, lastPriv = null;
+  function privSync(n) {
+    var lp = lastPriv;
+    if (!lp || !FORM || !(n > 0) || n === lp.q) return;
+    var ta = $('f_opts'), est = $('f_est');
+    var oldLine = '- ' + lp.name + ' · ' + lp.q + lp.unit + (lp.price ? ' (' + comma(lp.price * lp.q) + '원)' : '');
+    var newLine = '- ' + lp.name + ' · ' + n + lp.unit + (lp.price ? ' (' + comma(lp.price * n) + '원)' : '');
+    if (ta.value.indexOf(oldLine) >= 0) FORM.setText('f_opts', ta.value.replace(oldLine, newLine));
+    var nt = lp.total + lp.price * (n - lp.q);
+    if (est.value === comma(lp.total)) FORM.setText('f_est', nt > 0 ? comma(nt) : '');
+    lp.total = nt; lp.q = n;
+  }
   var KIND_LABEL = { SET: 'SET', ILLUSTRATION: '일러스트', RIGGING: '리깅', '세트': 'SET' };
 
   function reflect() {
@@ -2126,6 +2137,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 
       FORM.setText('f_opts', r.lines.map(function (l) { return '- ' + l.name + l.qtxt + (l.price ? ' (' + comma(l.price * l.q) + '원)' : ''); }).join('\n'));
       FORM.setText('f_est', r.total > 0 ? comma(r.total) : '');
+      /* 신청서에서 비공개 기간을 바꾸면 신청서 안의 옵션 줄 · 예상 금액만 맞춰 고침 (가격표 선택은 그대로) */
+      lastPriv = pv ? { name: pv.name, unit: pv.unit, price: pv.price || 0, q: pv.q, total: r.total } : null;
     }
     goTo('apply');
   }
@@ -2285,7 +2298,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     nick.addEventListener('input', function () { recheck('nick'); });
     $('f_debut').addEventListener('input', function () { recheck('debut'); });
     $('f_desc').addEventListener('input', function () { recheck('desc'); });
-    privEl.addEventListener('change', function () { recheck('pub'); });
+    privEl.addEventListener('change', function () { recheck('pub'); privSync(+privEl.value); });
 
     FORM = {
       setChip: function (key, v) {
