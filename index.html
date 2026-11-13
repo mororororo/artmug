@@ -529,7 +529,7 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
   /* 눌러도 색 · 투명도 그대로 */
   .lba,.lba:hover,.lba:active,.lba:focus{width:38px;height:38px;margin-top:-19px;background:rgba(0,0,0,.35);opacity:.85;transition:none}
   /* 동그라미 · 썸네일 줄 10px 위로 (아이폰 아래쪽 제스처 영역과 겹치지 않게) */
-  .lb.multi .lbp{padding-bottom:24px}
+  .lb.multi .lbp{padding-bottom:39px}
   .lba svg{width:22px;height:22px}
   .lbd button{width:6px;height:6px}
   .lbt{gap:6px}
@@ -809,6 +809,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .nsub{margin-top:1.5px}
   /* 아코디언 펼친 내용 : 들여쓰기 없이 */
   #noticeAcc .apin{padding-left:18px}
+  /* 자주하는 질문 : 펼친 답변 아래 여백 +1px */
+  #faqList .apin{padding-bottom:16.75px}
   /* 작가 소개글 : 1px 작게, 줄바꿈 없이 */
   .intro-txt{font-size:14.5px}
   .intro-txt br{display:none}
@@ -1900,13 +1902,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       var f = document.createElement('iframe');
       f.className = 'yt-pre'; f.title = '리깅 영상';
       f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen'); f.setAttribute('allowfullscreen', '');
-      f.src = 'https://www.youtube-nocookie.com/embed/' + yt + '?rel=0&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
-      f.addEventListener('load', function () {
-        try {
-          f.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: yt, channel: 'widget' }), '*');
-          f.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'], id: yt, channel: 'widget' }), '*');
-        } catch (e) {}
-      });
+      /* 이전에 재생이 되던 주소 형식 그대로(API 연결 · origin 없이) + playsinline=0 : 아이폰은 누르면 페이지 안에서 기본 전체화면 플레이어로 재생 */
+      f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + yt + '?rel=0&playsinline=0&fs=1';
       m.insertBefore(f, m.firstChild);
       m.classList.add('pre');
     }

@@ -160,7 +160,7 @@
       '.lzm-t button:hover{opacity:.85}' +
       '.lzm-t button[aria-current="true"]{border-color:#fff;opacity:1}' +
       '.lzm-t img,.lzm-t video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;border-radius:0}' +
-      '@media (max-width:760px){.lzm.multi .lzm-w{padding:0}.lzm.multi{padding-bottom:24px}.lzm-a,.lzm-a:hover,.lzm-a:active,.lzm-a:focus{width:38px;height:38px;margin-top:-19px;background:rgba(0,0,0,.35);opacity:.85;transition:none}.lzm-a svg{width:22px;height:22px}' +
+      '@media (max-width:760px){.lzm.multi .lzm-w{padding:0}.lzm.multi{padding-bottom:39px}.lzm-a,.lzm-a:hover,.lzm-a:active,.lzm-a:focus{width:38px;height:38px;margin-top:-19px;background:rgba(0,0,0,.35);opacity:.85;transition:none}.lzm-a svg{width:22px;height:22px}' +
       '.lzm-d button{width:6px;height:6px}.lzm-t{gap:6px}.lzm-t button{width:48px;height:48px;border-radius:8px}}';
     document.head.appendChild(st);
     zbox = document.createElement('div');
