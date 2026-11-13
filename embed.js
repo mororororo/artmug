@@ -46,6 +46,11 @@
   setTimeout(paintPage, 1500);
   setTimeout(paintPage, 4000);
 
+  /* 아트머그 편집기에서 글을 다시 저장하면, 화면에 그려져 있던 iframe 들까지 본문에 같이 저장됨.
+     그렇게 남은 예전 iframe 은 이 파일과 연결되지 않아(확대 보기 · 높이 조절 안 됨) 지우고 새로 만듦 */
+  var stale = document.querySelectorAll('#leuin-frame, #leuin-remote');
+  for (var si = 0; si < stale.length; si++) stale[si].parentNode.removeChild(stale[si]);
+
   /* 본문 iframe */
   var mount = document.getElementById('leuin-embed');
   var frame = document.createElement('iframe');
@@ -61,6 +66,21 @@
   frame.setAttribute('allowfullscreen', '');
   if (mount) mount.appendChild(frame);
   else (document.currentScript && document.currentScript.parentNode || document.body).appendChild(frame);
+
+  /* 모바일 : 위 썸네일(#big_img) ~ 소개글 상자 사이 여백을 지금의 1.5배로
+     (지금 여백 = 아트머그 쪽 간격 + 본문 안쪽 위 여백 16px → 그 절반만큼 iframe 위에 더함) */
+  function padTop() {
+    var big = document.getElementById('big_img');
+    frame.style.marginTop = '';
+    if (!big || !big.offsetHeight || !frame.offsetWidth || frame.offsetWidth > 760) return;
+    var g = frame.getBoundingClientRect().top - big.getBoundingClientRect().bottom;
+    if (g < 0 || g > 200) return;
+    frame.style.marginTop = Math.round((g + 16) / 2) + 'px';
+  }
+  padTop();
+  window.addEventListener('load', padTop);
+  window.addEventListener('resize', padTop);
+  setTimeout(padTop, 1500);
 
   /* 리모컨 iframe : 화면 고정 (휴대폰 · 태블릿에서는 표시하지 않음) */
   var touch = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (window.matchMedia && matchMedia('(hover:none) and (pointer:coarse)').matches);
