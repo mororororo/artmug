@@ -494,8 +494,40 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 /* ---------- 확대 보기 ---------- */
 .lb{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.75)}
 .lb.open{display:block}
-.lbp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 16px}
-.lbp img{display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+.lbp{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:64px 16px}
+.lb.multi .lbp{padding-bottom:14px}
+.lbm{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+.lbm img{display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+/* 여러 장일 때 : 좌우 화살표 + 아래 동그라미 · 작은 썸네일 (확대 상태 그대로 넘김) */
+.lb.multi .lbm{padding:0 64px}
+.lba{position:absolute;top:50%;z-index:2;display:none;place-items:center;width:46px;height:46px;margin-top:-23px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;opacity:.85;transition:opacity .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.lba:hover{opacity:1;background:rgba(255,255,255,.24)}
+.lba:focus{outline:none}
+.lba svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lba.prev{left:0}
+.lba.next{right:0}
+.lb.multi .lba{display:grid}
+.lbn{display:none;flex:none;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:960px;padding-top:16px}
+.lb.multi .lbn{display:flex}
+.lbd{display:flex;flex-wrap:wrap;justify-content:center;gap:7px}
+.lbd button{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:background .2s,transform .2s}
+.lbd button[aria-current="true"]{background:#fff;transform:scale(1.25)}
+.lbt{display:flex;gap:8px;max-width:100%;padding:2px;overflow-x:auto;scrollbar-width:none}
+.lbt::-webkit-scrollbar{display:none}
+.lbt>:first-child{margin-left:auto}
+.lbt>:last-child{margin-right:auto}
+.lbt button{position:relative;flex:none;width:58px;height:58px;padding:0;border:2px solid transparent;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden;cursor:pointer;opacity:.5;transition:opacity .2s,border-color .2s}
+.lbt button:hover{opacity:.85}
+.lbt button[aria-current="true"]{border-color:#fff;opacity:1}
+.lbt img,.lbt video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+@media (max-width:760px){
+  .lb.multi .lbm{padding:0}
+  .lba{width:38px;height:38px;margin-top:-19px;background:rgba(0,0,0,.35)}
+  .lba svg{width:22px;height:22px}
+  .lbd button{width:6px;height:6px}
+  .lbt{gap:6px}
+  .lbt button{width:48px;height:48px;border-radius:8px}
+}
 .lbx{position:absolute;top:12px;right:12px;z-index:2;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:none;color:#fff;font-size:30px;line-height:1;cursor:pointer;opacity:.85;transition:opacity .2s}
 .lbx:hover{opacity:1}
 .lbx:focus,.lbx:focus-visible{outline:none;box-shadow:none}
@@ -758,7 +790,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 .pnt+.pnotes{margin-top:6px}
 /* 표정 mp4 */
 .gimg video{display:block;width:100%;height:100%;object-fit:cover}
-.lbp video{display:block;max-width:100%;max-height:100%;border-radius:8px}
+.lbm video{display:block;min-width:0;min-height:0;max-width:100%;max-height:100%;border-radius:8px}
 
 /* ---------- 추가 수정 (모바일) ---------- */
 @media (max-width:760px){
@@ -1042,7 +1074,12 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="이미지 확대 보기">
   <div class="lbp" id="lbp">
     <button type="button" class="lbx" id="lbx" aria-label="닫기">✕</button>
-    <img alt="">
+    <div class="lbm" id="lbm">
+      <img alt="">
+      <button type="button" class="lba prev" id="lbPrev" aria-label="이전 이미지"></button>
+      <button type="button" class="lba next" id="lbNext" aria-label="다음 이미지"></button>
+    </div>
+    <div class="lbn" id="lbn"><div class="lbd" id="lbd"></div><div class="lbt" id="lbt"></div></div>
   </div>
 </div>
 
@@ -1359,7 +1396,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   }
 
   /* ---------- 이미지 확대 보기 (X 버튼 우측 상단) ---------- */
-  var lb = $('lb'), lbp = $('lbp'), lbi = lbp.querySelector('img');
+  var lb = $('lb'), lbp = $('lbp'), lbm = $('lbm'), lbi = lbm.querySelector('img');
+  var lbDots = $('lbd'), lbThumbs = $('lbt');
+  var lbList = [], lbIdx = 0, lbOnIdx = null;
   var viewTop = 0, viewBottom = 0, H = 0;
 
   function layoutLB() {
@@ -1374,54 +1413,125 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   var lbSmall = false;
   function fitSmall(el, w, h) {
     if (!lbSmall || !w || !h) return;
-    var cs = getComputedStyle(lbp);
-    var bw = lbp.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-    var bh = lbp.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    var cs = getComputedStyle(lbm);
+    var bw = lbm.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    var bh = lbm.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
     var k = Math.min(1, bw / w, bh / h) / 2;
     el.style.width = Math.round(w * k) + 'px';
     el.style.height = Math.round(h * k) + 'px';
   }
   function clearSmall(el) { if (el) { el.style.width = ''; el.style.height = ''; } }
   lbi.addEventListener('load', function () { fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight); });
-  function openLB(src, alt, gif) {
-    lbSmall = !!gif && !!(window.matchMedia && matchMedia('(hover:hover) and (min-width:761px)').matches);
+  /* list : [{ src, alt }] · i : 처음 보여줄 번호 · o.gif : 움짤 · o.onIndex(i) : 넘길 때마다 호출 (뒤의 캐러셀도 같이 이동)
+     여러 장이면 확대 상태 그대로 좌우 화살표 / 아래 동그라미 · 썸네일 / ← → 키 / 스와이프로 넘김 */
+  function openLB(list, i, o) {
+    o = o || {};
+    lbList = (list || []).filter(function (x) { return x && x.src; });
+    if (!lbList.length) return;
+    lbOnIdx = o.onIndex || null;
+    lbSmall = !!o.gif && !!(window.matchMedia && matchMedia('(hover:hover) and (min-width:761px)').matches);
     /* 아트머그 안 : 바깥 페이지(embed.js)가 화면 전체를 어둡게 하고 그 위에 직접 크게 띄움 */
     if (inFrame && lbHost) {
-      try { parent.postMessage({ leuinZoom: { src: new URL(src, location.href).href, video: isFile(src), gif: !!gif } }, '*'); return; } catch (e) {}
+      try {
+        parent.postMessage({ leuinZoom: {
+          items: lbList.map(function (x) { return { src: new URL(x.src, location.href).href, video: isFile(x.src), alt: x.alt || '' }; }),
+          i: i || 0, gif: !!o.gif
+        } }, '*');
+        return;
+      } catch (e) {}
     }
+    var multi = lbList.length > 1;
+    lb.classList.toggle('multi', multi);
+    lbDots.innerHTML = ''; lbThumbs.innerHTML = '';
+    if (multi) {
+      lbList.forEach(function (x, k) {
+        var d = document.createElement('button');
+        d.type = 'button'; d.setAttribute('aria-label', (k + 1) + '번 이미지');
+        d.addEventListener('click', function () { lbShow(k); });
+        lbDots.appendChild(d);
+        var t = document.createElement('button');
+        t.type = 'button'; t.setAttribute('aria-label', (k + 1) + '번 이미지 보기');
+        t.innerHTML = isFile(x.src) ? '<video src="' + esc(x.src) + '#t=0.1" muted playsinline preload="metadata"></video>'
+                                    : '<img src="' + esc(x.src) + '" alt="" draggable="false" loading="lazy" decoding="async">';
+        t.addEventListener('click', function () { lbShow(k); });
+        lbThumbs.appendChild(t);
+      });
+    }
+    lb.classList.add('open');
+    layoutLB();
+    lbShow(i || 0, true);
+    if (!inFrame) document.body.style.overflow = 'hidden';
+    $('lbx').focus({ preventScroll: true });
+  }
+  function lbShow(i, first) {
+    var n = lbList.length;
+    if (!n) return;
+    lbIdx = ((i % n) + n) % n;
+    var it = lbList[lbIdx], src = it.src;
     clearSmall(lbi); clearSmall(lbv);
     /* mp4 등 영상은 영상으로 크게 보기 */
     if (isFile(src)) {
       if (!lbv) {
-        lbv = document.createElement('video'); lbv.muted = true; lbv.loop = true; lbv.autoplay = true; lbv.setAttribute('playsinline', ''); lbp.appendChild(lbv);
+        lbv = document.createElement('video'); lbv.muted = true; lbv.loop = true; lbv.autoplay = true; lbv.setAttribute('playsinline', ''); lbm.insertBefore(lbv, lbi);
         lbv.addEventListener('loadedmetadata', function () { fitSmall(lbv, lbv.videoWidth, lbv.videoHeight); });
       }
-      lbi.style.display = 'none'; lbv.style.display = ''; lbv.src = src;
+      lbi.style.display = 'none'; lbi.removeAttribute('src'); lbv.style.display = ''; lbv.src = src;
       var pr = lbv.play && lbv.play(); if (pr && pr.catch) pr.catch(function () {});
     } else {
       if (lbv) { lbv.style.display = 'none'; lbv.removeAttribute('src'); }
-      lbi.style.display = ''; lbi.src = src; lbi.alt = alt || '';
+      lbi.style.display = ''; lbi.src = src; lbi.alt = it.alt || '';
+      if (lbSmall && lbi.complete) fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight);
     }
-    lb.classList.add('open');
-    layoutLB();
-    if (lbSmall && lbi.style.display !== 'none' && lbi.complete) fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight);
-    if (!inFrame) document.body.style.overflow = 'hidden';
-    $('lbx').focus({ preventScroll: true });
+    each(lbDots.children, function (d, k) { d.setAttribute('aria-current', k === lbIdx ? 'true' : 'false'); });
+    each(lbThumbs.children, function (t, k) { t.setAttribute('aria-current', k === lbIdx ? 'true' : 'false'); });
+    var cur = lbThumbs.children[lbIdx];
+    if (cur && lbThumbs.scrollWidth > lbThumbs.clientWidth) {
+      lbThumbs.scrollTo({ left: cur.offsetLeft - lbThumbs.clientWidth / 2 + cur.clientWidth / 2, behavior: first ? 'auto' : 'smooth' });
+    }
+    if (!first && lbOnIdx) lbOnIdx(lbIdx);
   }
+  function lbStep(d) { if (lbList.length > 1) lbShow(lbIdx + d); }
   function closeLB() {
     if (!lb.classList.contains('open')) return;
     lb.classList.remove('open');
     lbi.removeAttribute('src');
     if (lbv) { lbv.pause(); lbv.removeAttribute('src'); lbv.load(); }
+    lbThumbs.innerHTML = '';
     if (!inFrame) document.body.style.overflow = '';
   }
+  $('lbPrev').innerHTML = ARW_L; $('lbNext').innerHTML = ARW_R;
+  $('lbPrev').addEventListener('click', function (e) { e.stopPropagation(); lbStep(-1); });
+  $('lbNext').addEventListener('click', function (e) { e.stopPropagation(); lbStep(1); });
+  /* 동그라미 · 썸네일 줄 (사이 빈 곳 포함) 을 눌러도 닫히지 않음 */
+  $('lbn').addEventListener('click', function (e) { e.stopPropagation(); });
   $('lbx').addEventListener('click', closeLB);
-  /* 확대 화면 어디를 눌러도 바로 닫힘 */
-  lb.addEventListener('click', closeLB);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && lb.classList.contains('open')) closeLB(); });
-  /* embed.js 가 보내는 'leuinHost' 신호 : 바깥 페이지가 확대 보기를 대신 띄울 수 있음 */
+  /* 확대 화면 어디를 눌러도 바로 닫힘 (스와이프로 넘긴 직후는 제외) */
+  var lbSwiped = false;
+  lb.addEventListener('click', function () { if (lbSwiped) { lbSwiped = false; return; } closeLB(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLB();
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); lbStep(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); lbStep(1); }
+  });
+  /* 스와이프로 넘기기 */
+  var lbSw = null;
+  lbm.addEventListener('pointerdown', function (e) { if (lbList.length > 1 && !e.target.closest('.lba')) lbSw = { x: e.clientX, y: e.clientY, id: e.pointerId }; });
+  lbm.addEventListener('pointerup', function (e) {
+    if (!lbSw || e.pointerId !== lbSw.id) return;
+    var dx = e.clientX - lbSw.x, dy = e.clientY - lbSw.y; lbSw = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { lbSwiped = true; setTimeout(function () { lbSwiped = false; }, 400); lbStep(dx < 0 ? 1 : -1); }
+  });
+  lbm.addEventListener('pointercancel', function () { lbSw = null; });
+  lbm.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  /* embed.js 가 보내는 'leuinHost' 신호 : 바깥 페이지가 확대 보기를 대신 띄울 수 있음
+     'leuinZoomAt' : 바깥 확대 보기에서 넘긴 번호 → 뒤의 캐러셀도 같이 이동 */
   var lbHost = false;
-  window.addEventListener('message', function (e) { if (e.source === window.parent && e.data && e.data.leuinHost) lbHost = true; });
+  window.addEventListener('message', function (e) {
+    if (e.source !== window.parent || !e.data) return;
+    if (e.data.leuinHost) lbHost = true;
+    if (typeof e.data.leuinZoomAt === 'number' && lbOnIdx) lbOnIdx(e.data.leuinZoomAt);
+  });
 
   /* ---------- 양옆 카드가 살짝 작고 흐리게 보이는 무한 순환 캐러셀 (일러스트 · 리깅 공통) ----------
      처음에서 ‹ 를 누르면 바로 왼쪽에 마지막 작품이 있는 것처럼 이어집니다.
@@ -1454,7 +1564,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       c.addEventListener('click', function (e) {
         if (dragged) return;
         if (p !== pos) { moveTo(p); return; }
-        if (o.onCurrent) o.onCurrent(c, items[ii], ii, e);
+        if (o.onCurrent) o.onCurrent(c, items[ii], ii, e, goIdx);
       });
     });
     if (o.after) o.after(track);
@@ -1513,6 +1623,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       snapT = setTimeout(normalize, (o.dur || 700) + 20);
     }
     function step(d) { if (!multi) return; normalize(); moveTo(pos + d); }
+    /* 확대 보기에서 넘기면 뒤의 캐러셀도 그 작품으로 (움직임 없이) */
+    function goIdx(i) { if (!multi || i === idx()) return; clearTimeout(snapT); pos = CL + i; layout(false); }
     prev.addEventListener('click', function () { step(-1); });
     next.addEventListener('click', function () { step(1); });
     prev.disabled = next.disabled = !multi;
@@ -1577,7 +1689,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         items: items, unit: '작업물', cls: 'gal', cardCls: 'gal-card', thumbCls: 'sq', desk: 0.52, mob: 0.78, gap: 34, dur: 520,
         card: function (it, i) { return '<div class="g-media"><img src="' + esc(it.src) + '" alt="' + esc(it.alt || (name + ' ' + (i + 1))) + '" draggable="false" decoding="async" onload="var w=this.naturalWidth,h=this.naturalHeight;if(w&&h&&w/h>1408/2000)this.parentNode.style.aspectRatio=w+\'/\'+h"></div>'; },
         thumb: function (it) { return '<img src="' + esc(it.src) + '" alt="" draggable="false" loading="lazy" decoding="async">'; },
-        onCurrent: function (c, it) { openLB(it.src, it.alt || ''); }
+        onCurrent: function (c, it, i, e, go) {
+          openLB(items.map(function (x, k) { return { src: x.src, alt: x.alt || (name + ' ' + (k + 1)) }; }), i, { onIndex: go });
+        }
       });
     }
     function buildTabs() {
@@ -1636,7 +1750,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     if (items.length > nb) html += '<div class="grest">' + cells(nb, items.length) + '</div>';
     root.innerHTML = html;
     each(root.querySelectorAll('.gimg'), function (b) {
-      b.addEventListener('click', function () { var it = items[+b.getAttribute('data-i')]; openLB(it.src, it.caption || '', true); });
+      b.addEventListener('click', function () {
+        openLB(items.map(function (x) { return { src: x.src, alt: x.caption || '' }; }), +b.getAttribute('data-i'), { gif: true });
+      });
     });
   }
   function RigTabs(root, cats) {
@@ -1718,7 +1834,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       onCurrent: function (c, it) {
         if (c.querySelector('iframe,video')) return;
         if (it.video) play(c, it);
-        else if (it.src) openLB(it.src, '');
+        else if (it.src) openLB([{ src: it.src }], 0);
       },
       /* 다른 영상으로 넘어가면 재생 중인 영상은 멈추고 썸네일로 되돌림 */
       onLeave: function (cards) {
