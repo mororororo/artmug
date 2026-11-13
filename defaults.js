@@ -321,7 +321,14 @@ window.LEUIN_DEFAULTS = {
           {
             "options": [
               {
-                "name": "귀 / 꼬리",
+                "name": "귀",
+                "noQty": true,
+                "price": "70,000",
+                "sub": ""
+              },
+              {
+                "name": "꼬리",
+                "noQty": true,
                 "price": "70,000",
                 "sub": ""
               },
@@ -337,11 +344,13 @@ window.LEUIN_DEFAULTS = {
             "options": [
               {
                 "name": "마이크 포즈",
+                "noQty": true,
                 "price": "130,000",
                 "sub": "소품 포함"
               },
               {
                 "name": "게임기 포즈",
+                "noQty": true,
                 "price": "160,000",
                 "sub": "소품 포함"
               },
@@ -484,7 +493,14 @@ window.LEUIN_DEFAULTS = {
           {
             "options": [
               {
-                "name": "귀 / 꼬리",
+                "name": "귀",
+                "noQty": true,
+                "price": "30,000",
+                "sub": ""
+              },
+              {
+                "name": "꼬리",
+                "noQty": true,
                 "price": "30,000",
                 "sub": ""
               },
@@ -500,11 +516,13 @@ window.LEUIN_DEFAULTS = {
             "options": [
               {
                 "name": "마이크 포즈",
+                "noQty": true,
                 "price": "80,000",
                 "sub": "소품 포함"
               },
               {
                 "name": "게임기 포즈",
+                "noQty": true,
                 "price": "100,000",
                 "sub": "소품 포함"
               },
@@ -638,7 +656,14 @@ window.LEUIN_DEFAULTS = {
           {
             "options": [
               {
-                "name": "귀 / 꼬리",
+                "name": "귀",
+                "noQty": true,
+                "price": "40,000",
+                "sub": ""
+              },
+              {
+                "name": "꼬리",
+                "noQty": true,
                 "price": "40,000",
                 "sub": ""
               },
@@ -654,11 +679,13 @@ window.LEUIN_DEFAULTS = {
             "options": [
               {
                 "name": "마이크 포즈",
+                "noQty": true,
                 "price": "50,000",
                 "sub": "소품 포함"
               },
               {
                 "name": "게임기 포즈",
+                "noQty": true,
                 "price": "70,000",
                 "sub": "소품 포함"
               },
