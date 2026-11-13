@@ -219,16 +219,6 @@ window.LEUIN_DEFAULTS = {
         "cards": [
           {
             "features": [
-              "디자인 1안 · 일러스트",
-              "전신 일러스트 png",
-              "moc3 파일 폴더",
-              "기본 표정 4종"
-            ],
-            "name": "반신 타입",
-            "price": "1,450,000"
-          },
-          {
-            "features": [
               "디자인 2안 · 일러스트",
               "전신 일러스트 png",
               "moc3 파일 폴더",
@@ -236,6 +226,16 @@ window.LEUIN_DEFAULTS = {
             ],
             "name": "전신 타입",
             "price": "1,550,000"
+          },
+          {
+            "features": [
+              "디자인 1안 · 일러스트",
+              "전신 일러스트 png",
+              "moc3 파일 폴더",
+              "기본 표정 4종"
+            ],
+            "name": "반신 타입",
+            "price": "1,450,000"
           },
           {
             "disabled": true,
