@@ -128,10 +128,6 @@ input,select,textarea{font-family:inherit}
 /* ▪️ 줄은 글씨 1px 크게 (줄 높이는 그대로), - 줄은 줄 높이 1px 좁게 */
 #noticeAcc .nl.m-sq{font-size:17px;line-height:27.2px}
 #noticeAcc .nl.m-dash{line-height:26.2px}
-/* [[작은 글자]] 가 들어간 줄은 줄 높이 3px 좁게 */
-#noticeAcc .nl:has(.t-sm){line-height:24.2px}
-#noticeAcc .nl.m-sq:has(.t-sm){line-height:24.2px}
-#noticeAcc .nl.m-dash:has(.t-sm){line-height:23.2px}
 /* 글자 꾸밈 : ==연보라 배경== · {{빨간 글자}} · [[작은 글자]] (예시 등) */
 .t-sm{font-size:.84em;color:#6C6D92}
 .t-hl{padding:0 2px;border-radius:3px;background:#E2E3FD;color:inherit;-webkit-box-decoration-break:clone;box-decoration-break:clone}
@@ -876,8 +872,6 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   #noticeAcc .apin{line-height:25.2px}
   #noticeAcc .nl.m-sq{line-height:25.2px}
   #noticeAcc .nl.m-dash{line-height:24.2px}
-  #noticeAcc .nl:has(.t-sm),#noticeAcc .nl.m-sq:has(.t-sm){line-height:22.2px}
-  #noticeAcc .nl.m-dash:has(.t-sm){line-height:21.2px}
   /* 작업과정 : 컨펌 횟수는 단계 오른쪽 끝, 아이콘 원의 세로 중앙(16.5px)에 맞추고 단계 이름과 가로 점선으로 이음 */
   .fs-card{grid-template-columns:minmax(0,max-content) minmax(12px,1fr) auto}
   .fs-step,.fs-card b{grid-column:1}
@@ -1334,7 +1328,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     each(t.querySelectorAll('tr:not(.foot)>th,tr:not(.foot)>td'), function (c) { if (c.innerHTML.trim()) c.innerHTML = '<span class="ct">' + c.innerHTML + '</span>'; });
     t.addEventListener('mouseover', function (e) {
       var c = e.target.closest('td,th');
-      var row = c && c.parentNode;
+      /* 칸과 칸 사이 경계 위(칸 밖)에서는 지금 효과를 그대로 유지 (꺼졌다 켜지며 깜빡이지 않게) */
+      if (!c || !t.contains(c)) return;
+      var row = c.parentNode;
       each(t.querySelectorAll('tr.hr'), function (r) { if (r !== row || c.cellIndex !== 0) r.classList.remove('hr'); });
       if (!c || !t.contains(c) || row.classList.contains('foot')) { t.removeAttribute('data-hc'); t.removeAttribute('data-hr'); return; }
       if (c.cellIndex === 0) {
