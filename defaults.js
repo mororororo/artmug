@@ -250,7 +250,7 @@ window.LEUIN_DEFAULTS = {
             "options": [
               {
                 "name": "포트폴리오 비공개",
-                "price": "20,000",
+                "price": "50,000",
                 "sub": "",
                 "unit": "개월"
               }
@@ -428,7 +428,7 @@ window.LEUIN_DEFAULTS = {
             "options": [
               {
                 "name": "포트폴리오 비공개",
-                "price": "20,000",
+                "price": "50,000",
                 "sub": "",
                 "unit": "개월"
               }
@@ -594,7 +594,7 @@ window.LEUIN_DEFAULTS = {
             "options": [
               {
                 "name": "포트폴리오 비공개",
-                "price": "20,000",
+                "price": "50,000",
                 "sub": "",
                 "unit": "개월"
               }

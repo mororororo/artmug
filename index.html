@@ -450,6 +450,7 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .qb{display:grid;place-items:center;width:26px;height:26px;padding:0;border:1px solid #CBCDF0;border-radius:50%;background:#fff;color:var(--ink);font:700 15px/1 var(--font);cursor:pointer}
 /* − / + 는 선으로 그려 원의 정중앙에 */
 .qb svg{display:block;width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;pointer-events:none}
+.qb:disabled{border-color:#E4E5F2;background:#F6F6FB;color:#C3C4D8;cursor:default}
 .qu{margin-left:2px}
 /* 수량 버튼 위치를 모든 옵션에서 같게 : 가격 칸 폭 고정(오른쪽 정렬) + 단위 칸 폭 고정(개월 기준) */
 .oc .pp{flex:none;min-width:80px;text-align:right}
@@ -809,6 +810,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .nsub{margin-top:1.5px}
   /* 아코디언 펼친 내용 : 들여쓰기 없이 */
   #noticeAcc .apin{padding-left:18px}
+  /* 작업과정 : 내용 전체(원 · 글자 · 컨펌)를 오른쪽으로 1.5px */
+  .flow2{position:relative;left:1.5px}
   /* 자주하는 질문 : 펼친 답변 아래 여백 +1px */
   #faqList .apin{padding-bottom:16.75px}
   /* 작가 소개글 : 1px 작게, 줄바꿈 없이 */
@@ -2017,8 +2020,19 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         if (q) calc.qty[calc.tab][i] = q; else delete calc.qty[calc.tab][i];
         el.classList.toggle('sel', q > 0); el.setAttribute('aria-checked', q > 0);
         if (q && qi) qi.value = q;
+        bstate();
         sumUpdate();
       }
+      /* 최소(1)면 − , 최대면 + 비활성화 */
+      function bstate() {
+        if (!qi) return;
+        var cur = calc.qty[calc.tab][i] || 1;
+        each(el.querySelectorAll('.qb'), function (qb) {
+          var d = +qb.getAttribute('data-d');
+          qb.disabled = d < 0 ? cur <= 1 : cur >= mx;
+        });
+      }
+      bstate();
       function toggle() { set(calc.qty[calc.tab][i] ? 0 : 1); }
       el.addEventListener('click', function (e) { if (e.target.closest('.qty')) return; toggle(); });
       onKey(el, toggle);
