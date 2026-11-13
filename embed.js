@@ -96,7 +96,17 @@
   }
 
   /* 가로 위치 : 오른쪽 광고 배너의 가운데에 맞춤 (배너가 없으면 본문 칸 오른쪽 + 40px 위치의 160px 칸 기준) */
+  /* 글을 다시 저장할 때 함께 저장된 예전 리모컨 · 본문 iframe 이 페이지에 남아 본문 위를 투명하게 덮음
+     (작업과정 STEP 6·7 호버, 가격 옵션 + 버튼이 안 눌리던 원인) → 새로 만든 것 말고는 모두 지움 */
+  function sweep() {
+    var olds = document.querySelectorAll('iframe[src*="mororororo.github.io/artmug"], #leuin-remote, #leuin-frame');
+    for (var k = 0; k < olds.length; k++) {
+      var o = olds[k];
+      if (o !== remote && o !== frame && o.parentNode) o.parentNode.removeChild(o);
+    }
+  }
   function placeRemote() {
+    sweep();
     if (!remote) return;
     var vw = document.documentElement.clientWidth, x;
     var ban = document.querySelector('.ad_banner6');
