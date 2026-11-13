@@ -2185,7 +2185,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       ['debut', function () { return isTbd(dtbd) || debut.value.trim(); }, '데뷔 예정시기를 입력하거나 ‘미정’을 선택해 주세요.'],
       ['act', function () { return sel.act; }, '활동 구분을 선택해 주세요.'],
       ['type', function () { return sel.kind && sel.size; }, function () { return sel.kind ? '전신 / 반신을 선택해 주세요.' : '신청 타입을 선택해 주세요.'; }],
-      ['copy', function () { return sel.copy; }, '저작권 구매 여부를 선택해 주세요.'],
+      ['copy', function () { return sel.copy || sel.kind === '리깅'; }, '저작권 구매 여부를 선택해 주세요.'],
       ['pub', function () { return sel.pub && (sel.pub !== '비공개' || privEl.value); }, function () { return sel.pub === '비공개' ? '비공개 기간을 선택해 주세요.' : '포트폴리오 공개 여부를 선택해 주세요.'; }],
 
       ['desc', function () { return $('f_desc').value.trim(); }, '캐릭터 특징을 입력해 주세요.']
@@ -2272,19 +2272,23 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       sel[key] = v;
       paintChips(key);
       if (key === 'kind') syncSize();
-      if (key === 'act') syncCopy();
+      if (key === 'act' || key === 'kind') syncCopy();
       recheck(key === 'kind' || key === 'size' ? 'type' : key);
       updateEst();
     }
-    /* 기업세 : 저작권 구매 필수 → '구매' 로 고정, '미구매' 선택 불가 */
+    /* 리깅 : 저작권 구매 해당 없음 → 두 버튼 모두 선택 불가 (필수 항목에서도 뺌)
+       기업세 : 저작권 구매 필수 → '구매' 로 고정, '미구매' 선택 불가 */
+    function isRigKind() { return sel.kind === '리깅'; }
     function syncCopy() {
-      var co = sel.act === '기업세';
+      var rig = isRigKind(), co = !rig && sel.act === '기업세';
       each($('c_copy').querySelectorAll('.chip'), function (b) {
-        var off = co && b.getAttribute('data-v') === '미구매';
+        var off = rig || (co && b.getAttribute('data-v') === '미구매');
         b.disabled = off;
-        b.title = off ? '기업세는 저작권 구매가 필요합니다' : '';
+        b.title = rig ? '리깅만 의뢰하는 경우 저작권 구매 옵션이 없습니다' : off ? '기업세는 저작권 구매가 필요합니다' : '';
       });
-      if (co && sel.copy !== '구매') { sel.copy = '구매'; paintChips('copy'); recheck('copy'); }
+      if (rig && sel.copy) { sel.copy = ''; paintChips('copy'); }
+      if (co && sel.copy !== '구매') { sel.copy = '구매'; paintChips('copy'); }
+      recheck('copy');
     }
     /* ---- 예상 금액 : 신청서에서 고른 타입 가격 + 가격표에서 반영한 옵션 + 비공개(월 금액 × 개월)
        개인세 + 저작권 구매면 합계에 30% 추가, 기업세는 별도 안내 ---- */
@@ -2408,7 +2412,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         line('활동 구분', sel.act), '',
         '■ 신청 내용',
         line('신청 타입', type),
-        line('저작권 구매', sel.copy),
+        line('저작권 구매', sel.kind === '리깅' ? '해당 없음 (리깅)' : sel.copy),
         line('포트폴리오 공개 여부', pub),
         line('예상 금액', est ? est + '원' : ''), '',
         '■ 상세 내용',
