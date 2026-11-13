@@ -481,6 +481,7 @@ body.inframe .follow{position:relative;top:0;transition:transform .45s cubic-bez
 .psel li i{flex:none;color:var(--sub);font-style:normal}
 /* 선택 항목 앞 작은 다이아 */
 .psel li span{position:relative;padding-left:16px}
+.psel li .nx{margin-left:6px;color:var(--bell-deep);font-size:12px;font-weight:600}
 .psel li span::before{content:"-";position:absolute;left:0;font-weight:700;color:#BDBED0}
 .psel .none{color:var(--sub)}
 .rch{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
@@ -2058,7 +2059,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   function rightsNow() { return isRigTab() ? 'broadcast' : calc.rights; }
   function calcResult() {
     var t = curTab(), bi = calc.base[calc.tab], card = bi >= 0 ? (t.cards || [])[bi] : null;
-    var base = card ? num(card.price) : 0, unpriced = !!card && !base, optSum = 0, lines = [];
+    var base = card ? num(card.price) : 0, unpriced = !!card && !base, optSum = 0, exempt = 0, lines = [];
     flatOpts(t).forEach(function (o, i) {
       var q = calc.qty[calc.tab][i];
       if (!q) return;
@@ -2066,11 +2067,14 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       var p = num(o.price), unit = o.unit || '개';
       if (!p) unpriced = true;
       optSum += p * q;
+      /* V Bridger : 저작권(개인세 30%) 비용 제외 항목 */
+      var nx = /v\s*bridger/i.test(o.name || '');
+      if (nx) exempt += p * q;
       var qtxt = o.noQty ? '' : (unit === '개' ? (q > 1 ? ' × ' + q : '') : ' · ' + q + unit);
-      lines.push({ name: o.name + (o.sub ? ' (' + o.sub + ')' : ''), q: q, unit: unit, qtxt: qtxt, price: p, raw: o.name });
+      lines.push({ name: o.name + (o.sub ? ' (' + o.sub + ')' : ''), q: q, unit: unit, qtxt: qtxt, price: p, raw: o.name, nx: nx });
     });
-    var sub = base + optSum, add = rightsNow() === 'personal' ? Math.round(sub * 0.3) : 0, total = sub + add;
-    return { tab: t, card: card, base: base, optSum: optSum, lines: lines, sub: sub, add: add, total: total, unpriced: unpriced };
+    var sub = base + optSum, add = rightsNow() === 'personal' ? Math.round((sub - exempt) * 0.3) : 0, total = sub + add;
+    return { tab: t, card: card, base: base, optSum: optSum, exempt: exempt, lines: lines, sub: sub, add: add, total: total, unpriced: unpriced };
   }
 
   function sumUpdate() {
@@ -2081,7 +2085,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     }).join('') + '</div></div>';
     left += '<div class="psel"><h5>선택 항목</h5><ul>';
     if (r.card) left += '<li><span>' + esc(r.tab.key + ' · ' + r.card.name) + '</span><i>✓</i></li>';
-    r.lines.forEach(function (l) { left += '<li><span>' + esc(l.name + l.qtxt) + '</span><i>✓</i></li>'; });
+    r.lines.forEach(function (l) { left += '<li><span>' + esc(l.name + l.qtxt) + (rights === 'personal' && l.nx ? '<small class="nx">(저작권 비용 제외 항목)</small>' : '') + '</span><i>✓</i></li>'; });
     if (!r.card && !r.lines.length) left += '<li class="none">상품이나 옵션을 골라 주세요.</li>';
     left += '</ul></div>';
     if (r.unpriced) left += '<p class="pwarn">금액이 아직 정해지지 않은 항목이 포함되어 있어요.</p>';
@@ -2125,7 +2129,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       /* 신청서 예상 금액 계산용 : 가격표에서 고른 타입 금액 · 옵션 금액(비공개는 신청서의 개월 수로 따로 계산) */
       var nm0 = r.card ? (r.card.name || '') : '';
       FORM.setReflect(r.card ? { kind: KIND_LABEL[r.tab.key] || r.tab.key, size: nm0.indexOf('반신') >= 0 ? '반신' : nm0.indexOf('전신') >= 0 ? '전신' : '', base: r.base } : null,
-        r.lines.reduce(function (s, l) { return l.raw === '포트폴리오 비공개' ? s : s + l.price * l.q; }, 0));
+        r.lines.reduce(function (s, l) { return l.raw === '포트폴리오 비공개' ? s : s + l.price * l.q; }, 0), r.exempt);
       if (r.card) {
         FORM.setChip('kind', KIND_LABEL[r.tab.key] || r.tab.key);
         var nm = r.card.name || '';
@@ -2282,7 +2286,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     }
     /* ---- 예상 금액 : 신청서에서 고른 타입 가격 + 가격표에서 반영한 옵션 + 비공개(월 금액 × 개월)
        개인세 + 저작권 구매면 합계에 30% 추가, 기업세는 별도 안내 ---- */
-    var optExtra = 0, refl = null;
+    var optExtra = 0, optExempt = 0, refl = null;
     function tabFor(kind) {
       var ts = (P && P.tabs) || [], r = null;
       ts.forEach(function (t) { if (!r && (KIND_LABEL[t.key] || t.key) === kind) r = t; });
@@ -2305,7 +2309,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         priv = po ? num(po.price) * (+privEl.value) : 0;
       }
       var sub = base + optExtra + priv, plus = sel.act === '개인세' && sel.copy === '구매';
-      var total = plus ? Math.round(sub * 1.3) : sub;
+      var total = plus ? sub + Math.round((sub - optExempt) * 0.3) : sub;
       $('f_est').value = total > 0 ? comma(total) : '';
       var note = $('estNote');
       note.textContent = sel.act === '기업세' ? '※ 기업세 추가 비용은 문의 시 안내드립니다.' : plus ? '(+30%)' : '';
@@ -2365,7 +2369,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         choose(key, v);
       },
       setPriv: function (n) { privEl.value = String(Math.max(1, Math.min(6, n))); recheck('pub'); updateEst(); },
-      setReflect: function (rf, extra) { refl = rf; optExtra = extra || 0; },
+      setReflect: function (rf, extra, ex) { refl = rf; optExtra = extra || 0; optExempt = ex || 0; },
       updateEst: updateEst,
       setText: function (id, v) {
         var el = $(id); el.value = v;
@@ -2527,7 +2531,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       each($('applyForm').querySelectorAll('input[type=text],textarea'), function (el) { el.value = ''; el.style.height = ''; });
       Object.keys(CH).forEach(function (k) { sel[k] = ''; paintChips(k); });
       syncSize(); syncCopy();
-      optExtra = 0; refl = null; updateEst();
+      optExtra = 0; optExempt = 0; refl = null; updateEst();
       setPlat(''); ddOpen(false);
       tbd.setAttribute('aria-pressed', 'false'); nick.disabled = false;
       ptbd.setAttribute('aria-pressed', 'false'); dd.classList.remove('dis'); ddBtn.setAttribute('aria-disabled', 'false'); $('f_platEtc').disabled = false;
