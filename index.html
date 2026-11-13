@@ -311,6 +311,10 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 .sc-media img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;pointer-events:none}
 .sc-media .ph{width:100%;height:100%;border:0;border-radius:0}
 .sc-media iframe,.sc-media video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+/* 모바일 : 썸네일은 위에 보이기만 하고 터치는 아래 유튜브 플레이어로 통과 → 재생 시작되면 썸네일 숨김 */
+.sc-media.pre>img{position:relative;z-index:1}
+.sc-media.pre .play{z-index:2;pointer-events:none}
+.sc-media.pre.live>img,.sc-media.pre.live .play{display:none}
 .play{position:absolute;left:50%;top:50%;display:grid;place-items:center;width:68px;height:68px;margin:-34px 0 0 -34px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 6px 18px rgba(38,39,79,.22);cursor:pointer;transition:transform .2s}
 .play:hover{transform:scale(1.08)}
 .play::before{content:"";margin-left:5px;border-left:19px solid var(--bell-deep);border-top:12px solid transparent;border-bottom:12px solid transparent}
@@ -1612,6 +1616,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       if (!animate) track.classList.add('snap');
       track.style.transform = 'translateX(' + base + 'px)';
       cards.forEach(function (c, p) { c.classList.toggle('on', p === pos); });
+      if (o.onSettle) o.onSettle(cards[pos], items[idx()], cards);
       if (!animate) { void track.offsetWidth; track.classList.remove('snap'); }
       var i = idx();
       each(dotsEl.children, function (d, j) { d.setAttribute('aria-current', j === i ? 'true' : 'false'); });
@@ -1822,10 +1827,31 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   var showLayout = null;
   window.addEventListener('resize', function () { if (showLayout) showLayout(false); });
 
+  /* 모바일 미리 깔아 둔 유튜브 플레이어 : 재생이 시작되면 썸네일을 걷고 전체화면으로 */
+  function ytLive(f) {
+    var m = f.parentNode;
+    if (!m || m.classList.contains('live')) return;
+    m.classList.add('live');
+    var rq = f.requestFullscreen || f.webkitRequestFullscreen;
+    if (rq) { try { var p = rq.call(f); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+  }
+  window.addEventListener('message', function (e) {
+    if (!/^https:\/\/www\.youtube(-nocookie)?\.com$/.test(e.origin)) return;
+    var d; try { d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch (er) { return; }
+    if (!d) return;
+    var st = d.event === 'onStateChange' ? d.info : (d.event === 'infoDelivery' && d.info ? d.info.playerState : null);
+    if (st !== 1 && st !== 3) return;
+    each(document.querySelectorAll('iframe.yt-pre'), function (f) { if (f.contentWindow === e.source) ytLive(f); });
+  });
+  /* 신호가 안 와도 : 플레이어를 터치하면 이 페이지가 포커스를 잃으므로 그때 썸네일을 걷음 */
+  window.addEventListener('blur', function () {
+    setTimeout(function () { var a = document.activeElement; if (a && a.classList && a.classList.contains('yt-pre')) ytLive(a); }, 0);
+  });
   function Showcase(root, list) {
     var items = (list || []).filter(function (x) { return x && (x.video || x.src); }), empty = !items.length;
     if (empty) { root.innerHTML = '<div class="ph gph">작업물 준비 중입니다.</div>'; return; }
 
+    var TOUCH = !!(window.matchMedia && matchMedia('(hover:none) and (pointer:coarse)').matches);
     function poster(it) { var yt = ytId(it.video); return yt ? ytThumb(yt) : (it.src || ''); }
     function mediaHTML(it) {
       var src = poster(it), yt = ytId(it.video);
@@ -1852,15 +1878,38 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         else if (it.src) openLB([{ src: it.src }], 0);
       },
       /* 다른 영상으로 넘어가면 재생 중인 영상은 멈추고 썸네일로 되돌림 */
-      onLeave: function (cards) {
-        cards.forEach(function (c) {
-          if (!c.querySelector('iframe,video')) return;
-          var i = +c.getAttribute('data-i');
-          c.querySelector('.sc-media').innerHTML = mediaHTML(items[i]);
-          upgradeYt(c);
-        });
+      onLeave: function (cards) { cards.forEach(reset); },
+      /* 모바일 : 가운데 카드에는 썸네일 아래에 유튜브 플레이어를 미리 깔아 둠
+         → 한 번 터치가 바로 플레이어에 닿아 재생 (아이폰은 자동 전체화면, 안드로이드는 재생 시작 때 전체화면 요청) */
+      onSettle: function (cur, it, cards) {
+        if (!TOUCH) return;
+        cards.forEach(function (c) { if (c !== cur && c.querySelector('iframe.yt-pre')) reset(c); });
+        prep(cur, it);
       }
     });
+    function reset(c) {
+      if (!c.querySelector('iframe,video')) return;
+      var i = +c.getAttribute('data-i'), m = c.querySelector('.sc-media');
+      m.classList.remove('pre', 'live');
+      m.innerHTML = mediaHTML(items[i]);
+      upgradeYt(c);
+    }
+    function prep(c, it) {
+      var yt = it && ytId(it.video), m = c && c.querySelector('.sc-media');
+      if (!yt || !m || m.querySelector('iframe,video')) return;
+      var f = document.createElement('iframe');
+      f.className = 'yt-pre'; f.title = '리깅 영상';
+      f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen'); f.setAttribute('allowfullscreen', '');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + yt + '?rel=0&enablejsapi=1&origin=' + encodeURIComponent(location.origin);
+      f.addEventListener('load', function () {
+        try {
+          f.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: yt, channel: 'widget' }), '*');
+          f.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'], id: yt, channel: 'widget' }), '*');
+        } catch (e) {}
+      });
+      m.insertBefore(f, m.firstChild);
+      m.classList.add('pre');
+    }
     each(root.querySelectorAll('.sc-card'), function (c, p) {
       var n = items.length, CL = n > 1 ? Math.min(2, n) : 0;
       c.setAttribute('data-i', String(((p - CL) % n + n) % n));
