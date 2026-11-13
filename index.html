@@ -121,7 +121,17 @@ input,select,textarea{font-family:inherit}
 /* 펼친 내용은 자주하는 질문 답변과 같은 글씨 */
 /* 펼친 내용 : 제목 첫 글자(번호 원 26px + 간격 12px 뒤)와 같은 위치에서 시작 */
 #noticeAcc .apin{padding:18.5px 18px 20px 56px;font-size:16px;line-height:1.7}
-#noticeAcc .nl{display:block}
+#noticeAcc .nl{position:relative;display:block}
+/* 말머리 : 글 왼쪽 들여쓴 자리에 붙여, 줄이 넘어가도 글이 말머리 뒤에 맞춰 내려감 */
+#noticeAcc .nmk{position:absolute;top:0;font-style:normal}
+#noticeAcc .nmk.num{font-weight:700}
+/* ▪️ 줄은 글씨 1px 크게 (줄 높이는 그대로), - 줄은 줄 높이 1px 좁게 */
+#noticeAcc .nl.m-sq{font-size:17px;line-height:27.2px}
+#noticeAcc .nl.m-dash{line-height:26.2px}
+/* 글자 꾸밈 : ==연보라 배경== · {{빨간 글자}} · [[작은 글자]] (예시 등) */
+.t-sm{font-size:.84em;color:#6C6D92}
+.t-hl{padding:0 2px;border-radius:3px;background:#E2E3FD;color:inherit;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.t-red{color:#E0464E}
 
 .ai{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
 .ai,.ai.open{border-color:#D6D6DE}
@@ -815,6 +825,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .notice li::before{margin-top:5.75px}
   /* 공지사항 펼친 내용 : 기본 줄 높이 2px 줄임 (관리자에서 준 줄 간격은 그대로) */
   #noticeAcc .apin{line-height:25.2px}
+  #noticeAcc .nl.m-sq{line-height:25.2px}
+  #noticeAcc .nl.m-dash{line-height:24.2px}
   /* 작업과정 : 컨펌 횟수는 단계 오른쪽 끝, 아이콘 원의 세로 중앙(16.5px)에 맞추고 단계 이름과 가로 점선으로 이음 */
   .fs-card{grid-template-columns:minmax(0,max-content) minmax(12px,1fr) auto}
   .fs-step,.fs-card b{grid-column:1}
@@ -1072,16 +1084,54 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     });
   }
 
-  /* 공지사항 펼친 내용 : 줄마다 블록으로, 관리자에서 정한 줄별 위 간격(lineGaps, px) 적용 */
-  function fmtLines(s, gaps) {
-    gaps = gaps || [];
-    return String(s == null ? '' : s).replace(/\r/g, '').split('\n').map(function (l, i) {
-      var g = Number(gaps[i]) || 0;
-      return '<span class="nl"' + (g ? ' style="margin-top:' + g + 'px"' : '') + '>' +
-        (l.trim() ? esc(l).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') : '&nbsp;') + '</span>';
+  /* 공지 말머리 (관리자 lineMarks, admin.html 과 같은 코드)
+     sq ▪️ (글씨 1px 크게) · dash - (▪️보다 들여씀, 줄 높이 1px 좁게) · arrow → (- 보다 들여씀) · num 1) 2) 자동 번호(굵게)
+     ref ※ · refc ※ 를 윗줄 글 시작에 맞춤 · cont 말머리 없이 윗줄 글 시작에 맞춤
+     NMK[종류] = [말머리, 위치(px, -1 이면 윗줄 글 시작), 글 시작까지 폭(px), 말머리를 가운데 둘 칸 폭(px)]
+     말머리 줄(뒤에 이어지는 cont 줄 포함) 다음 줄은 기본보다 5px 더 띄움 */
+  var NMK = { sq: ['▪️', 0, 22, 16], ref: ['※', 0, 22, 16], refc: ['※', -1, 22, 16], num: ['', 0, 24], dash: ['-', 22, 13.6], arrow: ['→', 35.6, 21.6] };
+  /* 줄 맨 앞에 직접 쓴 말머리를 찾아 떼어냄 (lineMarks 가 없는 예전 데이터용) */
+  function nAuto(ls) {
+    var R = [['sq', /^\s*▪️?\s*/], ['arrow', /^\s*→\s*/], ['num', /^\s*\*\*\s*\d+\)\s*\*\*\s*/], ['num', /^\s*\d+\)\s+/], ['refc', /^\s+※\s*/], ['ref', /^※\s*/], ['dash', /^\s*-\s+/], ['cont', /^\s+(?=\S)/]];
+    var marks = [];
+    var out = ls.map(function (l) {
+      for (var k = 0; k < R.length; k++) { var x = l.match(R[k][1]); if (x) { marks.push(R[k][0]); return l.slice(x[0].length); } }
+      marks.push(''); return l;
+    });
+    return { lines: out, marks: marks };
+  }
+  function nLayout(ls, gaps, marks) {
+    var prevT = 0, n = 0, after = false, lastM = '', refB = 0;
+    return ls.map(function (l, i) {
+      var m = marks[i] || '', k = NMK[m], blank = !l.trim(), o = { m: m, label: '', b: 0, t: 0, w: 0 };
+      if (k) { if (m === 'refc') refB = lastM === 'refc' ? refB : prevT; o.b = k[1] < 0 ? refB : k[1]; o.t = o.b + k[2]; o.w = k[3] || 0; o.label = m === 'num' ? (++n) + ')' : k[0]; prevT = o.t; if (m === 'sq') n = 0; }
+      else if (m === 'cont') { o.b = o.t = prevT; }
+      else if (!blank) { prevT = 0; n = 0; }
+      o.gap = (Number((gaps || [])[i]) || 0) + (after && m !== 'cont' && !blank ? 5 : 0);
+      if (m !== 'cont') after = !!k && !blank;
+      if (!blank && m !== 'cont') lastM = m;
+      return o;
+    });
+  }
+  /* 글자 꾸밈 : **굵게** · ==연보라 배경== · {{빨간 글자}} · [[작은 글자]] (이미 &<> 를 바꾼 글에 적용) */
+  function nInl(s) {
+    return s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/==(.+?)==/g, '<mark class="t-hl">$1</mark>').replace(/\{\{(.+?)\}\}/g, '<span class="t-red">$1</span>').replace(/\[\[(.+?)\]\]/g, '<small class="t-sm">$1</small>');
+  }
+  function nLineHtml(l, o, esc) {
+    return (o.label ? '<i class="nmk' + (o.m === 'num' ? ' num' : '') + '" style="left:' + o.b + 'px' + (o.w ? ';width:' + o.w + 'px;text-align:center' : '') + '">' + esc(o.label) + '</i>' : '') +
+      (l.trim() ? nInl(esc(l)) : '&nbsp;');
+  }
+  /* 공지사항 펼친 내용 : 줄마다 블록으로, 관리자에서 정한 줄별 위 간격(lineGaps, px)과 말머리(lineMarks) 적용 */
+  function fmtLines(s, gaps, marks) {
+    var ls = String(s == null ? '' : s).replace(/\r/g, '').split('\n');
+    if (!marks) { var a = nAuto(ls); ls = a.lines; marks = a.marks; }
+    var L = nLayout(ls, gaps, marks);
+    return ls.map(function (l, i) {
+      var o = L[i], st = (o.gap ? 'margin-top:' + o.gap + 'px;' : '') + (o.t ? 'padding-left:' + o.t + 'px' : '');
+      return '<span class="nl' + (o.m ? ' m-' + o.m : '') + '"' + (st ? ' style="' + st + '"' : '') + '>' + nLineHtml(l, o, esc) + '</span>';
     }).join('');
   }
-  function fmt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
+  function fmt(s) { return nInl(esc(s)).replace(/\n/g, '<br>'); }
   /* 동그라미 화살표 : 글자(‹ ›) 대신 선으로 그려 원의 정중앙에 오도록 */
   var ARW_L = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6l-6 6 6 6"/></svg>';
   var ARW_R = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg>';
@@ -1162,7 +1212,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     acc.innerHTML = (n.details || []).map(function (d, i) {
       return '<div class="ai"><button type="button" class="ah" aria-expanded="false" aria-controls="ap' + i + '">' +
         '<span class="ht"><i class="n">' + (i + 1) + '</i>' + esc(d.title) + '</span><span class="chev" aria-hidden="true"></span></button>' +
-        '<div class="ap" id="ap' + i + '"><div class="apw"><div class="apin">' + fmtLines(d.body, d.lineGaps) + '</div></div></div></div>';
+        '<div class="ap" id="ap' + i + '"><div class="apw"><div class="apin">' + fmtLines(d.body, d.lineGaps, d.lineMarks) + '</div></div></div></div>';
     }).join('');
     bindGroup(acc);
   }
