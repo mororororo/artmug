@@ -819,6 +819,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .rights .txt,.rights .foot td{font-size:11.5px}
   /* 작업과정 : 원 1px 위로, 단계 사이 +2px */
   .flow2{gap:12px}
+  /* 작업과정 : 타임라인 전체를 내용 폭만큼만 잡아 화면 가운데로 (단계끼리 왼쪽 줄은 맞춘 채) */
+  .flow2{width:fit-content;max-width:100%;margin-left:auto;margin-right:auto}
+  .fs-card{padding-right:0}
   /* 아이콘 원 세로 중앙 = STEP 과 단계 이름 두 줄의 정중앙 */
   .fs-dot{margin-top:-3.5px}
   .fs:not(:last-child)::before{top:36.5px;height:calc(100% - 36.5px + 12px)}
