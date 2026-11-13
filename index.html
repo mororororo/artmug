@@ -1211,7 +1211,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     var acc = $('noticeAcc');
     acc.innerHTML = (n.details || []).map(function (d, i) {
       return '<div class="ai"><button type="button" class="ah" aria-expanded="false" aria-controls="ap' + i + '">' +
-        '<span class="ht"><i class="n">' + (i + 1) + '</i>' + esc(d.title) + '</span><span class="chev" aria-hidden="true"></span></button>' +
+        '<span class="ht"><i class="n">' + (i + 1) + '</i>' + nInl(esc(d.title)) + '</span><span class="chev" aria-hidden="true"></span></button>' +
         '<div class="ap" id="ap' + i + '"><div class="apw"><div class="apin">' + fmtLines(d.body, d.lineGaps, d.lineMarks) + '</div></div></div></div>';
     }).join('');
     bindGroup(acc);
@@ -1790,10 +1790,12 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     if ((t.preNotes || []).length) html += '<ul class="notes pnotes">' + t.preNotes.map(function (n) { return '<li>' + fmt(n) + '</li>'; }).join('') + '</ul>';
     html += '<div class="optgs" style="margin-top:36px">' + groupsOf(t).map(function (g) {
       var rows = (g.options || []).map(function (o) {
+        /* 수량 최대값 : 옵션에 max 가 있으면 그 값, 포트폴리오 비공개는 최대 6개월, 그 외 99 */
         var i = oi++, q = calc.qty[calc.tab][i] || 0, nq = !!o.noQty, unit = o.unit || '개';
-        return '<div class="oc' + (q ? ' sel' : '') + (nq ? '' : ' hq') + '" data-i="' + i + '" role="checkbox" aria-checked="' + (q > 0) + '" tabindex="0"><span class="pk"></span>' +
+        var mx = Math.max(1, parseInt(o.max, 10) || (/포트폴리오\s*비공개/.test(o.name || '') ? 6 : 99));
+        return '<div class="oc' + (q ? ' sel' : '') + (nq ? '' : ' hq') + '" data-i="' + i + '" data-max="' + mx + '" role="checkbox" aria-checked="' + (q > 0) + '" tabindex="0"><span class="pk"></span>' +
           '<span class="pb">' + esc(o.name) + (o.sub ? '<small' + (o.sub.length > 8 ? ' class="lsub"' : '') + '>(' + esc(o.sub) + ')</small>' : '') + '</span>' +
-          (nq ? '' : '<span class="qty"><button type="button" class="qb" data-d="-1" aria-label="하나 줄이기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8"/></svg></button><input type="number" min="1" max="99" value="' + (q || 1) + '" aria-label="' + esc(unit) + ' 수"><button type="button" class="qb" data-d="1" aria-label="하나 늘리기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5 1v8"/></svg></button><span class="qu">' + esc(unit) + '</span></span>') +
+          (nq ? '' : '<span class="qty"><button type="button" class="qb" data-d="-1" aria-label="하나 줄이기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8"/></svg></button><input type="number" min="1" max="' + mx + '" value="' + (q || 1) + '" aria-label="' + esc(unit) + ' 수"><button type="button" class="qb" data-d="1" aria-label="하나 늘리기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5 1v8"/></svg></button><span class="qu">' + esc(unit) + '</span></span>') +
           '<em class="pp">' + esc(won(o.price)) + '</em></div>';
       }).join('');
       var n = (g.options || []).length;
@@ -1831,9 +1833,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       onKey(el, toggle);
     });
     each(root.querySelectorAll('.oc'), function (el) {
-      var i = +el.getAttribute('data-i'), qi = el.querySelector('.qty input');
+      var i = +el.getAttribute('data-i'), qi = el.querySelector('.qty input'), mx = +el.getAttribute('data-max') || 99;
       function set(q) {
-        q = Math.max(0, Math.min(99, q));
+        q = Math.max(0, Math.min(mx, q));
         if (q) calc.qty[calc.tab][i] = q; else delete calc.qty[calc.tab][i];
         el.classList.toggle('sel', q > 0); el.setAttribute('aria-checked', q > 0);
         if (q && qi) qi.value = q;
@@ -1948,7 +1950,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     var sel = {};          /* 선택된 값 : { plat:'치지직', kind:'SET', ... } */
     var privEl = $('f_priv'), nick = $('f_nick'), tbd = $('nickTbd'), ptbd = $('platTbd'), debut = $('f_debut'), dtbd = $('debutTbd');
     function isTbd(b) { return b.getAttribute('aria-pressed') === 'true'; }
-    privEl.innerHTML = '<option value="">기간 선택</option>' + [1, 2, 3, 4, 5].map(function (n) { return '<option value="' + n + '">' + n + '개월</option>'; }).join('') + '<option value="6">6개월 이상</option>';
+    privEl.innerHTML = '<option value="">기간 선택</option>' + [1, 2, 3, 4, 5, 6].map(function (n) { return '<option value="' + n + '">' + n + '개월</option>'; }).join('');
 
     /* 접혀 있다가 부드럽게 펼쳐지는 영역 (기타 플랫폼명 / 전신·반신) */
     function reveal(el, on) { el.classList.toggle('on', !!on); }
@@ -2123,7 +2125,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     function line(label, v) { v = (v || '').trim(); return '- ' + label + ':' + (v.indexOf('\n') >= 0 ? '\n' + v : ' ' + (v || '-')); }
     function text() {
       var plat = sel.plat === '기타' ? ('기타' + ($('f_platEtc').value.trim() ? ' (' + $('f_platEtc').value.trim() + ')' : '')) : (sel.plat || '');
-      var pub = sel.pub === '비공개' ? ('비공개' + (privEl.value ? ' (' + (privEl.value === '6' ? '6개월 이상' : privEl.value + '개월') + ')' : '')) : (sel.pub || '');
+      var pub = sel.pub === '비공개' ? ('비공개' + (privEl.value ? ' (' + privEl.value + '개월' + ')' : '')) : (sel.pub || '');
       var type = [sel.kind, sel.size].filter(Boolean).join(' · ');
       var est = $('f_est').value.trim();
       return [
