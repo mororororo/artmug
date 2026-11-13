@@ -627,6 +627,12 @@ textarea{min-height:96px;resize:none;overflow:hidden}
 .agree{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:1px;margin-bottom:1px;padding:4px 0;font-size:14px;font-weight:700;cursor:pointer}
 .agree input{flex:none;width:16px;height:16px;margin:0;accent-color:var(--bell-deep)}
 #f_est::placeholder{color:#B9BACB}
+/* 예상 금액 옆 : (+30%) / 기업세 안내 */
+.estn{margin-left:6px;color:var(--bell-deep);font-size:13px;font-weight:700}
+.estn.co{color:var(--sub);font-size:12px;font-weight:500}
+.estn:empty{display:none}
+/* 가격표 : 개인세일 때 포트폴리오 비공개 금액 옆 +30% */
+.oc .pp .p30{margin-left:3px;color:var(--bell-deep);font-size:10.5px;font-weight:700}
 /* PC : 예) 안내 · 플랫폼명 입력 안내 글자 = 플랫폼 선택 글자 색 */
 @media (min-width:761px){.form input:not(#f_est)::placeholder,.form textarea::placeholder{color:#9B9CB5;opacity:1}}
 .fbtns{display:grid;grid-template-columns:1fr;gap:10px;margin-top:0}
@@ -1035,8 +1041,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
             <p class="ferr" id="e_pub"></p>
           </div>
           <div class="fq">
-            <label class="fl" for="f_est">예상 금액</label>
-            <div class="fline est"><input type="text" id="f_est" readonly placeholder="가격표에서 반영"><span class="won">원</span></div>
+            <label class="fl" for="f_est">예상 금액<span class="estn" id="estNote"></span></label>
+            <div class="fline est"><input type="text" id="f_est" readonly placeholder="타입을 고르면 자동 계산"><span class="won">원</span></div>
             <p class="ferr" id="e_est"></p>
           </div>
         </div>
@@ -2071,6 +2077,14 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 
   function sumUpdate() {
     var r = calcResult(), el = $('psum'), rig = isRigTab(), rights = rightsNow();
+    /* 개인세(저작권 구매) : 포트폴리오 비공개 금액도 30% 더해서 표시 (합계는 원래대로 전체 +30%) */
+    each(document.querySelectorAll('#priceRoot .oc'), function (oc) {
+      var pb = oc.querySelector('.pb'), pp = oc.querySelector('.pp');
+      if (!pb || !pp || !/^포트폴리오\s*비공개/.test(pb.textContent)) return;
+      if (pp.getAttribute('data-p0') == null) pp.setAttribute('data-p0', pp.textContent);
+      var p0 = pp.getAttribute('data-p0'), n = num(p0.replace(/[^\d,]/g, ''));
+      pp.innerHTML = rights === 'personal' && n ? esc('₩' + comma(Math.round(n * 1.3))) + '<small class="p30">+30%</small>' : esc(p0);
+    });
     /* 리깅만 의뢰 : 저작권 구매 버튼 모두 비활성화 */
     var left = '<div class="psel"><h5>저작권 구매' + (rig ? '<span class="rnote">※ 리깅만 의뢰하는 경우 저작권 구매 옵션이 없습니다.</span>' : '') + '</h5><div class="rch">' + [['broadcast', '미구매'], ['personal', '개인세'], ['company', '기업세']].map(function (x) {
       return '<button type="button" data-r="' + x[0] + '" aria-pressed="' + (!rig && rights === x[0]) + '"' + (rig ? ' disabled' : '') + '>' + x[1] + '</button>';
@@ -2107,19 +2121,21 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   function privSync(n) {
     var lp = lastPriv;
     if (!lp || !FORM || !(n > 0) || n === lp.q) return;
-    var ta = $('f_opts'), est = $('f_est');
+    var ta = $('f_opts');
     var oldLine = '- ' + lp.name + ' · ' + lp.q + lp.unit + (lp.price ? ' (' + comma(lp.price * lp.q) + '원)' : '');
     var newLine = '- ' + lp.name + ' · ' + n + lp.unit + (lp.price ? ' (' + comma(lp.price * n) + '원)' : '');
     if (ta.value.indexOf(oldLine) >= 0) FORM.setText('f_opts', ta.value.replace(oldLine, newLine));
-    var nt = lp.total + lp.price * (n - lp.q);
-    if (est.value === comma(lp.total)) FORM.setText('f_est', nt > 0 ? comma(nt) : '');
-    lp.total = nt; lp.q = n;
+    lp.q = n;
   }
   var KIND_LABEL = { SET: 'SET', ILLUSTRATION: '일러스트', RIGGING: '리깅', '세트': 'SET' };
 
   function reflect() {
     var r = calcResult();
     if (FORM) {
+      /* 신청서 예상 금액 계산용 : 가격표에서 고른 타입 금액 · 옵션 금액(비공개는 신청서의 개월 수로 따로 계산) */
+      var nm0 = r.card ? (r.card.name || '') : '';
+      FORM.setReflect(r.card ? { kind: KIND_LABEL[r.tab.key] || r.tab.key, size: nm0.indexOf('반신') >= 0 ? '반신' : nm0.indexOf('전신') >= 0 ? '전신' : '', base: r.base } : null,
+        r.lines.reduce(function (s, l) { return l.raw === '포트폴리오 비공개' ? s : s + l.price * l.q; }, 0));
       if (r.card) {
         FORM.setChip('kind', KIND_LABEL[r.tab.key] || r.tab.key);
         var nm = r.card.name || '';
@@ -2136,9 +2152,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       if (pv) { FORM.setChip('pub', '비공개'); FORM.setPriv(pv.q); }
 
       FORM.setText('f_opts', r.lines.map(function (l) { return '- ' + l.name + l.qtxt + (l.price ? ' (' + comma(l.price * l.q) + '원)' : ''); }).join('\n'));
-      FORM.setText('f_est', r.total > 0 ? comma(r.total) : '');
-      /* 신청서에서 비공개 기간을 바꾸면 신청서 안의 옵션 줄 · 예상 금액만 맞춰 고침 (가격표 선택은 그대로) */
-      lastPriv = pv ? { name: pv.name, unit: pv.unit, price: pv.price || 0, q: pv.q, total: r.total } : null;
+      FORM.updateEst();
+      /* 신청서에서 비공개 기간을 바꾸면 신청서 안의 옵션 줄도 맞춰 고침 (가격표 선택은 그대로) */
+      lastPriv = pv ? { name: pv.name, unit: pv.unit, price: pv.price || 0, q: pv.q } : null;
     }
     goTo('apply');
   }
@@ -2256,7 +2272,51 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       sel[key] = v;
       paintChips(key);
       if (key === 'kind') syncSize();
+      if (key === 'act') syncCopy();
       recheck(key === 'kind' || key === 'size' ? 'type' : key);
+      updateEst();
+    }
+    /* 기업세 : 저작권 구매 필수 → '구매' 로 고정, '미구매' 선택 불가 */
+    function syncCopy() {
+      var co = sel.act === '기업세';
+      each($('c_copy').querySelectorAll('.chip'), function (b) {
+        var off = co && b.getAttribute('data-v') === '미구매';
+        b.disabled = off;
+        b.title = off ? '기업세는 저작권 구매가 필요합니다' : '';
+      });
+      if (co && sel.copy !== '구매') { sel.copy = '구매'; paintChips('copy'); recheck('copy'); }
+    }
+    /* ---- 예상 금액 : 신청서에서 고른 타입 가격 + 가격표에서 반영한 옵션 + 비공개(월 금액 × 개월)
+       개인세 + 저작권 구매면 합계에 30% 추가, 기업세는 별도 안내 ---- */
+    var optExtra = 0, refl = null;
+    function tabFor(kind) {
+      var ts = (P && P.tabs) || [], r = null;
+      ts.forEach(function (t) { if (!r && (KIND_LABEL[t.key] || t.key) === kind) r = t; });
+      return r;
+    }
+    function updateEst() {
+      var t = sel.kind ? tabFor(sel.kind) : null, base = 0, priv = 0;
+      if (refl && refl.kind === sel.kind && (!refl.size || refl.size === sel.size)) base = refl.base;
+      else if (t && sel.size) {
+        var c = null, cs = t.cards || [];
+        cs.forEach(function (x) { if (!c && (x.name || '').indexOf(sel.size) >= 0) c = x; });
+        if (!c && cs.length === 1) c = cs[0];
+        base = c ? num(c.price) : 0;
+      }
+      if (sel.pub === '비공개' && +privEl.value > 0) {
+        var po = null;
+        (t ? [t] : []).concat((P && P.tabs) || []).forEach(function (tt) {
+          if (!po) flatOpts(tt).forEach(function (o) { if (!po && /포트폴리오\s*비공개/.test(o.name || '')) po = o; });
+        });
+        priv = po ? num(po.price) * (+privEl.value) : 0;
+      }
+      var sub = base + optExtra + priv, plus = sel.act === '개인세' && sel.copy === '구매';
+      var total = plus ? Math.round(sub * 1.3) : sub;
+      $('f_est').value = total > 0 ? comma(total) : '';
+      var note = $('estNote');
+      note.textContent = sel.act === '기업세' ? '기업세 추가 비용은 문의 시 안내드립니다.' : plus ? '(+30%)' : '';
+      note.className = 'estn' + (sel.act === '기업세' ? ' co' : '');
+      recheck('est');
     }
     Object.keys(CH).forEach(function (key) {
       var box = $('c_' + key);
@@ -2298,7 +2358,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     nick.addEventListener('input', function () { recheck('nick'); });
     $('f_debut').addEventListener('input', function () { recheck('debut'); });
     $('f_desc').addEventListener('input', function () { recheck('desc'); });
-    privEl.addEventListener('change', function () { recheck('pub'); privSync(+privEl.value); });
+    privEl.addEventListener('change', function () { recheck('pub'); privSync(+privEl.value); updateEst(); });
 
     FORM = {
       setChip: function (key, v) {
@@ -2310,7 +2370,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         }
         choose(key, v);
       },
-      setPriv: function (n) { privEl.value = String(Math.max(1, Math.min(6, n))); recheck('pub'); },
+      setPriv: function (n) { privEl.value = String(Math.max(1, Math.min(6, n))); recheck('pub'); updateEst(); },
+      setReflect: function (rf, extra) { refl = rf; optExtra = extra || 0; },
+      updateEst: updateEst,
       setText: function (id, v) {
         var el = $(id); el.value = v;
         if (el.tagName === 'TEXTAREA') grow(el);
@@ -2470,7 +2532,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       clearTimeout(resetTimer); disarm();
       each($('applyForm').querySelectorAll('input[type=text],textarea'), function (el) { el.value = ''; el.style.height = ''; });
       Object.keys(CH).forEach(function (k) { sel[k] = ''; paintChips(k); });
-      syncSize();
+      syncSize(); syncCopy();
+      optExtra = 0; refl = null; updateEst();
       setPlat(''); ddOpen(false);
       tbd.setAttribute('aria-pressed', 'false'); nick.disabled = false;
       ptbd.setAttribute('aria-pressed', 'false'); dd.classList.remove('dis'); ddBtn.setAttribute('aria-disabled', 'false'); $('f_platEtc').disabled = false;
