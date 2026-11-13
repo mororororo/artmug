@@ -2314,7 +2314,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       var total = plus ? Math.round(sub * 1.3) : sub;
       $('f_est').value = total > 0 ? comma(total) : '';
       var note = $('estNote');
-      note.textContent = sel.act === '기업세' ? '기업세 추가 비용은 문의 시 안내드립니다.' : plus ? '(+30%)' : '';
+      note.textContent = sel.act === '기업세' ? '※ 기업세 추가 비용은 문의 시 안내드립니다.' : plus ? '(+30%)' : '';
       note.className = 'estn' + (sel.act === '기업세' ? ' co' : '');
       recheck('est');
     }
