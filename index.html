@@ -1421,7 +1421,18 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     el.style.height = Math.round(h * k) + 'px';
   }
   function clearSmall(el) { if (el) { el.style.width = ''; el.style.height = ''; } }
-  lbi.addEventListener('load', function () { fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight); });
+  lbi.addEventListener('load', function () { fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight); lbArrows(); });
+  /* 화살표 : 화면 끝이 아니라 보이는 이미지 좌우 15px 바깥 (자리가 모자라면 화면 안쪽 끝에 붙음) */
+  function lbArrows() {
+    if (!lb.classList.contains('open') || lbList.length < 2) return;
+    var m = lbi.style.display === 'none' ? lbv : lbi, P = $('lbPrev'), N = $('lbNext');
+    if (!m || !m.offsetWidth) return;
+    var W = lbm.clientWidth, aw = P.offsetWidth || 46;
+    var l = m.offsetLeft, r = W - (m.offsetLeft + m.offsetWidth);
+    P.style.left = Math.max(0, l - 15 - aw) + 'px';
+    N.style.right = Math.max(0, r - 15 - aw) + 'px';
+  }
+  window.addEventListener('resize', lbArrows);
   /* list : [{ src, alt }] · i : 처음 보여줄 번호 · o.gif : 움짤 · o.onIndex(i) : 넘길 때마다 호출 (뒤의 캐러셀도 같이 이동)
      여러 장이면 확대 상태 그대로 좌우 화살표 / 아래 동그라미 · 썸네일 / ← → 키 / 스와이프로 넘김 */
   function openLB(list, i, o) {
@@ -1473,14 +1484,14 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     if (isFile(src)) {
       if (!lbv) {
         lbv = document.createElement('video'); lbv.muted = true; lbv.loop = true; lbv.autoplay = true; lbv.setAttribute('playsinline', ''); lbm.insertBefore(lbv, lbi);
-        lbv.addEventListener('loadedmetadata', function () { fitSmall(lbv, lbv.videoWidth, lbv.videoHeight); });
+        lbv.addEventListener('loadedmetadata', function () { fitSmall(lbv, lbv.videoWidth, lbv.videoHeight); lbArrows(); });
       }
       lbi.style.display = 'none'; lbi.removeAttribute('src'); lbv.style.display = ''; lbv.src = src;
       var pr = lbv.play && lbv.play(); if (pr && pr.catch) pr.catch(function () {});
     } else {
       if (lbv) { lbv.style.display = 'none'; lbv.removeAttribute('src'); }
       lbi.style.display = ''; lbi.src = src; lbi.alt = it.alt || '';
-      if (lbSmall && lbi.complete) fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight);
+      if (lbi.complete) { if (lbSmall) fitSmall(lbi, lbi.naturalWidth, lbi.naturalHeight); lbArrows(); }
     }
     each(lbDots.children, function (d, k) { d.setAttribute('aria-current', k === lbIdx ? 'true' : 'false'); });
     each(lbThumbs.children, function (t, k) { t.setAttribute('aria-current', k === lbIdx ? 'true' : 'false'); });

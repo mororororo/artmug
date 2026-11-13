@@ -191,6 +191,15 @@
     document.documentElement.appendChild(zbox);
   }
   function zStep(d) { if (zList.length > 1) zShow(zIdx + d); }
+  /* 화살표 : 화면 끝이 아니라 보이는 이미지 좌우 15px 바깥 (자리가 모자라면 화면 안쪽 끝에 붙음) */
+  function zArrows() {
+    if (!zOpen() || zList.length < 2 || !zmedia || !zmedia.offsetWidth) return;
+    var P = zbox.querySelector('.lzm-a.p'), N = zbox.querySelector('.lzm-a.n');
+    var W = zwrap.clientWidth, aw = P.offsetWidth || 46;
+    P.style.left = Math.max(0, zmedia.offsetLeft - 15 - aw) + 'px';
+    N.style.right = Math.max(0, W - zmedia.offsetLeft - zmedia.offsetWidth - 15 - aw) + 'px';
+  }
+  window.addEventListener('resize', zArrows);
   function zShow(i, first) {
     var n = zList.length;
     zIdx = ((i % n) + n) % n;
@@ -198,6 +207,10 @@
     zClearMedia();
     var m = document.createElement(it.video ? 'video' : 'img');
     function fit(w, h) {
+      fit0(w, h);
+      zArrows();
+    }
+    function fit0(w, h) {
       if (!zSmall || !w || !h) return;
       var cs = getComputedStyle(zwrap);
       var bw = zwrap.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), bh = zwrap.clientHeight;
