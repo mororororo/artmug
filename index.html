@@ -439,14 +439,20 @@ table{width:100%;border-collapse:collapse;font-size:14.5px}
 /* 선택된 옵션 : 연보라 칸을 위아래로 4px씩 작게 */
 .oc.sel::before{content:"";position:absolute;inset:4px 0;z-index:-1;border-radius:10px;background:var(--chalk)}
 .oc .pb{flex:1;min-width:0;font-size:14.5px}
-.oc .pb small{margin-left:5px;color:var(--sub);font-size:11.5px}
-/* 선택해서 수량 버튼이 생기면 괄호 설명은 아랫줄로 */
-.oc.sel.hq .pb small{display:block;margin:1px 0 0}
+/* 옵션 이름 · 설명이 두 줄 이상일 때 행간 -1px */
+.oc .pb,.oc .pb small{line-height:calc(1.65em - 1px)}
+.oc .pb small{color:var(--sub);font-size:11.5px}
+/* 이름 · 괄호 설명을 나란히 두고, 한 줄에 다 안 들어가면 설명을 통째로 아랫줄로.
+   아랫줄은 설명 글자 높이만큼만 차지 → 이름과 설명 사이가 벌어지지 않음 / 줄 맨 앞 들여쓰기 없음 */
+.oc .pb{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px}
+.oc .pb .onm{min-width:0}
 /* 신청서 저작권 구매 : PC 에서 미구매 버튼 1px 앞으로 */
 @media (min-width:761px){#c_copy .chip+.chip{margin-left:-1px}}
 .oc .pp{display:block;margin:0;font-size:14px}
 .oc .pp i{font-size:1em;margin-left:1px}
 .qty{display:none;align-items:center;gap:6px;color:var(--sub);font-size:13px}
+/* 수량 버튼(26px)이 생겨도 줄 높이가 커지지 않게 → 옵션 선택 시 아래 항목이 밀려 내려가지 않음 */
+.qty{margin:-2px 0}
 .qb{display:grid;place-items:center;width:26px;height:26px;padding:0;border:1px solid #CBCDF0;border-radius:50%;background:#fff;color:var(--ink);font:700 15px/1 var(--font);cursor:pointer}
 /* − / + 는 선으로 그려 원의 정중앙에 */
 .qb svg{display:block;width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;pointer-events:none}
@@ -699,7 +705,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .pcs{grid-template-columns:1fr 1fr}
   .psum{grid-template-columns:1fr;padding:22px 18px}
   /* 좁은 화면 : 저작권 구매 → 선택 항목 → 예상 금액 순 */
-  .pr{order:0;margin-top:18px;padding:18px 0 0;border-left:0;border-top:1px solid rgba(76,80,178,.2)}
+  .pr{order:0;margin-top:18px;padding:21px 0 0;border-left:0;border-top:1px solid rgba(76,80,178,.2)}
   .pl{padding-right:0}
   .pl{gap:16px}
   .opts{grid-template-columns:1fr}
@@ -736,7 +742,7 @@ body.inframe .remote,body.ext-remote .remote{display:none}
   .pc:not(.off):hover,.oc:hover{transform:none}
   .fgrid{grid-template-columns:minmax(0,1fr)}
   .opts.c3 .qty{margin-left:30px}
-  .fcard{padding:19.5px 18px 21.5px}
+  .fcard{padding:19.5px 20px 21.5px}
   .viewer{aspect-ratio:1/1}
   .sc-arrow{width:34px;height:34px;margin-top:-19px;font-size:19px}
   .sc-arrow.prev{left:4px}
@@ -849,6 +855,13 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .sc-thumb.sq{width:72px}
   /* 예상 금액 칸 : 위 간격 +1.5px, 안쪽 위 여백 -1.5px */
   .psum{margin-top:21.5px;padding-top:18px}
+  /* 총 예상 금액 숫자와 점선 사이 +2px */
+  .ptotal{margin-bottom:14px}
+  /* 옵션 묶음 네모칸 좌우 +1.5px / 연보라 예상 금액 칸 좌우 +2px */
+  .og{padding-left:11.5px;padding-right:11.5px}
+  .og.gbase{padding-left:15.5px;padding-right:15.5px}
+  .og.plain{padding:0}
+  .psum{padding-left:22px;padding-right:22px}
   /* SET / ILLUSTRATION / RIGGING 한 줄 */
   .ptabs{flex-wrap:nowrap;gap:6px}
   .ptab{padding:7px 11px;letter-spacing:.05em}
@@ -862,7 +875,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   /* 동의 체크 : 위아래 여백 14.25px (9.5px × 1.5) */
   .agree{margin-top:-3.75px;margin-bottom:-3.75px}
   /* 긴 괄호 설명(오마카세 · 겉옷 on/off) 은 아랫줄로 */
-  .oc .pb small.lsub{display:block;margin:1px 0 0}
+  .oc .pb small.lsub{display:block;flex-basis:100%;margin:1px 0 0}
   /* 수량 있는 옵션(포트폴리오 비공개 · 애니메이션 등)을 고르면 수량 칸은 이름 아래 줄로 → 상자 밖으로 튀어나가지 않음 */
   .oc.hq{flex-wrap:wrap}
   .oc.hq .pb{flex-basis:0}
@@ -1985,7 +1998,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         var i = oi++, q = calc.qty[calc.tab][i] || 0, nq = !!o.noQty, unit = o.unit || '개';
         var mx = Math.max(1, parseInt(o.max, 10) || (/포트폴리오\s*비공개/.test(o.name || '') ? 6 : 99));
         return '<div class="oc' + (q ? ' sel' : '') + (nq ? '' : ' hq') + '" data-i="' + i + '" data-max="' + mx + '" role="checkbox" aria-checked="' + (q > 0) + '" tabindex="0"><span class="pk"></span>' +
-          '<span class="pb">' + esc(o.name) + (o.sub ? '<small' + (o.sub.length > 8 ? ' class="lsub"' : '') + '>(' + esc(o.sub) + ')</small>' : '') + '</span>' +
+          '<span class="pb"><span class="onm">' + esc(o.name) + '</span>' + (o.sub ? '<small' + (o.sub.length > 8 ? ' class="lsub"' : '') + '>(' + esc(o.sub) + ')</small>' : '') + '</span>' +
           (nq ? '' : '<span class="qty"><button type="button" class="qb" data-d="-1" aria-label="하나 줄이기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8"/></svg></button><input type="number" min="1" max="' + mx + '" value="' + (q || 1) + '" aria-label="' + esc(unit) + ' 수"><button type="button" class="qb" data-d="1" aria-label="하나 늘리기"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5 1v8"/></svg></button><span class="qu">' + esc(unit) + '</span></span>') +
           '<em class="pp">' + esc(won(o.price)) + '</em></div>';
       }).join('');
