@@ -17,6 +17,17 @@
   var ORIGIN = 'https://mororororo.github.io', BASE = ORIGIN + '/artmug/';
   var CREAM = '#FDF8F1', RW = 180, RH = 440;
 
+  /* 방문 통계 (GoatCounter : https://leuin.goatcounter.com)
+     아트머그 글이 열릴 때마다 1회 집계. PC · 모바일 주소가 달라도 같은 항목(/artmug)으로 합산 */
+  (function () {
+    var gc = document.createElement('script');
+    gc.async = true;
+    gc.src = 'https://gc.zgo.at/count.js';
+    gc.setAttribute('data-goatcounter', 'https://leuin.goatcounter.com/count');
+    gc.setAttribute('data-goatcounter-settings', '{"path":"/artmug","title":"르인 커미션 안내 (아트머그)"}');
+    document.head.appendChild(gc);
+  })();
+
   var css = document.createElement('style');
   css.textContent =
     'html,body,#wrapBody,#rightInfo,#detailViews{background-color:' + CREAM + '!important}' +
