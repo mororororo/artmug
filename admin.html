@@ -198,6 +198,8 @@ textarea.ghost{min-height:0;resize:none;overflow:hidden}
 .thumb .ph{font-size:12px}
 .gtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
 .gtools input[type=text].ghost{flex:1;min-width:160px;border-color:#E3E3F6}
+.sale-tag{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:2;padding:5px 12px;border-radius:22px;letter-spacing:calc(-.02em + .5px);background:rgba(0,0,0,.7);color:#fff;font-size:12.5px;font-weight:600;white-space:nowrap;pointer-events:none}
+.sale-tag[hidden]{display:none}
 .badge-new{padding:1px 8px;border-radius:999px;background:var(--bell);color:var(--on-bell);font-size:11px;font-weight:800}
 .plats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:12px}
 .th{display:grid;gap:6px;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-align:center}
@@ -607,6 +609,10 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
   /* ---------- 공지사항 ---------- */
   function viewNotice(m) {
     var n = S.notice;
+    /* 주요 안내 위 확성기 공지 칸 (비우면 페이지에서 칸째 숨김) */
+    m.appendChild(h('div', { style: 'margin-bottom:22px' }, [
+      field('📢 공지 칸 (주요 안내 위)', inp(n, 'announce', { placeholder: '예) 현재 예약시 2/15에 작업 시작 가능합니다. (비우면 표시 안 함)' }))
+    ]));
     var list = h('ol', { class: 'notice' });
     n.main.forEach(function (t, i) {
       var box = { v: t };
@@ -616,6 +622,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
       ]));
     });
     var s1 = sec('1', '공지사항', [list, addBtn('+ 공지 추가', function () { n.main.push(''); touch(); render(); })]);
+    s1.appendChild(h('h3', { text: '이용안내', style: 'margin:26px 0 12px;font-size:15px;color:var(--bell-deep)' }));
     n.details.forEach(function (d, i) {
       s1.appendChild(h('div', { class: 'ai' }, [
         h('div', { class: 'ah' }, [h('i', { class: 'n', text: String(i + 1) }), inp(d, 'title', { class: 'ghost', placeholder: '항목 제목' }), tools(n.details, i, d.title || '이 항목')]),
@@ -786,6 +793,10 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     var it = items[sel];
     var viewer = h('div', { class: 'viewer' + (rig ? ' wide' : '') });
     if (it && it.src) viewer.appendChild(h('img', { src: srcOf(it), alt: '' }));
+    /* 판매 모델 표시 미리보기 (일러스트만) */
+    var saleTag = null;
+    function saleText() { var v = String((it && it.sale) || '').trim(); return v ? '판매모델｜' + v + (/^[\d,.]+$/.test(v) ? '만원' : '') : ''; }
+    if (!rig && it && it.src) { saleTag = h('span', { class: 'sale-tag', text: saleText() }); saleTag.hidden = !saleText(); viewer.appendChild(saleTag); }
     else viewer.appendChild(h('div', { class: 'ph', text: items.length ? '이미지가 없는 칸입니다 · 아래 "이미지 올리기"를 눌러 주세요' : '작업물이 없습니다 · 아래 "이미지 올리기"를 눌러 주세요' }));
     if (items.length > 1) {
       viewer.appendChild(h('button', { type: 'button', class: 'nav prev', text: '‹', 'aria-label': '이전', onclick: function () { iSel[key] = (sel - 1 + items.length) % items.length; render(); } }));
@@ -814,6 +825,11 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
       tl.appendChild(h('button', { type: 'button', class: 'btn sm', text: '뒤로 ▶', onclick: function () { if (sel < items.length - 1) { var t = items[sel]; items[sel] = items[sel + 1]; items[sel + 1] = t; iSel[key] = sel + 1; touch(); render(); } } }));
       tl.appendChild(h('button', { type: 'button', class: 'btn sm danger', text: '이 작업물 삭제', onclick: function () { if (!confirm('이 작업물을 삭제할까요?')) return; items.splice(sel, 1); iSel[key] = Math.max(0, sel - 1); touch(); render(); } }));
       tl.appendChild(inp(it, 'alt', { class: 'ghost', placeholder: '이미지 설명 (선택)' }));
+      if (!rig) {
+        var sale = inp(it, 'sale', { class: 'ghost sale-in', placeholder: '판매 가격 (만원 · 숫자만, 비우면 표시 안 함)' });
+        sale.addEventListener('input', function () { if (saleTag) { saleTag.textContent = saleText(); saleTag.hidden = !saleText(); } });
+        tl.appendChild(sale);
+      }
       if (pending[it.src]) tl.appendChild(h('span', { class: 'badge-new', text: '저장 전 새 이미지' }));
     }
     return [box, tl];
