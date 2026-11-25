@@ -2133,8 +2133,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       var p = num(o.price), unit = o.unit || '개';
       if (!p) unpriced = true;
       optSum += p * q;
-      /* V Bridger : 저작권(개인세 30%) 비용 제외 항목 */
-      var nx = /v\s*bridger/i.test(o.name || '');
+      /* V Bridger · 포트폴리오 비공개 : 저작권(개인세 30%) 비용 제외 항목 */
+      var nx = /v\s*bridger|포트폴리오\s*비공개/i.test(o.name || '');
       if (nx) exempt += p * q;
       var qtxt = o.noQty ? '' : (unit === '개' ? (q > 1 ? ' × ' + q : '') : ' · ' + q + unit);
       lines.push({ name: o.name + (o.sub ? ' (' + o.sub + ')' : ''), q: q, unit: unit, qtxt: qtxt, price: p, raw: o.name, nx: nx });
@@ -2197,7 +2197,9 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       /* 신청서 예상 금액 계산용 : 가격표에서 고른 타입 금액 · 옵션 금액(비공개는 신청서의 개월 수로 따로 계산) */
       var nm0 = r.card ? (r.card.name || '') : '';
       FORM.setReflect(r.card ? { kind: KIND_LABEL[r.tab.key] || r.tab.key, size: nm0.indexOf('반신') >= 0 ? '반신' : nm0.indexOf('전신') >= 0 ? '전신' : '', base: r.base } : null,
-        r.lines.reduce(function (s, l) { return l.raw === '포트폴리오 비공개' ? s : s + l.price * l.q; }, 0), r.exempt);
+        r.lines.reduce(function (s, l) { return l.raw === '포트폴리오 비공개' ? s : s + l.price * l.q; }, 0),
+        /* 저작권 제외 금액 : 비공개는 신청서에서 개월 수로 따로 빼므로 여기서는 V Bridger 만 */
+        r.lines.reduce(function (s, l) { return l.nx && l.raw !== '포트폴리오 비공개' ? s + l.price * l.q : s; }, 0));
       if (r.card) {
         FORM.setChip('kind', KIND_LABEL[r.tab.key] || r.tab.key);
         var nm = r.card.name || '';
@@ -2378,10 +2380,11 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         priv = po ? num(po.price) * (+privEl.value) : 0;
       }
       var sub = base + optExtra + priv, plus = sel.act === '개인세' && sel.copy === '구매';
-      var total = plus ? sub + Math.round((sub - optExempt) * 0.3) : sub;
+      /* 저작권 비용 : 개인세 기준 30% (V Bridger · 포트폴리오 비공개 제외), 기업세는 별도 안내, 리깅은 없음 */
+      var cr = Math.round((sub - optExempt - priv) * 0.3);
+      var total = plus ? sub + cr : sub;
       $('f_est').value = total > 0 ? comma(total) : '';
-      /* 저작권 비용 : 개인세 기준 30% (V Bridger 제외), 기업세는 별도 안내, 리깅은 없음 */
-      var crEl = $('f_cr'), cr = Math.round((sub - optExempt) * 0.3);
+      var crEl = $('f_cr');
       crEl.placeholder = sel.kind === '리깅' ? '리깅은 저작권 구매 없음' : !sel.act ? '활동 구분 선택 시 자동계산' : sel.act === '기업세' ? '기업세는 문의 시 안내' : sel.copy === '구매' ? '저작권 비용 자동계산' : '구매 시 자동계산';
       crEl.value = sel.copy === '구매' && sel.kind !== '리깅' && sel.act && sel.act !== '기업세' && cr > 0 ? comma(cr) : '';
       var note = $('estNote');

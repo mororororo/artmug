@@ -121,6 +121,9 @@ ul{list-style:none}
     var d = e.data;
     if (e.origin !== location.origin || !d || d.leuin !== 'remote') return;
     if (d.t === 'ready') { hello(); return; }
+    /* 본문(index.html)이 보낸 menu · state 만 받음. 글을 다시 저장할 때 같이 저장된 예전 리모컨 iframe 이
+       잠깐 함께 열려 'hello' 를 보내는데, 그걸 본문으로 착각하면 메뉴를 영영 못 받음 (리모컨이 사라지던 원인) */
+    if (d.t !== 'menu' && d.t !== 'state') return;
     main = e.source;
     if (d.t === 'menu') {
       build(d.items || []);

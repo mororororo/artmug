@@ -15,7 +15,7 @@ window.LEUIN_DEFAULTS = {
     },
     {
       "a": "디테일한 요청안(특히 의복 및 장식 자료)을 전달 받지 못한 경우 오마카세 비용을 추가 책정하고 있습니다.",
-      "q": "디자인 추가 비용의 기준은 어떻게 되나요?"
+      "q": "오마카세 비용 추가의 기준은 어떻게 되나요?"
     },
     {
       "a": "개인세 작업의 경우 대표 한 분과만 소통하고 있습니다.\n버츄얼 제작에 다인원이 참여하고 있는 경우에는 개인적으로 의견을 나눈 후 **한 분이 취합하여** 작가에게 전달 부탁드립니다.",
@@ -275,7 +275,12 @@ window.LEUIN_DEFAULTS = {
                 "noQty": true,
                 "price": "350,000",
                 "sub": ""
-              },
+              }
+            ],
+            "title": "일러스트·리깅 업그레이드"
+          },
+          {
+            "options": [
               {
                 "name": "삼면도",
                 "noQty": true,
@@ -283,8 +288,7 @@ window.LEUIN_DEFAULTS = {
                 "sub": "단색"
               }
             ],
-            "title": "일러스트 업그레이드",
-            "wide": true
+            "title": "일러스트 업그레이드"
           },
           {
             "options": [
@@ -333,7 +337,7 @@ window.LEUIN_DEFAULTS = {
                 "sub": ""
               },
               {
-                "name": "그 외 소품 추가",
+                "name": "그 외",
                 "price": "30,000",
                 "sub": "인형 등"
               }
@@ -370,12 +374,12 @@ window.LEUIN_DEFAULTS = {
                 "sub": ""
               },
               {
-                "name": "앞머리 변경",
+                "name": "앞머리",
                 "price": "130,000",
                 "sub": ""
               },
               {
-                "name": "뒷머리 변경",
+                "name": "뒷머리",
                 "price": "200,000",
                 "sub": ""
               }
@@ -505,7 +509,7 @@ window.LEUIN_DEFAULTS = {
                 "sub": ""
               },
               {
-                "name": "그 외 소품 추가",
+                "name": "그 외",
                 "price": "15,000",
                 "sub": "인형 등"
               }
@@ -542,12 +546,12 @@ window.LEUIN_DEFAULTS = {
                 "sub": ""
               },
               {
-                "name": "앞머리 변경",
+                "name": "앞머리",
                 "price": "80,000",
                 "sub": ""
               },
               {
-                "name": "뒷머리 변경",
+                "name": "뒷머리",
                 "price": "130,000",
                 "sub": ""
               }
@@ -668,7 +672,7 @@ window.LEUIN_DEFAULTS = {
                 "sub": ""
               },
               {
-                "name": "그 외 소품 추가",
+                "name": "그 외",
                 "price": "15,000",
                 "sub": "인형 등"
               }
@@ -705,12 +709,12 @@ window.LEUIN_DEFAULTS = {
                 "sub": ""
               },
               {
-                "name": "앞머리 변경",
+                "name": "앞머리",
                 "price": "80,000",
                 "sub": ""
               },
               {
-                "name": "뒷머리 변경",
+                "name": "뒷머리",
                 "price": "130,000",
                 "sub": ""
               }
