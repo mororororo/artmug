@@ -45,6 +45,7 @@
     for (var i = 0; i < all.length; i++) {
       var el = all[i];
       if (el.tagName === 'IFRAME' || el.tagName === 'IMG' || el.tagName === 'SCRIPT' || el.tagName === 'STYLE') continue;
+      if (el.className === 'ltip' || el.className === 'ltip r' || (el.closest && el.closest('.ltip'))) continue;   /* 가격 설명 말풍선은 흰색 그대로 */
       if (el.offsetWidth < vw * 0.6 && el.offsetWidth < 900) continue;
       var m = /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/.exec(getComputedStyle(el).backgroundColor);
       if (!m || (m[4] !== undefined && +m[4] < 0.5)) continue;
@@ -308,19 +309,27 @@
   var tip = null;
   var Q_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="7.1"/><path d="M6.15 5.9a1.9 1.9 0 1 1 2.65 1.74c-.5.22-.8.62-.8 1.16v.35"/><circle cx="8" cy="11.15" r=".85" fill="currentColor" stroke="none"/></svg>';
   function tipBuild() {
+    /* 아트머그 화면에는 본문 글꼴(Pretendard)이 없어 글자 · 줄 간격이 본문과 달라짐 → 말풍선용으로 같은 글꼴을 불러옴 */
+    if (!document.getElementById('leuin-font')) {
+      var lf = document.createElement('link');
+      lf.id = 'leuin-font'; lf.rel = 'stylesheet';
+      lf.href = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css';
+      document.head.appendChild(lf);
+    }
     var st = document.createElement('style');
     st.textContent =
-      '.ltip{position:absolute;z-index:2147482000;box-sizing:border-box;width:340px;padding:16px 18px 17px;border:1px solid #E3E3F6;border-radius:16px;background:#fff;box-shadow:0 10px 28px rgba(76,80,178,.18);color:#43446C;font:400 13px/1.6 "Pretendard Variable",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;letter-spacing:-.01em;text-align:left;word-break:keep-all;pointer-events:none}' +
+      '.ltip{position:absolute;z-index:2147482000;box-sizing:border-box;width:340px;padding:17.5px 18px 18.5px;border:1px solid #E3E3F6;border-radius:16px;background:#fff;box-shadow:0 10px 28px rgba(76,80,178,.18);color:#43446C;font:400 13px/1.6 "Pretendard Variable",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;letter-spacing:-.01em;text-align:left;word-break:keep-all;pointer-events:none}' +
       '.ltip *{box-sizing:border-box;margin:0;padding:0}' +
       '.ltip:after{content:"";position:absolute;top:29px;right:-7px;width:12px;height:12px;border:1px solid #E3E3F6;border-width:1px 1px 0 0;background:#fff;transform:rotate(45deg)}' +
       '.ltip.r:after{right:auto;left:-7px;border-width:0 0 1px 1px}' +
-      '.ltip-t{display:flex;align-items:center;gap:6px;margin-bottom:7px;color:#26274F;font-size:14px;font-weight:700}' +
+      '.ltip-t{display:flex;align-items:center;gap:6px;margin-bottom:8.5px;color:#26274F;font-size:14px;font-weight:700}' +
       '.ltip-q{flex:none;display:block;width:16px;height:16px;color:#4C50B2}.ltip-q svg{display:block;width:16px;height:16px}' +
-      '.ltip ul{display:grid;gap:3px;margin-top:6px;list-style:none}' +
+      '.ltip ul{display:grid;gap:5px;margin-top:6px;list-style:none}' +
       '.ltip li{position:relative;padding-left:12px}' +
-      '.ltip li:before{content:"";position:absolute;left:2px;top:.68em;width:4px;height:4px;border-radius:50%;background:#9699E1}' +
+      '.ltip li:before{content:"";position:absolute;left:2px;top:8.4px;width:4px;height:4px;border-radius:50%;background:#9699E1}' +
       '.ltip .ex,.ltip .cf{color:#9B9CB5;font-size:11.5px;line-height:1.5}' +
-      '.ltip p.ex,.ltip p.cf{margin-top:6px}' +
+      '.ltip p.ex,.ltip p.cf{margin-top:7px}' +
+      '.ltip li .ex,.ltip li .cf{margin-top:1px}' +
       '.ltip-q{margin-left:-1px}';
     document.head.appendChild(st);
     tip = document.createElement('div');

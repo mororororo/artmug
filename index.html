@@ -983,17 +983,18 @@ a.g-tag{cursor:pointer;transition:color .2s}
 .pq{flex:none;display:inline-grid;place-items:center;width:16px;height:16px;padding:0;border:1.3px solid #C9CADA;border-radius:50%;background:#fff;color:#B3B4C8;font:800 10px/1 var(--en);cursor:help}
 .pc.sel .pq{background:transparent}
 /* 말풍선 (아트머그 밖에서 볼 때 · 휴대폰) */
-.ptip{position:absolute;z-index:80;width:340px;padding:16px 18px 17px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 10px 28px rgba(76,80,178,.18);color:#43446C;font-size:13px;line-height:1.6;letter-spacing:-.01em;text-align:left;pointer-events:none;word-break:keep-all}
+.ptip{position:absolute;z-index:80;width:340px;padding:17.5px 18px 18.5px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 10px 28px rgba(76,80,178,.18);color:#43446C;font-size:13px;line-height:1.6;letter-spacing:-.01em;text-align:left;pointer-events:none;word-break:keep-all}
 .ptip::after{content:"";position:absolute;top:29px;right:-7px;width:12px;height:12px;border:1px solid var(--line);border-width:1px 1px 0 0;background:#fff;transform:rotate(45deg)}
 .ptip.r::after{right:auto;left:-7px;border-width:0 0 1px 1px}
-.ptip-t{display:flex;align-items:center;gap:6px;margin-bottom:7px;color:var(--ink);font-size:14px;font-weight:700}
+.ptip-t{display:flex;align-items:center;gap:6px;margin-bottom:8.5px;color:var(--ink);font-size:14px;font-weight:700}
 .ptip-t .pq{background:var(--chalk);border-color:var(--chalk);color:var(--bell-deep);cursor:default}
 .ptip p{margin:0}
-.ptip ul{margin:6px 0 0;display:grid;gap:3px}
+.ptip ul{margin:6px 0 0;display:grid;gap:5px}
 .ptip li{position:relative;padding-left:12px}
-.ptip li::before{content:"";position:absolute;left:2px;top:.68em;width:4px;height:4px;border-radius:50%;background:var(--bell)}
+.ptip li::before{content:"";position:absolute;left:2px;top:8.4px;width:4px;height:4px;border-radius:50%;background:var(--bell)}
 .ptip .ex,.ptip .cf{color:#9B9CB5;font-size:11.5px;line-height:1.5}
-.ptip p.ex,.ptip p.cf{margin-top:6px}
+.ptip p.ex,.ptip p.cf{margin-top:7px}
+.ptip li .ex,.ptip li .cf{margin-top:1px}
 .ptip-t .pq{margin-left:-1px}
 /* 휴대폰 : 물음표를 누르면 카드 안에 펼침 */
 .pc .ptip.inl{position:relative;z-index:auto;width:auto;margin:0 18px 16px;box-shadow:none;background:var(--panel);border-color:transparent;pointer-events:auto}
