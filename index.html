@@ -596,6 +596,8 @@ body.inframe .lbp{inset:auto;left:0;width:100%}
 /* 신청 타입(SET/일러스트/리깅) · 신청 범위(전신/반신) : 같은 크기 버튼 가로 한 줄, 좌측 정렬 */
 .krow{--kw:92px;flex-wrap:nowrap}
 .krow .chip{width:var(--kw);padding:0}
+/* 신청 범위 : 글자가 길어 버튼을 조금 넓게 */
+#c_size{--kw:112px}
 /* 펼쳐지는 영역 (높이 0 → 내용 높이, 위 간격까지 함께) */
 /* 좌우로 4px 넓혀서 그 안쪽 여백에 포커스 외곽선이 들어가도록 (잘림 방지) */
 .reveal{display:grid;grid-template-rows:0fr;align-self:stretch;margin:-6px -4px 0;opacity:0;visibility:hidden;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1),opacity .3s ease,visibility 0s .45s}
@@ -920,6 +922,138 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
   .fs-card b{grid-row:2}
   .fs-vl{display:block;grid-column:2;grid-row:1 / 3;align-self:start;justify-self:stretch;width:auto;height:1.5px;margin:15.75px 10px 0;background:repeating-linear-gradient(to right,#D3D4DE 0 2px,transparent 2px 6px)}
   .fs-card .bd{grid-column:3;grid-row:1 / 3;align-self:start;justify-self:end;margin:16.5px 0 -40px;transform:translateY(-50%);white-space:nowrap}
+}
+
+/* ---------- 샘플 아래 정보 (2026-11 추가) ---------- */
+/* 리깅 영상 : 영상 아래(점 위) 한 줄 — 왼쪽 태그 / 오른쪽 끝 모델 이름. 점과의 간격 16px → 24px (1.5배) */
+.sc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:2.5px auto 0;min-height:27px}
+.sc-meta:empty{display:none}
+/* 점은 썸네일 줄 아래 (일러스트 · 리깅 공통) */
+.sc-thumbs+.sc-dots{margin-top:12px}
+.sc-meta+.sc-thumbs{margin-top:24px}
+.rtag{display:inline-block;padding:4px 12px;border:1px solid #D5D6EE;border-radius:999px;background:#fff;color:var(--sub);font:600 12px/1.45 var(--font);letter-spacing:-.01em;white-space:nowrap}
+.rtag.hl{border-color:var(--chalk);background:var(--chalk);color:var(--bell-deep)}
+.rmodel{margin-left:auto;padding-left:12px;color:var(--ink);font-size:13.5px;font-weight:700;white-space:nowrap}
+.rmodel{display:inline-flex;align-items:center;gap:6px}
+.rmodel .plats{gap:4px}
+.rmodel .plat svg,.rmodel .plat img{display:block;width:auto;height:17px;max-width:60px}
+.rmodel i{margin:0 1px;color:#C3C4D8;font-style:normal;font-weight:400}
+/* 일러스트 : 샘플 칸 바로 아래 └────┘ 모양으로 이어 붙인 택 (플랫폼 로고 + 모델 이름, 링크 하나) */
+.sc-card.gal-card{border:0;border-radius:0;background:none;overflow:visible}
+.gal-card .g-media{border:1.5px solid #D9DAF4;border-radius:22px;overflow:hidden}
+.g-tag{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin:0;padding:7px 20px 9px;border:1.5px solid #D9DAF4;border-top:0;border-radius:0 0 22px 22px;background:#fff;color:#8C8DA8;font-size:13px;font-weight:600;line-height:1.4;text-decoration:none}
+a.g-tag{cursor:pointer;transition:color .2s}
+.gal-card.on a.g-tag:hover{color:var(--bell-deep)}
+.g-tag .plats{gap:4px}
+.g-tag .plat svg,.g-tag .plat img{display:block;width:auto;height:17px;max-width:60px}
+.g-tag .plat span{padding:1px 7px;font-size:11px}
+.g-tag b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 일러스트 : 아래 점과의 간격 16px → 24px (1.5배) */
+.sc-stage.gal+.sc-thumbs{margin-top:24px}
+@media (max-width:760px){
+  .gal-card .g-media{border-radius:16px}
+  .g-tag{padding:5px 14px 7px;border-radius:0 0 16px 16px;font-size:12px}
+  .g-tag .plat svg,.g-tag .plat img{height:15px}
+  .rtag{padding:3px 9px;font-size:11px}
+  .rmodel{font-size:12.5px}
+}
+/* 택이 붙은 샘플 : 아래 모서리는 각지게 → 택과 한 덩어리로 이어짐 (택 아래 모서리만 둥글게) */
+.gal-card .g-media:has(+.g-tag){border-bottom-left-radius:0;border-bottom-right-radius:0}
+/* 리깅 FACE · BODY (한 줄 3칸) : 표정 움짤보다 조금 크게, 칸을 꽉 채우지 않고 가운데 */
+.ggrid.c3{max-width:720px;margin:0 auto;gap:20px 22px}
+@media (max-width:760px){.ggrid.c3{max-width:none;gap:14px 10px}}
+/* 리깅 움짤 설명 2px 크게 */
+.gcap{font-size:14.5px}
+
+/* ---------- 가격 카드 (2026-11 수정) ---------- */
+/* 내용 전체 3px 위로, 체크박스는 타입 이름 줄(24px)의 세로 가운데 */
+.pch{padding-top:23px}
+.pn{display:flex;flex-wrap:nowrap;align-items:center;gap:5px;min-height:24px;padding-right:14px;line-height:24px;white-space:nowrap}
+.pc>.pk{top:26px}
+.pc.off .pch{padding-top:23px}
+/* EVENT 표시 · 할인 전 가격(취소선, 회색 절반 크기) */
+.pev{flex:none;display:inline-block;padding:0 7px;border-radius:999px;background:var(--bell);color:var(--on-bell);font:800 10px/18px var(--en);letter-spacing:.08em}
+.pp .po{display:flex;align-items:center;gap:4px;margin:2px 0 -5px;color:#A9AAC0;font-size:12.5px;font-weight:600;line-height:1.3}
+.pp .po s{text-decoration-thickness:1px}
+.pp .po svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* 퀄리티업 : 카드 맨 위 5px 보라색 선 */
+.pc.accent{overflow:hidden}
+.pc.accent::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--bell);pointer-events:none}
+/* 이름 옆 동그라미 물음표 (연한 회색) */
+.pq{flex:none;display:inline-grid;place-items:center;width:16px;height:16px;padding:0;border:1.3px solid #C9CADA;border-radius:50%;background:#fff;color:#B3B4C8;font:800 10px/1 var(--en);cursor:help}
+.pc.sel .pq{background:transparent}
+/* 말풍선 (아트머그 밖에서 볼 때 · 휴대폰) */
+.ptip{position:absolute;z-index:80;width:340px;padding:16px 18px 17px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 10px 28px rgba(76,80,178,.18);color:#43446C;font-size:13px;line-height:1.6;letter-spacing:-.01em;text-align:left;pointer-events:none;word-break:keep-all}
+.ptip::after{content:"";position:absolute;top:29px;right:-7px;width:12px;height:12px;border:1px solid var(--line);border-width:1px 1px 0 0;background:#fff;transform:rotate(45deg)}
+.ptip.r::after{right:auto;left:-7px;border-width:0 0 1px 1px}
+.ptip-t{display:flex;align-items:center;gap:6px;margin-bottom:7px;color:var(--ink);font-size:14px;font-weight:700}
+.ptip-t .pq{background:var(--chalk);border-color:var(--chalk);color:var(--bell-deep);cursor:default}
+.ptip p{margin:0}
+.ptip ul{margin:6px 0 0;display:grid;gap:3px}
+.ptip li{position:relative;padding-left:12px}
+.ptip li::before{content:"";position:absolute;left:2px;top:.68em;width:4px;height:4px;border-radius:50%;background:var(--bell)}
+.ptip .ex,.ptip .cf{color:#9B9CB5;font-size:11.5px;line-height:1.5}
+.ptip p.ex,.ptip p.cf{margin-top:6px}
+.ptip-t .pq{margin-left:-1px}
+/* 휴대폰 : 물음표를 누르면 카드 안에 펼침 */
+.pc .ptip.inl{position:relative;z-index:auto;width:auto;margin:0 18px 16px;box-shadow:none;background:var(--panel);border-color:transparent;pointer-events:auto}
+.pc .ptip.inl::after{display:none}
+@media (max-width:760px){
+  .pch{padding-top:19px}
+  .pc>.pk{top:22px}
+}
+
+/* ---------- 3차 수정 (2026-11) ---------- */
+/* 물음표 : 카드 · 말풍선 같은 선 아이콘, 동그라미 정중앙 */
+.pq{border:0;background:none;color:#B3B4C8}
+.pq svg{display:block;width:16px;height:16px}
+.pc.sel .pq{background:none}
+.ptip-t .pq{border:0;background:none;color:var(--bell-deep)}
+/* 일러스트 아래 칸 : 위아래 1.5px 높게, 로고 ~ 이름 1px 좁게 / 썸네일과의 간격 5px 줄임 */
+.g-tag{padding:8.5px 20px 10.5px;gap:6px}
+.sc-stage.gal+.sc-thumbs{margin-top:19px}
+/* 택 높이도 정수 픽셀 (8.5 + 18.5 + 10.5 + 테두리 1.5 = 39px), 카드 세로 가운데는 위 snapGal 이 정수로 맞춤 */
+.g-tag b{line-height:18.5px}
+.sc-stage.gal .sc-track{align-items:flex-start}
+/* 플랫폼 로고 : 모두 같은 크기의 정사각형 */
+.g-tag .plat img,.rmodel .plat img{width:17px;height:17px;max-width:none;object-fit:contain;border-radius:4px}
+/* 리깅 영상 아래 : 태그가 많으면 태그만 줄바꿈, 모델명은 태그 첫 줄 높이에 */
+.sc-meta{flex-wrap:nowrap;align-items:flex-start;gap:12px}
+.sc-meta .rtags{flex:1 1 auto;min-width:0;display:flex;flex-wrap:wrap;gap:6px}
+.rmodel{flex:none;min-height:27.4px;padding-left:0}
+.rmodel i{display:block;width:1px;height:11px;margin:0;background:#C9CADA}
+/* 리깅 화살표 : 양옆 샘플의 안쪽 세로 모서리 정중앙 (일러스트와 같은 방식) */
+.sc-stage:not(.gal) .sc-arrow.prev{left:calc(var(--edge,40px) - 22px)}
+.sc-stage:not(.gal) .sc-arrow.next{right:calc(var(--edge,40px) - 22px)}
+/* 넘김 모션 부드럽게 : 흐림(filter) 전환을 빼고 이동 · 투명도만, 합성 레이어로 */
+.sc-track{transition-timing-function:cubic-bezier(.45,0,.2,1);backface-visibility:hidden}
+.sc-card{filter:none;will-change:transform,opacity;backface-visibility:hidden;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.45,0,.2,1)}
+/* 리깅 FACE · BODY : 탭과의 간격 2배, 움짤 폭 5px 줄이고 간격 넓게, 설명 1px 가깝게.
+   세로로 긴 움짤도 비율 그대로 */
+.rig-body>.grest:first-child>.ggrid.c3{padding-top:20px}
+.ggrid.c3{gap:20px 29.5px;align-items:start}
+.ggrid.c3 .gimg{aspect-ratio:auto;min-height:60px}
+.ggrid.c3 .gimg img,.ggrid.c3 .gimg video{height:auto}
+.ggrid.c3 .gcap{margin-top:7px}
+/* 가격 카드 : 위 여백 +1.5px, 타입명 ~ 가격 간격 절반 (할인 카드는 타입명 ~ 할인 전 가격 간격 1.5배) */
+.pch,.pc.off .pch{padding-top:22.5px}
+.pc>.pk{top:25.5px}
+.pch{padding-bottom:10px}
+.pf{padding-top:20.5px}
+.pp{margin-top:-4px}
+.pp.disc{margin-top:4px}
+.pp .po{margin-top:7.5px}
+@media (max-width:760px){
+  .g-tag{padding:6.5px 14px 8.5px}
+  .g-tag b{line-height:17.5px}
+  .g-tag .plat img,.rmodel .plat img{width:15px;height:15px}
+  .sc-stage:not(.gal) .sc-arrow.prev{left:max(8px,calc(var(--edge,21px) - 9px))}
+  .sc-stage:not(.gal) .sc-arrow.next{right:max(8px,calc(var(--edge,21px) - 9px))}
+  .ggrid.c3{gap:14px 10px}
+  .pch,.pc.off .pch{padding-top:18.5px}
+  .pc>.pk{top:21.5px}
+  .pch{padding-bottom:12px}
+  .pf{padding-top:17.5px}
 }
 </style>
 </head>
@@ -1457,10 +1591,40 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
 
   /* ---------- 플랫폼 로고 + 닉네임 ---------- */
   var PLAT = { list: [], logos: {} };
+  /* 방송 플랫폼 기본 로고 (간단한 아이콘 · 관리자에서 로고 이미지를 올리면 그 이미지가 우선) */
+  /* 영문 이름으로 적힌 플랫폼도 같은 로고로 (로고는 관리자 > 일러스트 > 방송 플랫폼 로고) */
+  var PLAT_ALIAS = { chzzk: '치지직', soop: 'SOOP', '숲': 'SOOP', cime: '씨미', 'ci.me': '씨미', youtube: '유튜브', twitch: '트위치', bilibili: '빌리빌리' };
   function platHTML(name) {
     if (!name) return '';
-    var src = PLAT.logos && PLAT.logos[name];
-    return '<span class="plat">' + (src ? '<img src="' + esc(src) + '" alt="' + esc(name) + '" title="' + esc(name) + '">' : '<span>' + esc(name) + '</span>') + '</span>';
+    var L = PLAT.logos || {}, src = L[name] || L[PLAT_ALIAS[String(name).replace(/\s+/g, '').toLowerCase()]];
+    return '<span class="plat" title="' + esc(name) + '">' + (src ? '<img src="' + esc(src) + '" alt="' + esc(name) + '">' : '<span>' + esc(name) + '</span>') + '</span>';
+  }
+  function safeUrl(u) { u = String(u || '').trim(); return /^https?:\/\//i.test(u) ? u : ''; }
+  /* 일러스트 샘플 아래 택 : 플랫폼 로고 ~ 모델 이름 (링크가 있으면 택 전체가 링크 하나) */
+  function tagHTML(it) {
+    if (!it) return '';
+    var ps = platsOf(it).map(platHTML).join(''), n = it.nick ? '<b>' + esc(it.nick) + '</b>' : '';
+    if (!ps && !n) return '';
+    var inner = (ps ? '<span class="plats">' + ps + '</span>' : '') + n, u = safeUrl(it.link);
+    return u ? '<a class="g-tag" href="' + esc(u) + '" target="_blank" rel="noopener" draggable="false">' + inner + '</a>' : '<div class="g-tag">' + inner + '</div>';
+  }
+  /* 리깅 영상 태그 : 퀄리티업 · V Bridger · ios → 신의상 · 신헤어 → 나머지 가나다 순. 앞의 세 개는 연보라 */
+  var TAG_FIRST = ['퀄리티업', 'vbridger', 'ios', '신의상', '신헤어'], TAG_HL = ['퀄리티업', 'vbridger', 'ios'];
+  function tagKey(t) { return String(t || '').replace(/\s+/g, '').toLowerCase(); }
+  function sortTags(a) {
+    return (a || []).filter(Boolean).slice().sort(function (x, y) {
+      var i = TAG_FIRST.indexOf(tagKey(x)), j = TAG_FIRST.indexOf(tagKey(y));
+      if (i < 0) i = 99; if (j < 0) j = 99;
+      return i !== j ? i - j : String(x).localeCompare(String(y), 'ko');
+    });
+  }
+  function rigMetaHTML(it) {
+    if (!it) return '';
+    var tags = sortTags(it.tags).map(function (t) { return '<span class="rtag' + (TAG_HL.indexOf(tagKey(t)) >= 0 ? ' hl' : '') + '">' + esc(t) + '</span>'; }).join('');
+    var nm = [it.corp ? '기업세' : '', it.group || '', it.model || ''].map(function (x) { return String(x).trim(); }).filter(Boolean);
+    var ps = platsOf(it).map(platHTML).join('');
+    var model = nm.length || ps ? '<span class="rmodel">' + (ps ? '<span class="plats">' + ps + '</span>' : '') + nm.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('<i aria-hidden="true"></i>') + '</span>' : '';
+    return tags || model ? (tags ? '<span class="rtags">' + tags + '</span>' : '') + model : '';
   }
   /* 방송 플랫폼은 여러 개 가능 : platforms 배열 (예전 데이터의 platform 한 개도 그대로 읽음) */
   function platsOf(it) {
@@ -1626,7 +1790,12 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
      처음에서 ‹ 를 누르면 바로 왼쪽에 마지막 작품이 있는 것처럼 이어집니다.
      (양 끝에 복제 카드를 두고, 복제 카드로 넘어간 뒤 같은 위치의 진짜 카드로 소리 없이 바꿔치기) */
   var peekLayouts = [];
-  window.addEventListener('resize', function () { peekLayouts = peekLayouts.filter(function (f) { return f(); }); });
+  var peekW = window.innerWidth;
+  window.addEventListener('resize', function () {
+    if (window.innerWidth === peekW) return;
+    peekW = window.innerWidth;
+    peekLayouts = peekLayouts.filter(function (f) { return f(); });
+  });
 
   function Peek(root, o) {
     var items = o.items, n = items.length, multi = n > 1;
@@ -1634,7 +1803,8 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     root.innerHTML = '<div class="sc-stage ' + (o.cls || '') + '"><div class="sc-clip"><div class="sc-track"></div></div>' +
       '<button type="button" class="' + (o.arrowCls || 'sc-arrow') + ' prev" aria-label="이전 ' + o.unit + '">' + ARW_L + '</button>' +
       '<button type="button" class="' + (o.arrowCls || 'sc-arrow') + ' next" aria-label="다음 ' + o.unit + '">' + ARW_R + '</button></div>' +
-      '<div class="sc-dots"></div><div class="sc-thumbs"></div>';
+      (o.meta ? '<div class="sc-meta"></div>' : '') + '<div class="sc-thumbs"></div><div class="sc-dots"></div>';
+    var metaEl = root.querySelector('.sc-meta'), metaI = -1;
     var stage = root.querySelector('.sc-stage'), track = root.querySelector('.sc-track');
     var prev = root.querySelector('.prev'), next = root.querySelector('.next');
     var dotsEl = root.querySelector('.sc-dots'), thumbsEl = root.querySelector('.sc-thumbs');
@@ -1651,8 +1821,11 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       if (p < CL || p >= CL + n) c.setAttribute('aria-hidden', 'true');
       track.appendChild(c); cards.push(c);
       c.addEventListener('click', function (e) {
-        if (dragged) return;
-        if (p !== pos) { moveTo(p); return; }
+        /* 카드 안 링크(일러스트 택) : 가운데 카드에서만 열림, 끌기 · 옆 카드에서는 이동만 */
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (dragged) { if (a) e.preventDefault(); return; }
+        if (p !== pos) { if (a) e.preventDefault(); moveTo(p); return; }
+        if (a) return;
         if (o.onCurrent) o.onCurrent(c, items[ii], ii, e, goIdx);
       });
     });
@@ -1684,11 +1857,13 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       track.style.gap = gap + 'px';
       cards.forEach(function (c) { c.style.width = cw + 'px'; });
       if (!animate) track.classList.add('snap');
-      track.style.transform = 'translateX(' + base + 'px)';
+      track.style.transform = 'translate3d(' + base + 'px,0,0)';
       cards.forEach(function (c, p) { c.classList.toggle('on', p === pos); });
       if (o.onSettle) o.onSettle(cards[pos], items[idx()], cards);
       if (!animate) { void track.offsetWidth; track.classList.remove('snap'); }
       var i = idx();
+      if (metaEl && metaI !== i) { metaI = i; metaEl.innerHTML = o.meta(items[i]) || ''; }
+      if (metaEl) metaEl.style.width = cw + 'px';
       each(dotsEl.children, function (d, j) { d.setAttribute('aria-current', j === i ? 'true' : 'false'); });
       each(thumbsEl.children, function (t, j) { t.setAttribute('aria-current', j === i ? 'true' : 'false'); });
       var cur = thumbsEl.children[i];
@@ -1737,7 +1912,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
         track.classList.add('snap');
         stage.classList.add('dragging');
       }
-      track.style.transform = 'translateX(' + (base + dx) + 'px)';
+      track.style.transform = 'translate3d(' + (base + dx) + 'px,0,0)';
     });
     function endDrag(e, cancel) {
       if (!drag || e.pointerId !== drag.id) return;
@@ -1768,6 +1943,16 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     return '<span class="g-sale">판매모델｜' + esc(v) + '</span>';
   }
 
+  function snapGal(track) {
+    var cs = track.children, mx = 0;
+    each(cs, function (c) {
+      var m = c.querySelector('.g-media');
+      c.style.marginTop = '';
+      if (m) { m.style.height = ''; m.style.height = m.offsetHeight + 'px'; }
+    });
+    each(cs, function (c) { mx = Math.max(mx, c.offsetHeight); });
+    each(cs, function (c) { c.style.marginTop = Math.round((mx - c.offsetHeight) / 2) + 'px'; });
+  }
   /* ---------- 일러스트 갤러리 : 분류 탭 + 무한 순환 캐러셀 ---------- */
   function Gallery(root, cats) {
     cats = (cats || []).filter(Boolean);
@@ -1785,8 +1970,15 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       if (!items.length) { body.innerHTML = '<div class="ph gph5">작업물 준비 중입니다.</div>'; return; }
       Peek(body, {
         items: items, unit: '작업물', cls: 'gal', cardCls: 'gal-card', thumbCls: 'sq', desk: 0.52, mob: 0.78, gap: 34, dur: 520,
-        card: function (it, i) { return '<div class="g-media"><img src="' + esc(it.src) + '" alt="' + esc(it.alt || (name + ' ' + (i + 1))) + '" draggable="false" decoding="async" onload="var w=this.naturalWidth,h=this.naturalHeight;if(w&&h&&w/h>1408/2000)this.parentNode.style.aspectRatio=w+\'/\'+h">' + saleHTML(it) + '</div>'; },
+        card: function (it, i) { return '<div class="g-media"><img src="' + esc(it.src) + '" alt="' + esc(it.alt || (name + ' ' + (i + 1))) + '" draggable="false" decoding="async" onload="var w=this.naturalWidth,h=this.naturalHeight;if(w&&h&&w/h>1408/2000)this.parentNode.style.aspectRatio=w+\'/\'+h">' + saleHTML(it) + '</div>' + tagHTML(it); },
         thumb: function (it) { return '<img src="' + esc(it.src) + '" alt="" draggable="false" loading="lazy" decoding="async">'; },
+        /* 카드 위치 · 높이를 정수 픽셀로 : 비율이 다른 그림(짧은 카드)이 0.5px 위치에 놓이면
+           택의 글자(픽셀에 맞춰 그려짐)와 로고(소수점 위치 그대로)가 위아래로 어긋나 보임 */
+        after: function (track) {
+          each(track.querySelectorAll('.g-media img'), function (im) { im.addEventListener('load', function () { snapGal(track); }); });
+          snapGal(track);
+        },
+        onSettle: function (cur, it, cards) { if (cards[0]) snapGal(cards[0].parentNode); },
         onCurrent: function (c, it, i, e, go) {
           openLB(items.map(function (x, k) { return { src: x.src, alt: x.alt || (name + ' ' + (k + 1)) }; }), i, { onIndex: go });
         }
@@ -1835,7 +2027,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     var items = (list || []).filter(function (x) { return x && x.src; });
     if (!items.length) { root.innerHTML = '<div class="ph gph">작업물 준비 중입니다.</div>'; return; }
     function cells(from, to) {
-      return '<ul class="ggrid" style="--gc:' + (cols || 3) + '">' + items.slice(from, to).map(function (it, k) {
+      return '<ul class="ggrid' + ((cols || 3) === 3 ? ' c3' : '') + '" style="--gc:' + (cols || 3) + '">' + items.slice(from, to).map(function (it, k) {
         var i = from + k;
         return '<li><button type="button" class="gimg" data-i="' + i + '" aria-label="' + esc(it.caption || ((i + 1) + '번 움짤')) + ' 크게 보기">' +
           (isFile(it.src) ? '<video src="' + esc(it.src) + '" muted autoplay loop playsinline preload="metadata"></video>'
@@ -1945,7 +2137,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       else window.open(it.video, '_blank', 'noopener');
     }
     Peek(root, {
-      items: items, unit: '영상',
+      items: items, unit: '영상', meta: rigMetaHTML,
       card: function (it) { return '<div class="sc-media">' + mediaHTML(it) + '</div>'; },
       /* 썸네일 : 유튜브 hqdefault(4:3)는 위아래 검은 띠가 있어 16:9 원본(mqdefault)을 사용 */
       thumb: function (it, i) { var yt = ytId(it.video), src = yt ? 'https://img.youtube.com/vi/' + yt + '/mqdefault.jpg' : (it.src || ''); return src ? '<img src="' + esc(src) + '" alt="" draggable="false" loading="lazy" decoding="async">' : '<span>' + (i + 1) + '</span>'; },
@@ -2024,15 +2216,19 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     }
     var root = wrap.querySelector('.pbody');
 
-    var html = '<div class="pcs" style="--cols:' + cols + '">' + (t.cards || []).map(function (c, i) {
+    var hasDisc = (t.cards || []).some(function (c) { return !c.disabled && String(c.origPrice || '').trim(); });
+    var html = '<div class="pcs' + (hasDisc ? ' hasdisc' : '') + '" style="--cols:' + cols + '">' + (t.cards || []).map(function (c, i) {
       var feats = (c.features || []).filter(Boolean);
       if (c.disabled) {
         return '<div class="pc off" aria-disabled="true"><div class="pch"><b class="pn">' + esc(c.name) + '</b><em class="pp">' + esc(won(c.price)) + '</em>' +
           '<span class="poff">' + esc(c.disabledText || '(오픈 예정)') + '</span></div></div>';
       }
-      var on = calc.base[calc.tab] === i;
-      return '<div class="pc' + (on ? ' sel' : '') + '" data-i="' + i + '" role="checkbox" aria-checked="' + on + '" tabindex="0"><span class="pk"></span>' +
-        '<div class="pch"><b class="pn">' + esc(c.name) + '</b><em class="pp">' + esc(won(c.price)) + '</em></div>' +
+      var on = calc.base[calc.tab] === i, tip = tipData(c);
+      /* EVENT 표시 · 이름 · 물음표(설명 말풍선) / 할인 전 가격은 취소선 */
+      return '<div class="pc' + (on ? ' sel' : '') + (c.accent ? ' accent' : '') + (tip ? ' tipc' : '') + '" data-i="' + i + '" role="checkbox" aria-checked="' + on + '" tabindex="0"><span class="pk"></span>' +
+        '<div class="pch"><b class="pn">' + (c.event ? '<span class="pev">EVENT</span>' : '') + '<span>' + esc(c.name) + '</span>' +
+        (tip ? '<span class="pq" role="button" aria-label="' + esc(tip.title || '설명') + ' 보기">' + Q_SVG + '</span>' : '') + '</b>' +
+        '<em class="pp' + (String(c.origPrice || '').trim() ? ' disc"><span class="po"><s>' + esc(won(String(c.origPrice).trim().replace(/원$/, ''))) + '</s><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>' : '">') + esc(won(c.price)) + '</em></div>' +
         (feats.length ? '<ul class="pf">' + feats.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' : '') + '</div>';
     }).join('') + '</div>';
 
@@ -2066,7 +2262,10 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     if (oNotes.length) html += '<ul class="notes pnotes">' + oNotes.map(function (n) { return '<li>' + fmt(n) + '</li>'; }).join('') + '</ul>';
 
     html += '<aside class="psum" id="psum" aria-live="polite"></aside>';
+    tipHide();
     root.innerHTML = html;
+    initTips(root, t);
+    alignPch();
 
     function onKey(el, fn) {
       el.addEventListener('keydown', function (e) {
@@ -2119,6 +2318,88 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     });
     sumUpdate();
   }
+
+  /* ---------- 가격 카드 설명 말풍선 (퀄리티업 등) ----------
+     PC : 카드에 커서를 올리면 가격 안내 칸 왼쪽 바깥에 말풍선
+          (아트머그 안에서는 embed.js 가 본문 iframe 바깥 · 아트머그 화면 위에 띄움 — 리모컨처럼)
+     휴대폰 : 물음표를 누르면 카드 안에 펼침
+     설명 글 : 한 줄씩 / '- ' 는 동그라미 말머리 / 'ex)' 는 바로 위 항목 아래 작은 글자 / 'cf)' 는 맨 아래 참고 */
+  var Q_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="7.1"/><path d="M6.15 5.9a1.9 1.9 0 1 1 2.65 1.74c-.5.22-.8.62-.8 1.16v.35"/><circle cx="8" cy="11.15" r=".85" fill="currentColor" stroke="none"/></svg>';
+  function tipData(c) {
+    var raw = String((c && c.tip) || '').replace(/\r/g, '');
+    if (!raw.trim()) return null;
+    var lines = raw.split('\n').map(function (l) { return l.trim(); }).filter(Boolean).map(function (l) {
+      var t = /^-\s*/.test(l) ? 'li' : /^ex\)/i.test(l) ? 'ex' : /^cf\)/i.test(l) ? 'cf' : 'p';
+      if (t === 'li') l = l.replace(/^-\s*/, '');
+      return { t: t, s: l.replace(/\s*->\s*/g, ' → ') };
+    });
+    return { title: String(c.tipTitle || '').trim(), lines: lines };
+  }
+  function tipHTML(d) {
+    var h = d.title ? '<div class="ptip-t"><span class="pq" aria-hidden="true">' + Q_SVG + '</span>' + esc(d.title) + '</div>' : '', ul = '';
+    function flush() { if (ul) { h += '<ul>' + ul + '</li></ul>'; ul = ''; } }
+    d.lines.forEach(function (l) {
+      if (l.t === 'li') { ul += (ul ? '</li>' : '') + '<li>' + esc(l.s); return; }
+      if ((l.t === 'ex' || l.t === 'cf') && ul) { ul += '<div class="' + l.t + '">' + esc(l.s) + '</div>'; return; }
+      flush();
+      h += '<p class="' + l.t + '">' + esc(l.s) + '</p>';
+    });
+    flush();
+    return h;
+  }
+  var tipEl = null, tipOn = false, TIP_TOUCH = !!(window.matchMedia && matchMedia('(hover:none)').matches);
+  function tipHide() {
+    if (tipEl) tipEl.hidden = true;
+    if (tipOn && inFrame && lbHost) { try { parent.postMessage({ leuinTip: null }, '*'); } catch (e) {} }
+    tipOn = false;
+  }
+  function tipShow(card, d) {
+    var sec = $('price').getBoundingClientRect(), r = card.getBoundingClientRect();
+    tipOn = true;
+    /* 아트머그 : 바깥(embed.js)에 위치만 알려 줌 — 본문 iframe 은 스크롤이 없으므로 화면 기준 = 문서 기준 */
+    if (inFrame && lbHost) {
+      try { parent.postMessage({ leuinTip: { d: d, top: r.top, left: r.left, right: r.right, sec: sec.left } }, '*'); } catch (e) {}
+      return;
+    }
+    if (!tipEl) { tipEl = document.createElement('div'); tipEl.className = 'ptip'; tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
+    tipEl.innerHTML = tipHTML(d);
+    tipEl.hidden = false;
+    var w = tipEl.offsetWidth, x = sec.left - 14 - w, right = x < 8;
+    if (right) x = Math.min(r.right + 14, window.innerWidth - w - 8);
+    tipEl.classList.toggle('r', right);
+    tipEl.style.left = Math.round(x + window.scrollX) + 'px';
+    tipEl.style.top = Math.round(r.top + window.scrollY) + 'px';
+  }
+  function initTips(root, t) {
+    each(root.querySelectorAll('.pc.tipc'), function (el) {
+      var d = tipData((t.cards || [])[+el.getAttribute('data-i')]), q = el.querySelector('.pq');
+      if (!d) return;
+      if (!TIP_TOUCH) {
+        el.addEventListener('mouseenter', function () { tipShow(el, d); });
+        el.addEventListener('mouseleave', tipHide);
+      }
+      /* 물음표 : 카드 선택은 하지 않음. 휴대폰은 카드 안에 펼치기 / 접기 */
+      if (q) q.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (!TIP_TOUCH) return;
+        var box = el.querySelector('.ptip.inl');
+        if (box) { box.parentNode.removeChild(box); return; }
+        box = document.createElement('div'); box.className = 'ptip inl'; box.innerHTML = tipHTML(d);
+        el.querySelector('.pch').insertAdjacentElement('afterend', box);
+      });
+    });
+  }
+  window.addEventListener('resize', tipHide);
+  /* 할인 카드가 있는 탭 : 모든 카드의 가운데 구분선을 할인 카드 높이에 맞춤 (PC, 오픈 예정 카드 제외) */
+  function alignPch() {
+    var root = $('priceRoot'), hs = Array.prototype.filter.call(root.querySelectorAll('.pc:not(.off) > .pch'), function (x) { return true; }), mx = 0;
+    hs.forEach(function (h) { h.style.minHeight = ''; });
+    if (!root.querySelector('.pp.disc') || (window.matchMedia && matchMedia('(max-width:760px)').matches)) return;
+    hs.forEach(function (h) { mx = Math.max(mx, h.offsetHeight); });
+    hs.forEach(function (h) { h.style.minHeight = mx + 'px'; });
+  }
+  window.addEventListener('resize', function () { if ($('priceRoot').querySelector('.pch')) alignPch(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if ($('priceRoot').querySelector('.pch')) alignPch(); });
 
   /* 리깅 탭 : 저작권 구매 옵션 없음 */
   function isRigTab() { var k = (curTab().key || '') + ''; return /RIGGING|리깅/i.test(k); }
@@ -2190,21 +2471,31 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     lp.q = n;
   }
   var KIND_LABEL = { SET: 'SET', ILLUSTRATION: '일러스트', RIGGING: '리깅', '세트': 'SET' };
+  /* 신청 범위 : 전신 퀄리티업 / 전신 베이직 / 반신 베이직 ↔ 가격표 카드 이름 */
+  var SIZES = ['전신 퀄리티업', '전신 베이직', '반신 베이직'];
+  function isQU(nm) { return /퀄리티\s*업/.test(nm || ''); }
+  function sizeOf(nm) {
+    nm = nm || '';
+    if (nm.indexOf('반신') >= 0) return '반신 베이직';
+    if (nm.indexOf('전신') >= 0) return isQU(nm) ? '전신 퀄리티업' : '전신 베이직';
+    return '';
+  }
+  /* 카드 이름이 신청 범위와 맞는지 (일러스트 '전신 타입' 은 전신 베이직으로 봄) */
+  function sizeMatch(size, nm) { return !!size && (nm || '').indexOf(size.split(' ')[0]) >= 0 && isQU(size) === isQU(nm); }
 
   function reflect() {
     var r = calcResult();
     if (FORM) {
       /* 신청서 예상 금액 계산용 : 가격표에서 고른 타입 금액 · 옵션 금액(비공개는 신청서의 개월 수로 따로 계산) */
       var nm0 = r.card ? (r.card.name || '') : '';
-      FORM.setReflect(r.card ? { kind: KIND_LABEL[r.tab.key] || r.tab.key, size: nm0.indexOf('반신') >= 0 ? '반신' : nm0.indexOf('전신') >= 0 ? '전신' : '', base: r.base } : null,
+      FORM.setReflect(r.card ? { kind: KIND_LABEL[r.tab.key] || r.tab.key, size: sizeOf(nm0), base: r.base } : null,
         r.lines.reduce(function (s, l) { return l.raw === '포트폴리오 비공개' ? s : s + l.price * l.q; }, 0),
         /* 저작권 제외 금액 : 비공개는 신청서에서 개월 수로 따로 빼므로 여기서는 V Bridger 만 */
         r.lines.reduce(function (s, l) { return l.nx && l.raw !== '포트폴리오 비공개' ? s + l.price * l.q : s; }, 0));
       if (r.card) {
         FORM.setChip('kind', KIND_LABEL[r.tab.key] || r.tab.key);
-        var nm = r.card.name || '';
-        if (nm.indexOf('반신') >= 0) FORM.setChip('size', '반신');
-        else if (nm.indexOf('전신') >= 0) FORM.setChip('size', '전신');
+        var sz = sizeOf(r.card.name);
+        if (sz) FORM.setChip('size', sz);
       }
       var rt = rightsNow();
       if (rt === 'personal' || rt === 'company') {
@@ -2230,7 +2521,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     var CH = {
       act: ['개인세', '기업세'],
       kind: ['SET', '일러스트', '리깅'],
-      size: ['전신', '반신'],
+      size: SIZES,
       copy: ['구매', '미구매'],
       pub: ['공개', '비공개']
     };
@@ -2323,17 +2614,22 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
     }
     /* 신청 범위(전신/반신) : 신청 타입 아래 별도 항목, 항상 보임.
        일러스트 · 리깅은 전신만 가능 → 반신은 선택 불가 (이미 골라져 있으면 해제) */
+    /* 일러스트 · 리깅은 반신 불가, 일러스트 단독은 퀄리티업 없음 (리깅 작업 기준의 구분) */
+    function sizeOff(v) {
+      if (sel.kind === '일러스트') return v !== '전신 베이직' ? '일러스트 단독 의뢰는 전신 베이직만 가능합니다' : '';
+      if (sel.kind === '리깅') return v.indexOf('반신') >= 0 ? '리깅은 전신만 가능합니다' : '';
+      return '';
+    }
     function syncSize() {
-      var noHalf = sel.kind === '일러스트' || sel.kind === '리깅';
       each($('c_size').querySelectorAll('.chip'), function (b) {
-        var off = noHalf && b.getAttribute('data-v') === '반신';
-        b.disabled = off;
-        b.title = off ? '일러스트 · 리깅은 전신만 가능합니다' : '';
+        var why = sizeOff(b.getAttribute('data-v'));
+        b.disabled = !!why;
+        b.title = why;
       });
-      if (noHalf && sel.size === '반신') { sel.size = ''; paintChips('size'); }
+      if (sel.size && sizeOff(sel.size)) { sel.size = ''; paintChips('size'); }
     }
     function choose(key, v) {
-      if (key === 'size' && v === '반신' && (sel.kind === '일러스트' || sel.kind === '리깅')) return;
+      if (key === 'size' && v && sizeOff(v)) return;
       sel[key] = v;
       paintChips(key);
       if (key === 'kind') syncSize();
@@ -2368,7 +2664,7 @@ button,a,label,.chip,.oc,.pc,.sc-card{touch-action:manipulation}
       if (refl && refl.kind === sel.kind && (!refl.size || refl.size === sel.size)) base = refl.base;
       else if (t && sel.size) {
         var c = null, cs = t.cards || [];
-        cs.forEach(function (x) { if (!c && (x.name || '').indexOf(sel.size) >= 0) c = x; });
+        cs.forEach(function (x) { if (!c && !x.disabled && sizeMatch(sel.size, x.name)) c = x; });
         if (!c && cs.length === 1) c = cs[0];
         base = c ? num(c.price) : 0;
       }

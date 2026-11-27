@@ -214,6 +214,32 @@ textarea.ghost{min-height:0;resize:none;overflow:hidden}
 .rthumb img{display:block;width:100%;height:100%;object-fit:cover}
 .rthumb.sq{aspect-ratio:1;width:72px;justify-self:center}
 @media(max-width:720px){.rrow{grid-template-columns:20px 84px minmax(0,1fr)}.rrow .tools{grid-column:2 / -1;justify-content:flex-end}}
+/* 리깅 영상 : 태그 · 모델 이름 (2026-11) */
+.rmeta{grid-column:2 / -1;display:grid;gap:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.rtags{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.rtags>span{margin-right:4px;color:var(--sub);font-size:12px;font-weight:700}
+.rtg{padding:3px 11px;border:1px solid #D5D6EE;border-radius:999px;background:#fff;color:var(--sub);font-size:12px;font-weight:600;cursor:pointer}
+.rtg[aria-pressed="true"]{border-color:var(--bell);background:var(--chalk);color:var(--bell-deep)}
+.rtg.hl{font-weight:800}
+.rmodel{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.rmodel input[type=text]{width:170px;padding:6px 10px;font-size:13px}
+.rmodel .pv{color:var(--ink);font-size:13px;font-weight:700}
+.tagmgr{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tagmgr .tg{display:inline-flex;align-items:center;gap:4px;padding:3px 6px 3px 11px;border:1px solid #D5D6EE;border-radius:999px;background:#fff;font-size:12.5px;font-weight:600}
+.tagmgr .tg.hl{border-color:var(--chalk);background:var(--chalk);color:var(--bell-deep)}
+.tagmgr .tg button{width:18px;height:18px;padding:0;border:0;border-radius:50%;background:none;color:#9B9CB5;font-size:13px;line-height:1;cursor:pointer}
+.tagmgr .tg button:hover{background:#F0E4E6;color:#D0454C}
+.tagmgr input[type=text]{width:150px;padding:6px 10px;font-size:13px}
+/* 일러스트 : 플랫폼 · 닉네임 · 링크 (샘플 아래 택) */
+.illmeta{display:grid;gap:8px;margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.illmeta .row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.illmeta .row>b{min-width:72px;color:var(--sub);font-size:12px}
+.illmeta input[type=text]{flex:1;min-width:180px}
+/* 가격 카드 : 할인 · 강조 · 설명 */
+.pl3{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.pl3 input[type=text]{width:130px}
+.tipbox{display:grid;gap:4px;margin-top:4px}
+.tipbox textarea{font-size:12.5px}
 code{padding:1px 6px;border-radius:6px;background:var(--chalk);font-size:12.5px}
 ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:decimal}
 .card{padding:26px;border:1px solid var(--line);border-radius:20px;background:#fff}
@@ -278,8 +304,8 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
   function inp(obj, key, extra) {
     return h('input', Object.assign({ type: 'text', value: obj[key] == null ? '' : obj[key], oninput: function (e) { obj[key] = e.target.value; touch(); } }, extra || {}));
   }
-  function ta(obj, key, rows) {
-    return h('textarea', { rows: rows || 3, value: obj[key] == null ? '' : obj[key], oninput: function (e) { obj[key] = e.target.value; touch(); } });
+  function ta(obj, key, rows, ph) {
+    return h('textarea', { rows: rows || 3, placeholder: ph || (key === 'tip' ? "물음표 설명 (비우면 물음표 없음) — 한 줄에 하나 / '- ' 로 시작 : 동그라미 말머리 / 'ex)' · 'cf)' : 바로 위 항목 아래 작은 글자" : ''), value: obj[key] == null ? '' : obj[key], oninput: function (e) { obj[key] = e.target.value; touch(); } });
   }
   function lines(arr, rows) {
     return h('textarea', { rows: rows || 3, value: (arr || []).join('\n'), oninput: function (e) {
@@ -667,6 +693,15 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
             pi, h('span', { text: '원', style: 'color:var(--sub);font-size:13px' }),
             h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: !!c.disabled, onchange: function (e) { c.disabled = e.target.checked; touch(); render(); } }), '비활성(회색)']),
             c.disabled ? inp(c, 'disabledText', { class: 'ghost', placeholder: '(오픈 예정)', style: 'width:140px' }) : null
+          ]),
+          c.disabled ? null : h('div', { class: 'pl3' }, [
+            h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: !!c.event, onchange: function (e) { c.event = e.target.checked; touch(); } }), 'EVENT 표시']),
+            h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: !!c.accent, onchange: function (e) { c.accent = e.target.checked; touch(); } }), '맨 위 보라색 선']),
+            h('label', { class: 'chk' }, ['할인 전 가격(취소선) ', (function () { var x = priceInp(c, 'origPrice'); x.className = 'ghost'; x.placeholder = '비우면 표시 안 함'; return x; })()])
+          ]),
+          c.disabled ? null : h('div', { class: 'tipbox' }, [
+            inp(c, 'tipTitle', { class: 'ghost', placeholder: '물음표 설명 제목 (예: 베이직과 퀄리티업의 차이)' }),
+            ta(c, 'tip', 3)
           ])
         ]),
         tools(t.cards, i, c.name || '이 카드')
@@ -742,7 +777,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
 
   /* ---------- 일러스트 / 리깅 (페이지와 같은 뷰어 모양) ---------- */
   function newItem(rig) {
-    var it = { src: '', alt: '', nick: '', platform: '' };
+    var it = { src: '', alt: '', nick: '', platforms: [], link: '' };
     if (rig) it.video = '';
     return it;
   }
@@ -753,6 +788,10 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     if (type === 'gif') return { src: x.src || '', caption: x.caption || '' };
     var o = { video: x.video || '' };
     if (x.src) o.src = x.src;
+    /* 영상 아래 표시 : 태그 · 기업세 · 그룹명 · 모델명 */
+    o.tags = Array.isArray(x.tags) ? x.tags.filter(Boolean) : [];
+    o.corp = !!x.corp; o.group = x.group || ''; o.model = x.model || '';
+    o.platforms = Array.isArray(x.platforms) ? x.platforms.filter(Boolean) : [];
     return o;
   }
   /* type : video = 영상 캐러셀 / gif = 움짤 + 작은 설명 (지정이 없으면 첫 탭만 영상) */
@@ -774,8 +813,10 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     delete it.platform;
     return it.platforms;
   }
+  /* 일러스트 샘플 택의 방송 플랫폼 (페이지에 기본 아이콘 내장 · 아래 '방송 플랫폼 로고'에서 이미지로 바꿀 수 있음) */
+  var ILL_PLATS = ['치지직', 'SOOP', '씨미', '유튜브', '트위치', '빌리빌리'];
   function platSelect(it) {
-    var list = (S.platforms && S.platforms.list) || [], cur = platsOf(it);
+    var cur = platsOf(it), list = ILL_PLATS.concat(cur.filter(function (x) { return ILL_PLATS.indexOf(x) < 0; }));
     if (!list.length) return h('span', { class: 'hint', style: 'margin:0', text: '플랫폼 목록이 없습니다' });
     return h('div', { class: 'platpick', title: '방송 플랫폼 (여러 개 선택 가능)' }, list.map(function (n) {
       return h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: cur.indexOf(n) >= 0, onchange: function (e) {
@@ -831,6 +872,15 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
         tl.appendChild(sale);
       }
       if (pending[it.src]) tl.appendChild(h('span', { class: 'badge-new', text: '저장 전 새 이미지' }));
+    }
+    /* 일러스트 : 샘플 아래 택 (플랫폼 로고 + 모델 이름, 링크 하나) — 플랫폼 · 이름이 모두 비면 택 없음 */
+    if (!rig && it) {
+      var meta = h('div', { class: 'illmeta' }, [
+        h('div', { class: 'row' }, [h('b', { text: '방송 플랫폼' }), platSelect(it)]),
+        h('div', { class: 'row' }, [h('b', { text: '모델 이름' }), inp(it, 'nick', { placeholder: '예) 류설히님 (비우면 표시 안 함)' })]),
+        h('div', { class: 'row' }, [h('b', { text: '링크' }), inp(it, 'link', { placeholder: 'https://... (방송국 · 채널 주소, 플랫폼 로고~이름 전체에 걸림)' })])
+      ]);
+      return [box, tl, meta];
     }
     return [box, tl];
   }
@@ -912,17 +962,77 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
         else th.textContent = it.video ? '주소 확인' : '영상 없음';
       }
       paintThumb();
+      it.tags = Array.isArray(it.tags) ? it.tags : [];
+      var tagRow = h('div', { class: 'rtags' }, [h('span', { text: '태그' })]);
+      sortTags(rigTagList()).forEach(function (t) {
+        var b = h('button', { type: 'button', class: 'rtg' + (isHlTag(t) ? ' hl' : ''), 'aria-pressed': String(it.tags.indexOf(t) >= 0), text: t, onclick: function () {
+          var k = it.tags.indexOf(t);
+          if (k >= 0) it.tags.splice(k, 1); else it.tags.push(t);
+          it.tags = sortTags(it.tags);
+          b.setAttribute('aria-pressed', String(it.tags.indexOf(t) >= 0)); touch();
+        } });
+        tagRow.appendChild(b);
+      });
+      if (!rigTagList().length) tagRow.appendChild(h('span', { class: 'hint', style: 'margin:0', text: '아래 "영상 태그 종류"에서 태그를 추가해 주세요' }));
+      var pv = h('span', { class: 'pv' });
+      function paintPv() { var a = [it.corp ? '기업세' : '', it.group, it.model].map(function (x) { return String(x || '').trim(); }).filter(Boolean); pv.textContent = a.length ? '→ ' + a.join('｜') : ''; }
+      paintPv();
+      var gIn = inp(it, 'group', { placeholder: '그룹명 (없으면 비움)' }), mIn = inp(it, 'model', { placeholder: '모델 이름' });
+      gIn.addEventListener('input', paintPv); mIn.addEventListener('input', paintPv);
       list.appendChild(h('div', { class: 'rrow' }, [
         h('b', { class: 'rnum', text: String(i + 1) }),
         th,
         h('input', { type: 'text', value: it.video || '', placeholder: 'YouTube 주소 (예: https://youtu.be/...)', 'aria-label': (i + 1) + '번 영상 주소',
           oninput: function (e) { it.video = e.target.value.trim(); touch(); paintThumb(); } }),
-        tools(cur.items, i, (i + 1) + '번 영상')
+        tools(cur.items, i, (i + 1) + '번 영상'),
+        h('div', { class: 'rmeta' }, [
+          tagRow,
+          h('div', { class: 'rmodel' }, [
+            h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: !!it.corp, onchange: function (e) { it.corp = e.target.checked; touch(); paintPv(); } }), '기업세']),
+            gIn, mIn, pv
+          ]),
+          h('div', { class: 'rmodel' }, [h('span', { text: '모델명 앞 플랫폼 로고', style: 'color:var(--sub);font-size:12px;font-weight:700' }), platSelect(it)])
+        ])
       ]));
     });
     if (!cur.items.length) list.appendChild(h('p', { class: 'hint', style: 'margin:0', text: '등록된 영상이 없습니다.' }));
     kids.push(list);
-    kids.push(addBtn('+ 영상 추가', function () { cur.items.push({ video: '' }); touch(); render(); }));
+    kids.push(addBtn('+ 영상 추가', function () { cur.items.push({ video: '', tags: [], corp: false, group: '', model: '' }); touch(); render(); }));
+    kids.push(h('div', { style: 'margin-top:18px' }, [tagManager()]));
+  }
+  /* ---------- 리깅 영상 태그 종류 (추가 · 삭제) ----------
+     페이지 순서 : 퀄리티업 · V Bridger · ios → 신의상 · 신헤어 → 나머지 가나다 순 (앞의 세 개는 연보라) */
+  var TAG_FIRST = ['퀄리티업', 'vbridger', 'ios', '신의상', '신헤어'], TAG_HL = ['퀄리티업', 'vbridger', 'ios'];
+  function tagKey(t) { return String(t || '').replace(/\s+/g, '').toLowerCase(); }
+  function isHlTag(t) { return TAG_HL.indexOf(tagKey(t)) >= 0; }
+  function sortTags(a) {
+    return (a || []).filter(Boolean).slice().sort(function (x, y) {
+      var i = TAG_FIRST.indexOf(tagKey(x)), j = TAG_FIRST.indexOf(tagKey(y));
+      if (i < 0) i = 99; if (j < 0) j = 99;
+      return i !== j ? i - j : String(x).localeCompare(String(y), 'ko');
+    });
+  }
+  function rigTagList() { S.gallery.rigTags = Array.isArray(S.gallery.rigTags) ? S.gallery.rigTags : []; return S.gallery.rigTags; }
+  function tagManager() {
+    var list = rigTagList(), box = h('div', { class: 'tagmgr' });
+    sortTags(list).forEach(function (t) {
+      box.appendChild(h('span', { class: 'tg' + (isHlTag(t) ? ' hl' : '') }, ['#' + t, h('button', { type: 'button', text: '×', title: '"' + t + '" 태그 삭제', onclick: function () {
+        if (!confirm('"' + t + '" 태그를 삭제할까요? (영상에 붙어 있던 이 태그도 함께 빠집니다)')) return;
+        list.splice(list.indexOf(t), 1);
+        (S.gallery.rigging || []).forEach(function (c) { (c.items || []).forEach(function (x) { if (Array.isArray(x.tags)) x.tags = x.tags.filter(function (y) { return y !== t; }); }); });
+        touch(); render();
+      } })]));
+    });
+    var add = h('input', { type: 'text', placeholder: '새 태그 (예: 신의상)', onkeydown: function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } } });
+    function go() {
+      var v = add.value.replace(/^#/, '').trim();
+      if (!v) return;
+      if (list.some(function (x) { return tagKey(x) === tagKey(v); })) { setStatus('"' + v + '" 태그는 이미 있습니다.', 'err'); return; }
+      list.push(v); touch(); render();
+    }
+    box.appendChild(add);
+    box.appendChild(h('button', { type: 'button', class: 'btn sm', text: '+ 태그 추가', onclick: go }));
+    return card('영상 태그 종류', [box], '영상마다 위에서 태그를 눌러 고르면 영상 아래 왼쪽에 태그로 표시돼요. 순서는 자동(퀄리티업 · V Bridger · ios → 신의상 · 신헤어 → 가나다)이고, 퀄리티업 · V Bridger · ios 는 연보라색이에요. 오른쪽 끝에는 모델 이름이 표시되며, 기업세 · 그룹이면 "기업세｜그룹명｜모델명"으로 나와요.');
   }
   function gifEditor(cur, kids) {
     var list = h('div', { class: 'rlist' });
@@ -954,7 +1064,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     S.platforms = S.platforms || { list: [], logos: {} };
     S.platforms.logos = S.platforms.logos || {};
     var P = S.platforms, box = h('div', { class: 'plats' });
-    P.list.forEach(function (n) {
+    ILL_PLATS.forEach(function (n) {
       var src = P.logos[n], im = h('div', { class: 'im' });
       if (src) im.appendChild(h('img', { src: pending[src] ? pending[src].url : src, alt: n })); else im.textContent = '로고 없음 (글자로 표시)';
       var file = h('input', { type: 'file', accept: 'image/*', style: 'display:none', onchange: function (e) {
@@ -974,10 +1084,12 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     var names = h('textarea', { rows: 3, value: P.list.join('\n'), onchange: function (e) {
       P.list = e.target.value.split('\n').map(function (x) { return x.trim(); }).filter(Boolean); touch(); render();
     } });
-    m.appendChild(card('방송 플랫폼', [
-      h('p', { class: 'hint', text: '작업물 아래에 로고와 닉네임이 함께 표시돼요. 로고를 올리지 않으면 이름이 글자로 표시됩니다. (로고 이미지는 직접 준비해 올려 주세요.) 이 목록은 신청서의 "활동 플랫폼" 선택지로도 쓰입니다.' }),
-      field('플랫폼 이름 (한 줄에 하나)', names),
-      P.list.length ? box : h('p', { class: 'hint', text: '플랫폼이 없습니다.' })
+    m.appendChild(card('방송 플랫폼 로고 (일러스트 샘플 아래 택)', [
+      h('p', { class: 'hint', text: '일러스트 샘플 아래 · 리깅 모델명 앞에 표시되는 로고예요. "변경"으로 다른 이미지를 올리면 바로 바뀌고, 삭제하면 이름이 글자로 표시돼요. (페이지에서는 17px 정사각형으로 맞춰 표시)' }),
+      box
+    ]));
+    m.appendChild(card('신청서 "활동 플랫폼" 선택지', [
+      field('플랫폼 이름 (한 줄에 하나)', names)
     ]));
   }
 

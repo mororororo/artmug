@@ -302,6 +302,59 @@
     zShow(Math.max(0, Math.min(list.length - 1, +d.i || 0)), true);
   }
 
+  /* 가격 카드 설명 말풍선 (퀄리티업 등) : 본문 가격 안내 칸의 왼쪽 바깥, 아트머그 화면 위에 표시 (리모컨처럼 본문 iframe 밖)
+     본문이 { d:{title,lines}, top, left, right, sec } 를 보내면 띄우고, null 이면 숨김. 글은 모두 textContent 로만 넣음
+     왼쪽에 자리가 모자라면 카드 오른쪽에 표시 */
+  var tip = null;
+  var Q_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="7.1"/><path d="M6.15 5.9a1.9 1.9 0 1 1 2.65 1.74c-.5.22-.8.62-.8 1.16v.35"/><circle cx="8" cy="11.15" r=".85" fill="currentColor" stroke="none"/></svg>';
+  function tipBuild() {
+    var st = document.createElement('style');
+    st.textContent =
+      '.ltip{position:absolute;z-index:2147482000;box-sizing:border-box;width:340px;padding:16px 18px 17px;border:1px solid #E3E3F6;border-radius:16px;background:#fff;box-shadow:0 10px 28px rgba(76,80,178,.18);color:#43446C;font:400 13px/1.6 "Pretendard Variable",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;letter-spacing:-.01em;text-align:left;word-break:keep-all;pointer-events:none}' +
+      '.ltip *{box-sizing:border-box;margin:0;padding:0}' +
+      '.ltip:after{content:"";position:absolute;top:29px;right:-7px;width:12px;height:12px;border:1px solid #E3E3F6;border-width:1px 1px 0 0;background:#fff;transform:rotate(45deg)}' +
+      '.ltip.r:after{right:auto;left:-7px;border-width:0 0 1px 1px}' +
+      '.ltip-t{display:flex;align-items:center;gap:6px;margin-bottom:7px;color:#26274F;font-size:14px;font-weight:700}' +
+      '.ltip-q{flex:none;display:block;width:16px;height:16px;color:#4C50B2}.ltip-q svg{display:block;width:16px;height:16px}' +
+      '.ltip ul{display:grid;gap:3px;margin-top:6px;list-style:none}' +
+      '.ltip li{position:relative;padding-left:12px}' +
+      '.ltip li:before{content:"";position:absolute;left:2px;top:.68em;width:4px;height:4px;border-radius:50%;background:#9699E1}' +
+      '.ltip .ex,.ltip .cf{color:#9B9CB5;font-size:11.5px;line-height:1.5}' +
+      '.ltip p.ex,.ltip p.cf{margin-top:6px}' +
+      '.ltip-q{margin-left:-1px}';
+    document.head.appendChild(st);
+    tip = document.createElement('div');
+    tip.className = 'ltip';
+    tip.setAttribute('role', 'tooltip');
+    tip.style.display = 'none';
+    document.body.appendChild(tip);
+  }
+  function el(tag, cls, text) { var x = document.createElement(tag); if (cls) x.className = cls; if (text != null) x.textContent = String(text); return x; }
+  function tipHide() { if (tip) tip.style.display = 'none'; }
+  function tipShow(m) {
+    var d = m && m.d, lines = d && Array.isArray(d.lines) ? d.lines : null;
+    if (!lines) { tipHide(); return; }
+    if (!tip) tipBuild();
+    tip.innerHTML = '';
+    if (d.title) { var t = el('div', 'ltip-t'); var q = el('span', 'ltip-q'); q.innerHTML = Q_SVG; t.appendChild(q); t.appendChild(document.createTextNode(String(d.title))); tip.appendChild(t); }
+    var ul = null, li = null;
+    lines.slice(0, 40).forEach(function (l) {
+      var k = l && l.t, s = l && l.s;
+      if (k === 'li') { if (!ul) { ul = el('ul'); tip.appendChild(ul); } li = el('li', '', s); ul.appendChild(li); return; }
+      if ((k === 'ex' || k === 'cf') && li) { li.appendChild(el('div', k, s)); return; }
+      ul = li = null;
+      tip.appendChild(el('p', k === 'cf' || k === 'ex' ? k : '', s));
+    });
+    tip.style.display = 'block';
+    var fr = frame.getBoundingClientRect(), w = tip.offsetWidth, vw = document.documentElement.clientWidth;
+    var x = fr.left + (+m.sec || 0) - 14 - w, right = x < 8;
+    if (right) x = Math.min(fr.left + (+m.right || 0) + 14, vw - w - 8);
+    tip.className = 'ltip' + (right ? ' r' : '');
+    tip.style.left = Math.round(x + window.pageXOffset) + 'px';
+    tip.style.top = Math.round(fr.top + (+m.top || 0) + window.pageYOffset) + 'px';
+  }
+  window.addEventListener('resize', tipHide);
+
   /* 본문 높이 자동 조절 · 문의 창 열기 */
   function hello() { try { frame.contentWindow.postMessage({ leuinHost: 1 }, ORIGIN); } catch (er) {} }
   frame.addEventListener('load', hello);
@@ -324,6 +377,7 @@
     }
     /* 사진 · 움짤 확대 보기 : 아트머그 화면 전체를 어둡게 하고 그 위에 크게 */
     if (e.data.leuinZoom) { zoom(e.data.leuinZoom); return; }
+    if (typeof e.data === 'object' && 'leuinTip' in e.data) { if (e.data.leuinTip) tipShow(e.data.leuinTip); else tipHide(); return; }
     var h = +e.data.leuinHeight;
     if (h > 100) frame.style.height = Math.ceil(h) + 'px';
   });
