@@ -664,17 +664,20 @@ window.LEUIN_DEFAULTS = {
               {
                 "name": "신헤어",
                 "price": "300,000",
-                "sub": ""
+                "sub": "",
+                "quPrice": "400,000"
               },
               {
                 "name": "앞머리",
                 "price": "130,000",
-                "sub": ""
+                "sub": "",
+                "quPrice": "180,000"
               },
               {
                 "name": "뒷머리",
                 "price": "200,000",
-                "sub": ""
+                "sub": "",
+                "quPrice": "250,000"
               }
             ],
             "title": "헤어"
@@ -684,7 +687,8 @@ window.LEUIN_DEFAULTS = {
               {
                 "name": "신의상",
                 "price": "450,000",
-                "sub": ""
+                "sub": "",
+                "quPrice": "550,000"
               },
               {
                 "name": "몸체 추가",
@@ -1012,17 +1016,20 @@ window.LEUIN_DEFAULTS = {
               {
                 "name": "신헤어",
                 "price": "180,000",
-                "sub": ""
+                "sub": "",
+                "quPrice": "250,000"
               },
               {
                 "name": "앞머리",
                 "price": "80,000",
-                "sub": ""
+                "sub": "",
+                "quPrice": "130,000"
               },
               {
                 "name": "뒷머리",
                 "price": "130,000",
-                "sub": ""
+                "sub": "",
+                "quPrice": "180,000"
               }
             ],
             "title": "헤어"
@@ -1032,7 +1039,8 @@ window.LEUIN_DEFAULTS = {
               {
                 "name": "신의상",
                 "price": "250,000",
-                "sub": ""
+                "sub": "",
+                "quPrice": "350,000"
               },
               {
                 "name": "겉옷 on/off",

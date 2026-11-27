@@ -724,7 +724,8 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
             ]),
             h('div', { class: 'row4' }, [
               h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: !!o.noQty, onchange: function (e) { o.noQty = e.target.checked; touch(); render(); } }), '수량 선택 없음']),
-              o.noQty ? null : h('label', { class: 'chk' }, ['수량 단위 ', inp(o, 'unit', { class: 'ghost', placeholder: '개', style: 'width:70px' })])
+              o.noQty ? null : h('label', { class: 'chk' }, ['수량 단위 ', inp(o, 'unit', { class: 'ghost', placeholder: '개', style: 'width:70px' })]),
+              h('label', { class: 'chk' }, ['퀄리티업 선택 시 ', (function () { var x = priceInp(o, 'quPrice'); x.className = 'ghost'; x.placeholder = '같으면 비움'; x.style.width = '110px'; return x; })()])
             ])
           ]),
           tools(g.options, i, o.name || '이 옵션')
