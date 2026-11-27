@@ -318,22 +318,25 @@
     }
     var st = document.createElement('style');
     st.textContent =
-      '.ltip{position:absolute;z-index:2147482000;box-sizing:border-box;width:340px;padding:17.5px 18px 18.5px;border:1px solid #E3E3F6;border-radius:16px;background:#fff;box-shadow:0 10px 28px rgba(76,80,178,.18);color:#43446C;font:400 13px/1.6 "Pretendard Variable",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;letter-spacing:-.01em;text-align:left;word-break:keep-all;pointer-events:none}' +
-      '.ltip *{box-sizing:border-box;margin:0;padding:0}' +
-      '.ltip:after{content:"";position:absolute;top:29px;right:-7px;width:12px;height:12px;border:1px solid #E3E3F6;border-width:1px 1px 0 0;background:#fff;transform:rotate(45deg)}' +
-      '.ltip.r:after{right:auto;left:-7px;border-width:0 0 1px 1px}' +
-      '.ltip-t{display:flex;align-items:center;gap:6px;margin-bottom:8.5px;color:#26274F;font-size:14px;font-weight:700}' +
-      '.ltip-q{flex:none;display:block;width:16px;height:16px;color:#4C50B2}.ltip-q svg{display:block;width:16px;height:16px}' +
-      '.ltip ul{display:grid;gap:5px;margin-top:6px;list-style:none}' +
-      '.ltip li{position:relative;padding-left:12px}' +
-      '.ltip li:before{content:"";position:absolute;left:2px;top:8.4px;width:4px;height:4px;border-radius:50%;background:#9699E1}' +
-      '.ltip .ex,.ltip .cf{color:#9B9CB5;font-size:11.5px;line-height:1.5}' +
-      '.ltip p.ex,.ltip p.cf{margin-top:7px}' +
-      '.ltip li .ex,.ltip li .cf{margin-top:1px}' +
-      '.ltip-q{margin-left:-1px}';
+      '#leuin-tip,#leuin-tip *{box-sizing:border-box!important;margin:0!important;padding:0!important;border:0!important;float:none!important;font-family:inherit!important;font-size:inherit!important;font-weight:inherit!important;font-style:normal!important;line-height:inherit!important;letter-spacing:inherit!important;word-spacing:normal!important;color:inherit!important;text-indent:0!important;text-transform:none!important;text-align:left!important;text-decoration:none!important;list-style:none!important;background:none!important;min-height:0!important;max-width:none!important;box-shadow:none!important}' +
+      '#leuin-tip{position:absolute!important;z-index:2147482000!important;width:340px!important;padding:17.5px 18px 18.5px!important;border:1px solid #E3E3F6!important;border-radius:16px!important;background:#fff!important;box-shadow:0 10px 28px rgba(76,80,178,.18)!important;color:#43446C!important;font-family:"Pretendard Variable",Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif!important;font-size:13px!important;font-weight:400!important;line-height:20.8px!important;letter-spacing:-.01em!important;word-break:keep-all!important;white-space:normal!important;pointer-events:none!important}' +
+      '#leuin-tip:after{content:""!important;position:absolute!important;top:29px!important;right:-7px!important;width:12px!important;height:12px!important;border:1px solid #E3E3F6!important;border-width:1px 1px 0 0!important;background:#fff!important;transform:rotate(45deg)!important}' +
+      '#leuin-tip.r:after{right:auto!important;left:-7px!important;border-width:0 0 1px 1px!important}' +
+      '#leuin-tip .ltip-t{display:flex!important;align-items:flex-start!important;gap:6px!important;margin-bottom:8.5px!important;color:#26274F!important;font-size:14px!important;font-weight:700!important;line-height:22.4px!important}' +
+      '#leuin-tip .ltip-q{flex:none!important;display:block!important;width:16px!important;height:16px!important;margin:3.2px 0 0 -1px!important;color:#4C50B2!important}' +
+      '#leuin-tip .ltip-q svg{display:block!important;width:16px!important;height:16px!important;fill:none!important}' +
+      '#leuin-tip p{display:block!important;line-height:19.8px!important}' +
+      '#leuin-tip ul{display:grid!important;gap:5px!important;margin-top:6px!important}' +
+      '#leuin-tip li{display:block!important;position:relative!important;padding-left:12px!important;line-height:23px!important}' +
+      '#leuin-tip li:before{content:""!important;display:block!important;position:absolute!important;left:2px!important;top:9.5px!important;width:4px!important;height:4px!important;border-radius:50%!important;background:#9699E1!important}' +
+      '#leuin-tip li:after{content:none!important}' +
+      '#leuin-tip .ex,#leuin-tip .cf{display:block!important;color:#9B9CB5!important;font-size:11.5px!important;line-height:17.25px!important}' +
+      '#leuin-tip p.ex,#leuin-tip p.cf{margin-top:7px!important}' +
+      '#leuin-tip li .ex,#leuin-tip li .cf{margin-top:1px!important}';
     document.head.appendChild(st);
     tip = document.createElement('div');
     tip.className = 'ltip';
+    tip.id = 'leuin-tip';
     tip.setAttribute('role', 'tooltip');
     tip.style.display = 'none';
     document.body.appendChild(tip);

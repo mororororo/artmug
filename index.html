@@ -998,6 +998,38 @@ a.g-tag{cursor:pointer;transition:color .2s}
 .ptip p.ex,.ptip p.cf{margin-top:7px}
 .ptip li .ex,.ptip li .cf{margin-top:1px}
 .ptip-t .pq{margin-left:-1px}
+/* 말풍선 줄 간격 : 안내 문장 줄 사이 1px 좁게 / 말머리 문장의 줄바꿈 간격(23px)은 항목 사이보다 조금 좁게, 점은 첫 줄 가운데 / 물음표는 제목 첫 줄 가운데 */
+.ptip p:not(.ex):not(.cf){line-height:19.8px}
+.ptip li{line-height:23px}
+.ptip li::before{top:9.5px}
+.ptip-t{align-items:flex-start;line-height:22.4px}
+.ptip-t .pq{margin-top:3.2px}
+/* 움짤 묶음 상자 사이 간격 · 위아래 안쪽 여백 같게 */
+.og.gbase+.og.gbase{margin-top:22px}
+.og.gbase{padding-top:18px;padding-bottom:18px}
+/* FACE · BODY 소메뉴 (탭 아래 : 퀄리티업｜베이직 …) */
+.gsub{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:2px 4px;margin:-3px 0 24px}
+.gsub button{padding:2px 6px;border:0;background:none;color:#9B9CB5;font-size:14px;font-weight:600;cursor:pointer;transition:color .2s}
+.gsub button:not(:disabled):hover{color:var(--bell-deep)}
+.gsub button:disabled{color:#D3D4DE;cursor:not-allowed}
+.gsub button[aria-selected="true"]{color:var(--bell-deep);font-weight:700}
+.gsub i{display:block;width:1px;height:11px;margin:0 4px;background:#D3D4DE}
+.rig-body>.gsub+.grest{margin-top:0}
+.rig-body>.gsub+.grest>.ggrid.c3{padding-top:0}
+/* 움짤 크기 작게 : FACE · BODY (3칸) 약 190px, EXPRESSION (4칸) 약 160px */
+.sc-stage.gal.wide .gal-card .g-media{aspect-ratio:16/9}
+/* 움짤 : 칸 크기만 줄이고 전체 폭은 그대로 → 줄어든 만큼 사이 간격이 넓어짐
+   FACE · BODY (3칸) 220 → 190px / EXPRESSION (4칸) 189 → 175px (변경 전과 지난번의 중간) */
+@media (min-width:761px){
+  /* FACE · BODY : 칸 200px, 사이 60px */
+  .ggrid.c3{max-width:720px;grid-template-columns:repeat(3,minmax(0,200px));justify-content:space-between;column-gap:0}
+  /* EXPRESSION : 칸 175px, 사이 24px, 가운데 → 좌우 끝 여백이 사이 간격보다 넓게 */
+  .ggrid:not(.c3){max-width:none;grid-template-columns:repeat(var(--gc,4),minmax(0,175px));justify-content:center;column-gap:24px}
+  /* 묶음 상자 밖 움짤도 상자 안과 같은 폭 (상자 안쪽 여백 14 + 테두리 1) */
+  .grest>.ggrid:not(.c3){padding:0 15px}
+}
+/* 가격 카드 이름 옆 물음표 0.8px 작게 */
+.pn .pq,.pn .pq svg{width:15.2px;height:15.2px}
 /* 휴대폰 : 물음표를 누르면 카드 안에 펼침 */
 .pc .ptip.inl{position:relative;z-index:auto;width:auto;margin:0 18px 16px;box-shadow:none;background:var(--panel);border-color:transparent;pointer-events:auto}
 .pc .ptip.inl::after{display:none}
@@ -1053,6 +1085,7 @@ a.g-tag{cursor:pointer;transition:color .2s}
   .sc-stage:not(.gal) .sc-arrow.prev{left:max(8px,calc(var(--edge,21px) - 9px))}
   .sc-stage:not(.gal) .sc-arrow.next{right:max(8px,calc(var(--edge,21px) - 9px))}
   .ggrid.c3{gap:14px 10px}
+  .ggrid:not(.c3),.ggrid.c3{max-width:none}
   .pch,.pc.off .pch{padding-top:20.5px}
   .pc>.pk{top:23.5px}
   .pf{padding-bottom:22px}
@@ -1064,6 +1097,14 @@ a.g-tag{cursor:pointer;transition:color .2s}
   /* 리깅 화살표 : 가운데 큰 영상의 좌우 모서리 정중앙 (화살표 34px) */
   .sc-stage:not(.gal) .sc-arrow.prev{left:calc(var(--peek,21px) - 17px)}
   .sc-stage:not(.gal) .sc-arrow.next{right:calc(var(--peek,21px) - 17px)}
+  /* 일러스트 화살표도 가운데 샘플의 좌우 모서리 정중앙 */
+  .gal .sc-arrow.prev{left:calc(var(--peek,21px) - 17px)}
+  .gal .sc-arrow.next{right:calc(var(--peek,21px) - 17px)}
+  /* 리깅 영상 아래 : 일러스트 설명칸처럼 영상 바로 아래 └──┘ 칸 안에 이름 · 태그 */
+  .sc-stage:not(.gal)+.sc-meta:not(:empty){position:relative;margin-top:-10px;padding:10px 12px 12px;border:1.5px solid #D9DAF4;border-top:0;border-radius:0 0 16px 16px;background:#fff}
+  .sc-stage:not(.gal):has(+.sc-meta:not(:empty)) .sc-card.on{border-bottom-left-radius:0;border-bottom-right-radius:0}
+  /* 말풍선 제목 : 물음표 옆 1px 넓게 */
+  .ptip-t{gap:7px}
   .pch{padding-bottom:12px}
   .pf{padding-top:17.5px}
 }
@@ -1981,7 +2022,7 @@ a.g-tag{cursor:pointer;transition:color .2s}
       var items = itemsNow(), name = cats[ci].name || '작업물';
       if (!items.length) { body.innerHTML = '<div class="ph gph5">작업물 준비 중입니다.</div>'; return; }
       Peek(body, {
-        items: items, unit: '작업물', cls: 'gal', cardCls: 'gal-card', thumbCls: 'sq', desk: 0.52, mob: 0.78, gap: 34, dur: 520,
+        items: items, unit: '작업물', cls: 'gal' + (cats[ci].wide ? ' wide' : ''), cardCls: 'gal-card', thumbCls: 'sq', desk: cats[ci].wide ? 0.78 : 0.52, mob: cats[ci].wide ? 0.86 : 0.78, gap: cats[ci].wide ? 18 : 34, dur: 520,
         card: function (it, i) { return '<div class="g-media"><img src="' + esc(it.src) + '" alt="' + esc(it.alt || (name + ' ' + (i + 1))) + '" draggable="false" decoding="async" onload="var w=this.naturalWidth,h=this.naturalHeight;if(w&&h&&w/h>1408/2000)this.parentNode.style.aspectRatio=w+\'/\'+h">' + saleHTML(it) + '</div>' + tagHTML(it); },
         thumb: function (it) { return '<img src="' + esc(it.src) + '" alt="" draggable="false" loading="lazy" decoding="async">'; },
         /* 카드 위치 · 높이를 정수 픽셀로 : 비율이 다른 그림(짧은 카드)이 0.5px 위치에 놓이면
@@ -2038,6 +2079,21 @@ a.g-tag{cursor:pointer;transition:color .2s}
     showLayout = null;
     var items = (list || []).filter(function (x) { return x && x.src; });
     if (!items.length) { root.innerHTML = '<div class="ph gph">작업물 준비 중입니다.</div>'; return; }
+    /* 소메뉴 : 움짤의 '묶음 이름(group)' 순서대로. 고른 묶음의 움짤만 표시 */
+    /* 소메뉴 목록 : 관리자에서 적은 소메뉴(subs) 순서 + 움짤에만 있는 묶음 이름. 움짤이 없는 소메뉴는 연한 회색(선택 불가) */
+    var groups = ((cat && cat.subs) || []).map(function (g) { return String(g || '').trim(); }).filter(Boolean);
+    items.forEach(function (x) { var g = String(x.group || '').trim(); if (g && groups.indexOf(g) < 0) groups.push(g); });
+    var has = groups.map(function (g) { return items.some(function (x) { return String(x.group || '').trim() === g; }); });
+    var sub = '';
+    if (groups.length && has.indexOf(true) >= 0) {
+      var gi = Math.min(groups.length - 1, Math.max(0, (cat && cat._gi) || 0));
+      if (!has[gi]) gi = has.indexOf(true);
+      sub = '<div class="gsub" role="tablist">' + groups.map(function (g, k) {
+        return (k ? '<i aria-hidden="true"></i>' : '') + '<button type="button" role="tab" data-g="' + k + '" aria-selected="' + (k === gi) + '"' +
+          (has[k] ? '' : ' disabled aria-disabled="true" title="준비중"') + '>' + esc(g) + '</button>';
+      }).join('') + '</div>';
+      items = items.filter(function (x) { return String(x.group || '').trim() === groups[gi]; });
+    }
     function cells(from, to) {
       return '<ul class="ggrid' + ((cols || 3) === 3 ? ' c3' : '') + '" style="--gc:' + (cols || 3) + '">' + items.slice(from, to).map(function (it, k) {
         var i = from + k;
@@ -2048,9 +2104,25 @@ a.g-tag{cursor:pointer;transition:color .2s}
       }).join('') + '</ul>';
     }
     var nb = Math.min(items.length, Math.max(0, parseInt(cat && cat.baseCount, 10) || 0)), html = '';
-    if (nb) html += '<fieldset class="og gbase">' + ((cat.baseTitle || '기본 제공') ? '<legend class="ogt">' + esc(cat.baseTitle || '기본 제공') + '</legend>' : '') + cells(0, nb) + '</fieldset>';
+    /* 움짤마다 '묶음 이름(group)'이 있으면 이어지는 같은 이름끼리 묶음 상자로 (예: FACE 퀄리티업 / 베이직) */
+    if (false) {
+      var runs = [];
+      items.forEach(function (x, k) {
+        var g = String(x.group || '').trim(), last = runs[runs.length - 1];
+        if (last && last.g === g) last.to = k + 1; else runs.push({ g: g, from: k, to: k + 1 });
+      });
+      html = runs.map(function (r) {
+        return r.g ? '<fieldset class="og gbase"><legend class="ogt">' + esc(r.g) + '</legend>' + cells(r.from, r.to) + '</fieldset>'
+                   : '<div class="grest">' + cells(r.from, r.to) + '</div>';
+      }).join('');
+      nb = items.length;
+    }
+    else if (nb) html += '<fieldset class="og gbase">' + ((cat.baseTitle || '기본 제공') ? '<legend class="ogt">' + esc(cat.baseTitle || '기본 제공') + '</legend>' : '') + cells(0, nb) + '</fieldset>';
     if (items.length > nb) html += '<div class="grest">' + cells(nb, items.length) + '</div>';
-    root.innerHTML = html;
+    root.innerHTML = sub + html;
+    each(root.querySelectorAll('.gsub button'), function (b) {
+      b.addEventListener('click', function () { cat._gi = +b.getAttribute('data-g'); GifGrid(root, list, cols, cat); });
+    });
     each(root.querySelectorAll('.gimg'), function (b) {
       b.addEventListener('click', function () {
         openLB(items.map(function (x) { return { src: x.src, alt: x.caption || '' }; }), +b.getAttribute('data-i'), { gif: true });

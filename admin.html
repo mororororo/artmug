@@ -786,7 +786,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
      작업물은 { video } 만 남깁니다. (예전에 올린 이미지가 있으면 src 도 유지) */
   function rigItem(x, type) {
     x = x || {};
-    if (type === 'gif') return { src: x.src || '', caption: x.caption || '' };
+    if (type === 'gif') return { src: x.src || '', caption: x.caption || '', group: x.group || '' };
     var o = { video: x.video || '' };
     if (x.src) o.src = x.src;
     /* 영상 아래 표시 : 태그 · 기업세 · 그룹명 · 모델명 */
@@ -899,7 +899,8 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     var kids = [tabs];
     gallery(cur.items, 'ill' + iCat, false, cur).forEach(function (k) { kids.push(k); });
     kids.push(h('div', { class: 'grid2', style: 'margin-top:18px' }, [
-      field('탭 이름', inp(cur, 'name')),
+      h('div', { class: 'field' }, [h('span', { text: '탭 이름' }), inp(cur, 'name'),
+        h('label', { class: 'chk', style: 'margin-top:6px' }, [h('input', { type: 'checkbox', checked: !!cur.wide, onchange: function (e) { cur.wide = e.target.checked; touch(); } }), '가로 그림 분류 (리깅 샘플만큼 넓게 표시)'])]),
       h('div', { class: 'field' }, [h('span', { text: '분류 관리' }), h('div', { class: 'tl' }, [
         h('button', { type: 'button', class: 'btn sm', text: '+ 분류 추가', onclick: function () { cats.push({ name: '새 분류', items: [] }); iCat = cats.length - 1; touch(); render(); } }),
         cats.length > 1 ? h('button', { type: 'button', class: 'btn sm danger', text: '이 분류 삭제', onclick: function () { if (!confirm('"' + cur.name + '" 분류를 통째로 삭제할까요?')) return; cats.splice(iCat, 1); iCat = 0; touch(); render(); } }) : null
@@ -941,7 +942,7 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     ]));
     if (cur.type === 'gif') kids.push(h('div', { class: 'grid2' }, [
       field('묶음 이름 (가운데 정렬로 표시)', inp(cur, 'baseTitle', { placeholder: '기본 제공' })),
-      h('div')
+      field('소메뉴 (한 줄에 하나 · 움짤의 "묶음 이름"과 같게, 움짤이 없으면 회색)', lines(cur.subs = cur.subs || [], 3))
     ]));
     kids.push(h('div', { class: 'field' }, [h('span', { text: '탭 관리' }), h('div', { class: 'tl', style: 'flex-wrap:wrap;align-items:center' }, [
       h('label', { class: 'chk' }, [h('input', { type: 'checkbox', checked: !!cur.soon, onchange: function (e) { cur.soon = e.target.checked; touch(); render(); } }), '준비중 (회색·선택 불가)']),
@@ -1045,8 +1046,12 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
       list.appendChild(h('div', { class: 'rrow' }, [
         h('b', { class: 'rnum', text: String(i + 1) }),
         th,
-        h('input', { type: 'text', value: it.caption || '', placeholder: '작은 설명 (예: 눈 깜빡임)', 'aria-label': (i + 1) + '번 설명',
-          oninput: function (e) { it.caption = e.target.value; touch(); } }),
+        h('div', { style: 'display:grid;gap:6px' }, [
+          h('input', { type: 'text', value: it.caption || '', placeholder: '작은 설명 (예: 눈 깜빡임)', 'aria-label': (i + 1) + '번 설명',
+            oninput: function (e) { it.caption = e.target.value; touch(); } }),
+          h('input', { type: 'text', value: it.group || '', placeholder: '묶음 이름 (예: 퀄리티업 · 이어진 같은 이름끼리 한 상자, 비우면 묶지 않음)', 'aria-label': (i + 1) + '번 묶음',
+            oninput: function (e) { it.group = e.target.value; touch(); } })
+        ]),
         tools(cur.items, i, (i + 1) + '번 움짤')
       ]));
     });
