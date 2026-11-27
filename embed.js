@@ -326,7 +326,7 @@
       '#leuin-tip .ltip-q{flex:none!important;display:block!important;width:16px!important;height:16px!important;margin:3.2px 0 0 -1px!important;color:#4C50B2!important}' +
       '#leuin-tip .ltip-q svg{display:block!important;width:16px!important;height:16px!important;fill:none!important}' +
       '#leuin-tip p{display:block!important;line-height:19.8px!important}' +
-      '#leuin-tip ul{display:grid!important;gap:5px!important;margin-top:6px!important}' +
+      '#leuin-tip ul{display:grid!important;gap:3.5px!important;margin-top:6px!important}' +
       '#leuin-tip li{display:block!important;position:relative!important;padding-left:12px!important;line-height:23px!important}' +
       '#leuin-tip li:before{content:""!important;display:block!important;position:absolute!important;left:2px!important;top:9.5px!important;width:4px!important;height:4px!important;border-radius:50%!important;background:#9699E1!important}' +
       '#leuin-tip li:after{content:none!important}' +
