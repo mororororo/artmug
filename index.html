@@ -991,7 +991,7 @@ a.g-tag{cursor:pointer;transition:color .2s}
 .ptip-t{display:flex;align-items:center;gap:6px;margin-bottom:8.5px;color:var(--ink);font-size:14px;font-weight:700}
 .ptip-t .pq{background:var(--chalk);border-color:var(--chalk);color:var(--bell-deep);cursor:default}
 .ptip p{margin:0}
-.ptip ul{margin:6px 0 0;display:grid;gap:3.5px}
+.ptip ul{margin:6px 0 0;display:grid;gap:2px}
 .ptip li{position:relative;padding-left:12px}
 .ptip li::before{content:"";position:absolute;left:2px;top:8.4px;width:4px;height:4px;border-radius:50%;background:var(--bell)}
 .ptip .ex,.ptip .cf{color:#9B9CB5;font-size:11.5px;line-height:1.5}
@@ -1000,8 +1000,9 @@ a.g-tag{cursor:pointer;transition:color .2s}
 .ptip-t .pq{margin-left:-1px}
 /* 말풍선 줄 간격 : 안내 문장 줄 사이 1px 좁게 / 말머리 문장의 줄바꿈 간격(23px)은 항목 사이보다 조금 좁게, 점은 첫 줄 가운데 / 물음표는 제목 첫 줄 가운데 */
 .ptip p:not(.ex):not(.cf){line-height:19.8px}
-.ptip li{line-height:23px}
-.ptip li::before{top:9.5px}
+.ptip li{line-height:22px}
+.ptip li::before{top:9px}
+.ptip:not(.inl){padding-bottom:17px}
 .ptip-t{align-items:flex-start;line-height:22.4px}
 .ptip-t .pq{margin-top:3.2px}
 /* 움짤 묶음 상자 사이 간격 · 위아래 안쪽 여백 같게 */
@@ -2443,12 +2444,13 @@ a.g-tag{cursor:pointer;transition:color .2s}
     tipOn = true;
     /* 아트머그 : 바깥(embed.js)에 위치만 알려 줌 — 본문 iframe 은 스크롤이 없으므로 화면 기준 = 문서 기준 */
     if (inFrame && lbHost) {
-      try { parent.postMessage({ leuinTip: { d: d, top: r.top, left: r.left, right: r.right, sec: sec.left } }, '*'); } catch (e) {}
+      try { parent.postMessage({ leuinTip: { d: d, top: r.top, left: r.left, right: r.right, sec: sec.left, h: card.offsetHeight } }, '*'); } catch (e) {}
       return;
     }
     if (!tipEl) { tipEl = document.createElement('div'); tipEl.className = 'ptip'; tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
     tipEl.innerHTML = tipHTML(d);
     tipEl.hidden = false;
+    fitTip(tipEl, card.offsetHeight);
     var w = tipEl.offsetWidth, x = sec.left - 14 - w, right = x < 8;
     if (right) x = Math.min(r.right + 14, window.innerWidth - w - 8);
     tipEl.classList.toggle('r', right);
@@ -2475,6 +2477,15 @@ a.g-tag{cursor:pointer;transition:color .2s}
     });
   }
   window.addEventListener('resize', tipHide);
+
+  /* 말풍선 높이를 타입 칸 높이에 맞춤 : 말머리 항목 사이 간격(기본 2px)을 1 ~ 4px 안에서 조절 */
+  function fitTip(box, H) {
+    var ul = box && box.querySelector('ul');
+    if (!ul || !(H > 0)) return;
+    ul.style.setProperty('gap', '2px', 'important');
+    var n = ul.children.length - 1, g = 2 - (box.offsetHeight - H) / Math.max(1, n);
+    if (n > 0 && g >= 1 && g <= 4) ul.style.setProperty('gap', g.toFixed(2) + 'px', 'important');
+  }
   /* 할인 카드가 있는 탭 : 모든 카드의 가운데 구분선을 할인 카드 높이에 맞춤 (PC, 오픈 예정 카드 제외) */
   function alignPch() {
     var root = $('priceRoot'), hs = Array.prototype.filter.call(root.querySelectorAll('.pc:not(.off) > .pch'), function (x) { return true; }), mx = 0;
