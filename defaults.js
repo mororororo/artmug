@@ -119,6 +119,7 @@ window.LEUIN_DEFAULTS = {
           {
             "video": "https://youtu.be/eM3jjPia87w",
             "tags": [
+              "베이직",
               "ios",
               "마이크",
               "신헤어"
@@ -201,6 +202,7 @@ window.LEUIN_DEFAULTS = {
     ],
     "rigTags": [
       "퀄리티업",
+      "베이직",
       "V Bridger",
       "ios",
       "신헤어",

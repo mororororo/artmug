@@ -1003,8 +1003,8 @@ ol.steps{margin:8px 0 0 18px;display:grid;gap:4px;font-size:13px;list-style:deci
     kids.push(h('div', { style: 'margin-top:18px' }, [tagManager()]));
   }
   /* ---------- 리깅 영상 태그 종류 (추가 · 삭제) ----------
-     페이지 순서 : 퀄리티업 · V Bridger · ios → 신의상 · 신헤어 → 나머지 가나다 순 (앞의 세 개는 연보라) */
-  var TAG_FIRST = ['퀄리티업', 'vbridger', 'ios', '신의상', '신헤어'], TAG_HL = ['퀄리티업', 'vbridger', 'ios'];
+     페이지 순서 : 퀄리티업 · V Bridger · ios → 신의상 · 신헤어 → 나머지 가나다 순 (앞의 네 개는 연보라) */
+  var TAG_FIRST = ['퀄리티업', '베이직', 'vbridger', 'ios', '신의상', '신헤어'], TAG_HL = ['퀄리티업', '베이직', 'vbridger', 'ios'];
   function tagKey(t) { return String(t || '').replace(/\s+/g, '').toLowerCase(); }
   function isHlTag(t) { return TAG_HL.indexOf(tagKey(t)) >= 0; }
   function sortTags(a) {

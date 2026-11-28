@@ -1662,8 +1662,8 @@ a.g-tag{cursor:pointer;transition:color .2s}
     var inner = (ps ? '<span class="plats">' + ps + '</span>' : '') + n, u = safeUrl(it.link);
     return u ? '<a class="g-tag" href="' + esc(u) + '" target="_blank" rel="noopener" draggable="false">' + inner + '</a>' : '<div class="g-tag">' + inner + '</div>';
   }
-  /* 리깅 영상 태그 : 퀄리티업 · V Bridger · ios → 신의상 · 신헤어 → 나머지 가나다 순. 앞의 세 개는 연보라 */
-  var TAG_FIRST = ['퀄리티업', 'vbridger', 'ios', '신의상', '신헤어'], TAG_HL = ['퀄리티업', 'vbridger', 'ios'];
+  /* 리깅 영상 태그 : 퀄리티업 · 베이직 · V Bridger · ios → 신의상 · 신헤어 → 나머지 가나다 순. 앞의 네 개는 연보라 */
+  var TAG_FIRST = ['퀄리티업', '베이직', 'vbridger', 'ios', '신의상', '신헤어'], TAG_HL = ['퀄리티업', '베이직', 'vbridger', 'ios'];
   function tagKey(t) { return String(t || '').replace(/\s+/g, '').toLowerCase(); }
   function sortTags(a) {
     return (a || []).filter(Boolean).slice().sort(function (x, y) {
