@@ -48,7 +48,7 @@
               "치지직"
             ],
             "src": "images/p-mwbux4nu9arr.webp",
-            "link": ""
+            "link": "https://chzzk.naver.com/01019087f12d3244000ba0f794dd999c"
           },
           {
             "alt": "",
@@ -58,7 +58,7 @@
               "SOOP"
             ],
             "src": "images/p-mwbuxducxniu.webp",
-            "link": ""
+            "link": "https://chzzk.naver.com/bdf93e882bfdee135e110b2fcc7061f2"
           },
           {
             "alt": "",
@@ -74,7 +74,7 @@
               "치지직"
             ],
             "src": "images/p-mwbuxwkho7dw.webp",
-            "link": ""
+            "link": "https://chzzk.naver.com/8292f415bf4949a508539b1332e059dd"
           },
           {
             "src": "images/p-mwd5u0moh0sf.webp",
@@ -167,31 +167,38 @@
         "items": [
           {
             "src": "images/p-mwbuo3opj25t.webp",
-            "caption": "발그레"
+            "caption": "발그레",
+            "group": ""
           },
           {
             "src": "images/p-mwbuo5fhj1g4.webp",
-            "caption": "정색"
+            "caption": "정색",
+            "group": ""
           },
           {
             "src": "images/p-mwcdhb3cgfmj.mp4",
-            "caption": "반짝눈"
+            "caption": "반짝눈",
+            "group": ""
           },
           {
             "src": "images/p-mwcdhf527dmx.mp4",
-            "caption": "하트눈"
+            "caption": "하트눈",
+            "group": ""
           },
           {
             "src": "images/p-mwcdhjypd253.mp4",
-            "caption": "눈물"
+            "caption": "눈물",
+            "group": ""
           },
           {
             "src": "images/p-mwcdhly23g59.mp4",
-            "caption": "눈물 (애니메이션)"
+            "caption": "눈물 (애니메이션)",
+            "group": ""
           },
           {
             "src": "images/p-mwcdhnlnkjgg.mp4",
-            "caption": "빙글눈"
+            "caption": "빙글눈",
+            "group": ""
           }
         ],
         "name": "EXPRESSION",
