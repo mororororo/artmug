@@ -125,7 +125,7 @@
             ],
             "corp": false,
             "group": "",
-            "model": "유르밍",
+            "model": "유르밍님",
             "platforms": [
               "치지직",
               "SOOP"
@@ -138,8 +138,16 @@
       {
         "cols": 3,
         "items": [
-          {"src": "images/hair-long2.mp4", "caption": "펌헤어", "group": "헤어"},
-          {"src": "images/hair-long1.mp4", "caption": "생머리", "group": "헤어"}
+          {
+            "src": "images/hair-long2.mp4",
+            "caption": "펌헤어",
+            "group": "헤어"
+          },
+          {
+            "src": "images/hair-long1.mp4",
+            "caption": "생머리",
+            "group": "헤어"
+          }
         ],
         "name": "HEAD",
         "type": "gif",
