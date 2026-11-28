@@ -137,13 +137,16 @@
       },
       {
         "cols": 3,
-        "items": [],
-        "name": "FACE",
-        "soon": true,
+        "items": [
+          {"src": "images/hair-long2.mp4", "caption": "펌헤어", "group": "헤어"},
+          {"src": "images/hair-long1.mp4", "caption": "생머리", "group": "헤어"}
+        ],
+        "name": "HEAD",
         "type": "gif",
         "subs": [
           "퀄리티업",
-          "베이직"
+          "베이직",
+          "헤어"
         ]
       },
       {

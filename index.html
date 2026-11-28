@@ -961,7 +961,7 @@ a.g-tag{cursor:pointer;transition:color .2s}
 }
 /* 택이 붙은 샘플 : 아래 모서리는 각지게 → 택과 한 덩어리로 이어짐 (택 아래 모서리만 둥글게) */
 .gal-card .g-media:has(+.g-tag){border-bottom-left-radius:0;border-bottom-right-radius:0}
-/* 리깅 FACE · BODY (한 줄 3칸) : 표정 움짤보다 조금 크게, 칸을 꽉 채우지 않고 가운데 */
+/* 리깅 HEAD · BODY (한 줄 3칸) : 표정 움짤보다 조금 크게, 칸을 꽉 채우지 않고 가운데 */
 .ggrid.c3{max-width:720px;margin:0 auto;gap:20px 22px}
 @media (max-width:760px){.ggrid.c3{max-width:none;gap:14px 10px}}
 /* 리깅 움짤 설명 2px 크게 */
@@ -1008,7 +1008,7 @@ a.g-tag{cursor:pointer;transition:color .2s}
 /* 움짤 묶음 상자 사이 간격 · 위아래 안쪽 여백 같게 */
 .og.gbase+.og.gbase{margin-top:22px}
 .og.gbase{padding-top:18px;padding-bottom:18px}
-/* FACE · BODY 소메뉴 (탭 아래 : 퀄리티업｜베이직 …) */
+/* HEAD · BODY 소메뉴 (탭 아래 : 퀄리티업｜베이직 …) */
 .gsub{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:2px 4px;margin:-3px 0 24px}
 .gsub button{padding:2px 6px;border:0;background:none;color:#9B9CB5;font-size:14px;font-weight:600;cursor:pointer;transition:color .2s}
 .gsub button:not(:disabled):hover{color:var(--bell-deep)}
@@ -1017,12 +1017,12 @@ a.g-tag{cursor:pointer;transition:color .2s}
 .gsub i{display:block;width:1px;height:11px;margin:0 4px;background:#D3D4DE}
 .rig-body>.gsub+.grest{margin-top:0}
 .rig-body>.gsub+.grest>.ggrid.c3{padding-top:0}
-/* 움짤 크기 작게 : FACE · BODY (3칸) 약 190px, EXPRESSION (4칸) 약 160px */
+/* 움짤 크기 작게 : HEAD · BODY (3칸) 약 190px, EXPRESSION (4칸) 약 160px */
 .sc-stage.gal.wide .gal-card .g-media{aspect-ratio:16/9}
 /* 움짤 : 칸 크기만 줄이고 전체 폭은 그대로 → 줄어든 만큼 사이 간격이 넓어짐
-   FACE · BODY (3칸) 220 → 190px / EXPRESSION (4칸) 189 → 175px (변경 전과 지난번의 중간) */
+   HEAD · BODY (3칸) 220 → 190px / EXPRESSION (4칸) 189 → 175px (변경 전과 지난번의 중간) */
 @media (min-width:761px){
-  /* FACE · BODY : 칸 200px, 사이 60px */
+  /* HEAD · BODY : 칸 200px, 사이 60px */
   .ggrid.c3{max-width:720px;grid-template-columns:repeat(3,minmax(0,200px));justify-content:space-between;column-gap:0}
   /* EXPRESSION : 칸 175px, 사이 24px, 가운데 → 좌우 끝 여백이 사이 간격보다 넓게 */
   .ggrid:not(.c3){max-width:none;grid-template-columns:repeat(var(--gc,4),minmax(0,175px));justify-content:center;column-gap:24px}
@@ -1064,7 +1064,7 @@ a.g-tag{cursor:pointer;transition:color .2s}
 /* 넘김 모션 부드럽게 : 흐림(filter) 전환을 빼고 이동 · 투명도만, 합성 레이어로 */
 .sc-track{transition-timing-function:cubic-bezier(.45,0,.2,1);backface-visibility:hidden}
 .sc-card{filter:none;will-change:transform,opacity;backface-visibility:hidden;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.45,0,.2,1)}
-/* 리깅 FACE · BODY : 탭과의 간격 2배, 움짤 폭 5px 줄이고 간격 넓게, 설명 1px 가깝게.
+/* 리깅 HEAD · BODY : 탭과의 간격 2배, 움짤 폭 5px 줄이고 간격 넓게, 설명 1px 가깝게.
    세로로 긴 움짤도 비율 그대로 */
 .rig-body>.grest:first-child>.ggrid.c3{padding-top:20px}
 .ggrid.c3{gap:20px 29.5px;align-items:start}
@@ -1705,14 +1705,14 @@ a.g-tag{cursor:pointer;transition:color .2s}
     lbp.style.height = h + 'px';
   }
   var lbv = null;
-  /* PC 에서 움짤은 화면에 꽉 차게 보이던 크기의 1/4 (가로 · 세로 각각 절반) */
-  var lbSmall = false;
+  /* PC 에서 움짤은 화면에 꽉 차게 보이던 크기의 가로 · 세로 각각 75% (EXPRESSION 은 60%) */
+  var lbSmall = false, lbZoom = 0.75;
   function fitSmall(el, w, h) {
     if (!lbSmall || !w || !h) return;
     var cs = getComputedStyle(lbm);
     var bw = lbm.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     var bh = lbm.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-    var k = Math.min(1, bw / w, bh / h) / 2;
+    var k = Math.min(1, bw / w, bh / h) * lbZoom;
     el.style.width = Math.round(w * k) + 'px';
     el.style.height = Math.round(h * k) + 'px';
   }
@@ -1736,13 +1736,14 @@ a.g-tag{cursor:pointer;transition:color .2s}
     lbList = (list || []).filter(function (x) { return x && x.src; });
     if (!lbList.length) return;
     lbOnIdx = o.onIndex || null;
+    lbZoom = o.zoom || 0.75;
     lbSmall = !!o.gif && !!(window.matchMedia && matchMedia('(hover:hover) and (min-width:761px)').matches);
     /* 아트머그 안 : 바깥 페이지(embed.js)가 화면 전체를 어둡게 하고 그 위에 직접 크게 띄움 */
     if (inFrame && lbHost) {
       try {
         parent.postMessage({ leuinZoom: {
           items: lbList.map(function (x) { return { src: new URL(x.src, location.href).href, video: isFile(x.src), alt: x.alt || '' }; }),
-          i: i || 0, gif: !!o.gif
+          i: i || 0, gif: !!o.gif, zoom: o.zoom || 0.75
         } }, '*');
         return;
       } catch (e) {}
@@ -2105,7 +2106,7 @@ a.g-tag{cursor:pointer;transition:color .2s}
       }).join('') + '</ul>';
     }
     var nb = Math.min(items.length, Math.max(0, parseInt(cat && cat.baseCount, 10) || 0)), html = '';
-    /* 움짤마다 '묶음 이름(group)'이 있으면 이어지는 같은 이름끼리 묶음 상자로 (예: FACE 퀄리티업 / 베이직) */
+    /* 움짤마다 '묶음 이름(group)'이 있으면 이어지는 같은 이름끼리 묶음 상자로 (예: HEAD 퀄리티업 / 베이직) */
     if (false) {
       var runs = [];
       items.forEach(function (x, k) {
@@ -2126,7 +2127,8 @@ a.g-tag{cursor:pointer;transition:color .2s}
     });
     each(root.querySelectorAll('.gimg'), function (b) {
       b.addEventListener('click', function () {
-        openLB(items.map(function (x) { return { src: x.src, alt: x.caption || '' }; }), +b.getAttribute('data-i'), { gif: true });
+        openLB(items.map(function (x) { return { src: x.src, alt: x.caption || '' }; }), +b.getAttribute('data-i'),
+          { gif: true, zoom: /표정|EXPRESSION/i.test((cat && cat.name) || '') ? 0.6 : 0.75 });
       });
     });
   }

@@ -154,7 +154,7 @@
   /* 여러 장이면 확대 상태 그대로 좌우 화살표 / 아래 동그라미 · 작은 썸네일 / ← → 키 / 스와이프로 넘김
      넘길 때마다 본문(iframe)에 번호를 알려 뒤의 캐러셀도 같이 이동 */
   var zbox = null, zwrap = null, zdots = null, zthumbs = null, zmedia = null, zOverflow = '';
-  var zList = [], zIdx = 0, zSmall = false, zSwiped = false, zSw = null;
+  var zList = [], zIdx = 0, zSmall = false, zZoom = 0.75, zSwiped = false, zSw = null;
   var ZARW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M__"/></svg>';
   function zOpen() { return zbox && zbox.style.display !== 'none'; }
   function zoomClose() {
@@ -248,7 +248,7 @@
       if (!zSmall || !w || !h) return;
       var cs = getComputedStyle(zwrap);
       var bw = zwrap.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), bh = zwrap.clientHeight;
-      var k = Math.min(1, bw / w, bh / h) / 2;
+      var k = Math.min(1, bw / w, bh / h) * zZoom;
       m.style.width = Math.round(w * k) + 'px';
       m.style.height = Math.round(h * k) + 'px';
     }
@@ -279,6 +279,7 @@
     if (!zbox) zBuild();
     zoomClose();
     zList = list;
+    zZoom = d.zoom || 0.75;
     zSmall = !!d.gif && !touch && window.matchMedia && matchMedia('(min-width:761px)').matches;
     var multi = list.length > 1;
     zbox.classList.toggle('multi', multi);
